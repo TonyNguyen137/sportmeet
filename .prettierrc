@@ -1,0 +1,30 @@
+{
+	"printWidth": 90,
+	"tabWidth": 2,
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"semi": true,
+	"endOfLine": "lf",
+	"bracketSpacing": true,
+	"arrowParens": "always",
+	"bracketSameLine": true,
+	"plugins": ["prettier-plugin-ejs", "prettier-plugin-tailwindcss"],
+
+	"overrides": [
+		{
+			"files": ["*.ejs"],
+			"options": {
+				"parser": "html"
+			}
+		},
+
+		{
+			"files": ["*.md"],
+			"options": {
+				"tabWidth": 2,
+				"proseWrap": "preserve"
+			}
+		}
+	]
+}

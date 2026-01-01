@@ -1,0 +1,44 @@
+{
+	"name": "sport-plattform",
+	"version": "0.1.0",
+	"description": "",
+	"license": "ISC",
+	"author": "",
+	"type": "module",
+	"scripts": {
+		"start": "node server/app.js",
+		"dev": "concurrently \"node --watch server/app.js\" \"npm run watch:js\" \"npm run watch:css\"",
+		"watch:css": "postcss src/css/styles.css -o public/styles.css -w",
+		"build:css": "postcss src/css/styles.css -o public/styles.css",
+		"watch:js": "wp-scripts start --output-path=public",
+		"build:js": "wp-scripts build --output-path=public",
+		"format": "prettier . --write",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@tailwindcss/postcss": "^4.1.18",
+		"dotenv": "^17.2.3",
+		"ejs": "^3.1.10",
+		"express": "^5.2.1",
+		"postcss": "^8.5.6",
+		"tailwindcss": "^4.1.18"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^20.3.0",
+		"@commitlint/config-conventional": "^20.3.0",
+		"@eslint/js": "^9.39.2",
+		"@wordpress/postcss-plugins-preset": "^5.37.0",
+		"@wordpress/scripts": "^31.2.0",
+		"concurrently": "^9.2.1",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^16.5.0",
+		"husky": "^9.1.7",
+		"postcss-cli": "^11.0.1",
+		"prettier": "^3.7.4",
+		"prettier-plugin-ejs": "^1.0.3",
+		"prettier-plugin-tailwindcss": "^0.7.2"
+	}
+}
