@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Determine the directory name of the current file
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,10 +25,4 @@ app.get('/', (req, res) => {
 	});
 });
 
-app.listen(port, () => {
-	if (process.env.NODE_ENV === 'development') {
-		console.log(`App listening at http://localhost:${port}`);
-	} else {
-		console.log(`App listening at ${port}`);
-	}
-});
+export default app;
