@@ -14,13 +14,7 @@ The designs were created to the following widths:
 - accent: #1AEEBE
 
 - neutral: #c8c8c8
-- dark: #121212
-- light: #F9FAFB:
-
-### Neutral
+- dark: #0B1F2A
+- light: #F9FAFB
 
 ## Typography
-
-### Body Copy
-
-### Font
