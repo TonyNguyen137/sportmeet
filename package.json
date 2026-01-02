@@ -9,8 +9,8 @@
 		"start": "node server/index.js",
 		"dev": "concurrently \"node --watch server/index.js\" \"npm run watch:js\" \"npm run watch:css\"",
 		"build": "concurrently \"npm run build:js\" \"npm run build:css\"",
-		"watch:css": "postcss src/css/styles.css -o public/css/styles.css -w",
-		"build:css": "postcss src/css/styles.css -o public/css/styles.css",
+		"watch:css": "tailwindcss -i src/css/styles.css -o public/css/styles.css -w",
+		"build:css": "tailwindcss -i src/css/styles.css -o public/css/styles.css -m",
 		"watch:js": "wp-scripts start --output-path=public/js",
 		"build:js": "wp-scripts build --output-path=public/js",
 		"format": "prettier . --write",
@@ -19,19 +19,21 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
-		"@tailwindcss/postcss": "^4.1.18",
 		"dotenv": "^17.2.3",
 		"ejs": "^3.1.10",
-		"express": "^5.2.1",
-		"postcss": "^8.5.6",
-		"tailwindcss": "^4.1.18"
+		"express": "^5.2.1"
 	},
+	"browserslist": [
+		"defaults"
+	],
 	"devDependencies": {
 		"@commitlint/cli": "^20.3.0",
 		"@commitlint/config-conventional": "^20.3.0",
 		"@eslint/js": "^9.39.2",
+		"@tailwindcss/cli": "^4.1.18",
 		"@wordpress/scripts": "^31.2.0",
 		"concurrently": "^9.2.1",
+		"cssnano": "^7.1.2",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"globals": "^16.5.0",
@@ -39,6 +41,7 @@
 		"postcss-cli": "^11.0.1",
 		"prettier": "^3.7.4",
 		"prettier-plugin-ejs": "^1.0.3",
-		"prettier-plugin-tailwindcss": "^0.7.2"
+		"prettier-plugin-tailwindcss": "^0.7.2",
+		"tailwindcss": "^4.1.18"
 	}
 }
