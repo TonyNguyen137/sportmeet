@@ -8,8 +8,8 @@
 	"scripts": {
 		"prestart": "npm run build:assets",
 		"start": "node server/index.js",
-		"dev": "concurrently \"node --watch server/index.js\" \"npm run watch:assets\"",
-		"watch:assets": "webpack --config webpack.dev.cjs --watch --progress",
+		"dev": "concurrently -n assets,server -c yellow,cyan \"npm run watch:assets\" \"node --watch server/index.js\"",
+		"watch:assets": "webpack --config webpack.dev.cjs --watch",
 		"build:assets": "npx browserslist && webpack --config webpack.prod.cjs --progress",
 		"format": "prettier . --write",
 		"lint": "eslint .",

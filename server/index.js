@@ -1,9 +1,10 @@
 import app from './app.js';
+import config from './config.js';
 
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 app.listen(port, () => {
-	if (process.env.NODE_ENV === 'development') {
+	if (config.env === 'development') {
 		console.log(`App listening at http://localhost:${port}`);
 	} else {
 		console.log(`App listening at ${port}`);
