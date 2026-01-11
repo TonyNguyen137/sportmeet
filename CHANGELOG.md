@@ -11,9 +11,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 - Initial project structure (server/, src/, views/, public/, tests/, docs/).
 - Express app entry point and base setup.
-- Tailwind CSS + PostCSS setup.
-- Webpack build pipeline via @wordpress/scripts.
+- Tailwind CSS + PostCSS.
+- Webpack build pipeline.
 - Environment variable support using `.env` and `.env.example`.
 - ESLint + Prettier configuration.
 - Commitlint + Husky git hooks for commit message enforcement.
-- README with project folder structure diagram.
+- README
