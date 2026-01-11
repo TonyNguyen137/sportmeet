@@ -43,7 +43,7 @@ if (fs.existsSync(manifestPath)) {
 // -------------------------------
 
 app.get('/', (req, res) => {
-	res.render('partials/layout', {
+	res.render('base', {
 		title: 'Sport Plattform Startseite',
 		template: 'index'
 	});

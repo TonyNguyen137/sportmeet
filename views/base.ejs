@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="<%= publicPrefix + assets['index.css'] %>" />
-		<script type="module" src="<%= publicPrefix + assets['index.js'] %>"></script>
+		<script defer src="<%= publicPrefix + assets['index.js'] %>"></script>
 		<title><%= title %></title>
 	</head>
 	<body>
-		<%- include('../' + template) %>
+		<%- include('templates/' + template) %>
 	</body>
 </html>
