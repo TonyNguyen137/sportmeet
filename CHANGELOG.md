@@ -17,3 +17,4 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - ESLint + Prettier configuration.
 - Commitlint + Husky git hooks for commit message enforcement.
 - README
+- database design diagram
