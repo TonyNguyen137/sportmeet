@@ -15,13 +15,11 @@ module.exports = function (env, argv) {
 		mode: 'development',
 		output: {
 			path: path.join(__dirname, 'public'),
-			filename: '[name].min.js'
+			filename: '[name].js'
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
-				filename: function (pathData) {
-					return pathData.chunk.name === 'index' ? 'styles.min.css' : '[name].min.css';
-				}
+				filename: '[name].css'
 			})
 		],
 		module: {

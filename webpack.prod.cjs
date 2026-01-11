@@ -37,11 +37,7 @@ module.exports = (env, argv) => {
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
-				filename: function (pathData) {
-					return pathData.chunk.name === 'index'
-						? 'style.[contenthash:6].min.css'
-						: '[name].[contenthash:6].min.css';
-				}
+				filename: '[name].[contenthash:6].min.css'
 			})
 		],
 		module: {
