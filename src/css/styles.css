@@ -2,3 +2,7 @@
 
 @source '../../views/';
 @source '../js/';
+
+.test-foo {
+	@apply text-red-500;
+}
