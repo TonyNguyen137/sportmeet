@@ -6,6 +6,7 @@
 	"author": "",
 	"type": "module",
 	"scripts": {
+		"prestart": "npm run build:assets",
 		"start": "node server/index.js",
 		"dev": "concurrently \"node --watch server/index.js\" \"npm run watch:js\"",
 		"watch:assets": "webpack --config webpack.dev.cjs --watch --progress",
