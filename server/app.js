@@ -34,8 +34,9 @@ if (fs.existsSync(manifestPath)) {
 	app.locals.publicPrefix = PUBLIC_DIR_SLUG;
 } else {
 	app.locals.assets = {
-		'index.js': '/assets/index.js',
-		'index.css': '/assets/styles.css'
+		'index.js': 'index.js',
+		'index.css': 'styles.css',
+		'sprite.svg': 'sprite.svg'
 	};
 	console.warn('[assets] manifest.json not found:', manifestPath);
 }

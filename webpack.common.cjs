@@ -1,5 +1,7 @@
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { createHash } = require('node:crypto');
+const fs = require('node:fs');
 module.exports = {
 	entry: {
 		index: './src/js/index.js'
@@ -10,6 +12,27 @@ module.exports = {
 	plugins: [
 		new WebpackManifestPlugin({
 			fileName: 'manifest.json' // landet in public/assets/manifest.json
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+				// 1) sprite.svg mit Hash
+				{
+					from: 'src/assets/svg/sprite.svg',
+					to({ absoluteFilename }) {
+						const buf = fs.readFileSync(absoluteFilename);
+						const hash = createHash('md5').update(buf).digest('hex').slice(0, 8);
+						return `sprite.${hash}.svg`;
+					}
+				},
+
+				// 2) Rest kopieren (sprite ausschließen)
+				{
+					from: 'src/assets/svg/logo',
+					globOptions: {
+						ignore: ['**/.DS_Store', '**/Thumbs.db', '**/sprite.svg']
+					}
+				}
+			]
 		})
 	],
 
@@ -19,7 +42,7 @@ module.exports = {
 				test: /\.(woff2?|eot|ttf|otf)$/i,
 				type: 'asset/resource',
 				generator: {
-					filename: 'public/[name][ext]'
+					filename: '[name][ext]'
 				}
 			},
 
@@ -50,7 +73,7 @@ module.exports = {
 				test: /sprite\.svg$/,
 				type: 'asset/resource',
 				generator: {
-					filename: 'public/[name][ext]'
+					filename: '[name][ext]'
 				}
 			}
 		]
