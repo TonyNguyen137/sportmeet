@@ -45,8 +45,15 @@ if (fs.existsSync(manifestPath)) {
 
 app.get('/', (req, res) => {
 	res.render('base', {
-		title: 'Sport Plattform Startseite',
+		title: 'SportMeet Startseite',
 		template: 'index'
+	});
+});
+
+app.get('/register', (req, res) => {
+	res.render('base', {
+		title: 'SportMeet Registrierung',
+		template: 'page-register'
 	});
 });
 
