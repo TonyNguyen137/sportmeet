@@ -3,11 +3,12 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="<%= publicPrefix + assets['index.css'] %>" />
-		<script defer src="<%= publicPrefix + assets['index.js'] %>"></script>
+		<link rel="stylesheet" href="<%= publicPrefix + '/' + assets['index.css'] %>" />
+		<script defer src="<%= publicPrefix + '/' + assets['index.js'] %>"></script>
 		<title><%= title %></title>
 	</head>
-	<body>
+	<body
+		class="font-montserrat bg-primary grid min-h-screen grid-rows-[auto_1fr_auto] text-base">
 		<%- include('templates/' + template) %>
 	</body>
 </html>
