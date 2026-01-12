@@ -1,8 +1,7 @@
 @import 'tailwindcss' source(none);
-
 @source '../../views/';
 @source '../js/';
 
-.test-foo {
-	@apply text-red-500;
-}
+@import './font-face.css';
+@import './global.css';
+@import './theme.css';

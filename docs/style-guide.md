@@ -9,12 +9,11 @@ The designs were created to the following widths:
 
 ## Colors
 
-- primary: #006BFF
-- secondary: #0da9d9
-- accent: #1AEEBE
-
-- neutral: #c8c8c8
-- dark: #0B1F2A
-- light: #F9FAFB
+- primary: #f2f7fd
+- accent-blue: #145AF9
+- accent-dark-blue: #193cb8;
+- neutral-100: #d1d5db;
+- neutral-400: #9ca3af;
+- text: #4a5565;
 
 ## Typography

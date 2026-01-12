@@ -1,0 +1,15 @@
+@theme {
+	--font-montserrat: 'Montserrat', sans-serif;
+	--color-primary: #f2f7fd;
+	--color-accent-blue: #145af9;
+	--color-accent-dark-blue: #193cb8;
+	--color-neutral-400: #9ca3af;
+	--color-neutral-100: #d1d5db;
+	--color-base: #4a5565;
+
+	--radius-sm: 8px;
+	--radius-default: 16px;
+	--text-sm: calc(14/16 * 1rem);
+	--text-h1: calc(30/16 * 1rem);
+	--text-base: 1rem;
+}
