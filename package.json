@@ -8,7 +8,8 @@
 	"scripts": {
 		"prestart": "npm run build:assets",
 		"start": "node server/index.js",
-		"dev": "concurrently -n assets,server -c yellow,cyan \"npm run watch:assets\" \"node --watch server/index.js\"",
+		"dev:server": "node --watch server/index.js",
+		"dev": "concurrently -n assets,server -c yellow,cyan \"npm run watch:assets\" \"wait-on public/manifest.json && npm run dev:server\"",
 		"watch:assets": "webpack --config webpack.config.cjs --mode development --watch",
 		"build:assets": "npx browserslist && webpack --config webpack.config.cjs --mode production  --progress",
 		"format": "prettier . --write",
@@ -49,6 +50,7 @@
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tailwindcss": "^4.1.18",
 		"terser-webpack-plugin": "^5.3.16",
+		"wait-on": "^9.0.3",
 		"webpack": "^5.104.1",
 		"webpack-cli": "^6.0.1",
 		"webpack-manifest-plugin": "^6.0.1",
