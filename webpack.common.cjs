@@ -1,5 +1,7 @@
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+
 const { createHash } = require('node:crypto');
 const fs = require('node:fs');
 module.exports = {
@@ -10,6 +12,7 @@ module.exports = {
 		clean: true
 	},
 	plugins: [
+		new RemoveEmptyScriptsPlugin(),
 		new WebpackManifestPlugin({
 			fileName: 'manifest.json' // landet in public/assets/manifest.json
 		}),
