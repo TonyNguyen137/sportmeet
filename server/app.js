@@ -64,4 +64,11 @@ app.get('/forgot-password', (req, res) => {
 	});
 });
 
+app.get('/me', (req, res) => {
+	res.render('base', {
+		title: 'SportMeet - Mein User Dashboard',
+		template: 'single'
+	});
+});
+
 export default app;
