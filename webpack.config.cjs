@@ -18,6 +18,8 @@ module.exports = function (env, argv) {
 
 	console.log('mode: ', mode);
 
+	const outputJs = `[name]${mode === 'production' ? '.[contenthash:6].min' : ''}.js`;
+	const outputCss = `[name]${mode === 'production' ? '.[contenthash:6].min' : ''}.css`;
 	return {
 		mode: mode,
 		entry: {
@@ -26,7 +28,7 @@ module.exports = function (env, argv) {
 		output: {
 			clean: true,
 			path: path.join(__dirname, 'public'),
-			filename: '[name].[contenthash:6].min.js',
+			filename: outputJs,
 			chunkFilename: (pathData) => {
 				// auto-generated ID by Webpack (e.g. "src_js_components_${Component}_js")
 				// (The ID is derived from your file path + filename if optimization.chunkIds is set to 'named')
@@ -50,7 +52,7 @@ module.exports = function (env, argv) {
 		plugins: [
 			new RemoveEmptyScriptsPlugin(),
 			new MiniCssExtractPlugin({
-				filename: '[name].[contenthash:6].min.css'
+				filename: outputCss
 			}),
 			new WebpackManifestPlugin({
 				fileName: 'manifest.json' // landet in public/assets/manifest.json
