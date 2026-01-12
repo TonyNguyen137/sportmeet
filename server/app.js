@@ -57,4 +57,11 @@ app.get('/register', (req, res) => {
 	});
 });
 
+app.get('/forgot-password', (req, res) => {
+	res.render('base', {
+		title: 'SportMeet Passwort vergessen',
+		template: 'page-forgot-password'
+	});
+});
+
 export default app;
