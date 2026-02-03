@@ -1,7 +1,11 @@
 @import 'tailwindcss' source(none);
-@source '../../views/';
+@source '../../server/views/';
 @source '../js/';
 
 @import './font-face.css';
 @import './global.css';
 @import './theme.css';
+@import './components/view-switcher.css';
+@import './components/tabs.css';
+
+@import './utility/pane.css';

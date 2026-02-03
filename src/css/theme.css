@@ -3,19 +3,25 @@
 	--color-primary: #f2f7fd;
 	--color-secondary: #eff6ff;
 	--color-success-100: #dcfce7;
-	--color-success-800: ##16a34a;
-
+	--color-success-800: #16a34a;
+	--color-success-900: #15803d;
 	--color-accent-blue: #145af9;
 	--color-accent-dark-blue: #193cb8;
+	--color-light: #dbeafe;
 	--color-neutral-400: #9ca3af;
 	--color-neutral-100: #d1d5db;
-	--color-base: #4a5565;
+	--color-neutral-50: #e5e7eb;
+	--color-body: #4a5565;
 	--color-focus-ring-light: #3b82f680;
+	--color-dark: #111827;
 
 	--radius-sm: 8px;
+	--radius-md: 12px;
 	--radius-default: 16px;
 	--text-xsm: calc(12/16 * 1rem);
 	--text-sm: calc(14/16 * 1rem);
-	--text-h1: calc(30/16 * 1rem);
+	--text-md: clamp(1.125rem, 0.9878rem + 0.5854vw, 1.5rem);
+	--text-h1: clamp(1.375rem, 1.1921rem + 0.7805vw, 1.875rem);
+
 	--text-default: 1rem;
 }

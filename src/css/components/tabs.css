@@ -1,0 +1,27 @@
+@layer components {
+	.tabs {
+		&__list {
+			@apply flex;
+		}
+
+		&__tab {
+			@apply text-body text-default cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-3 px-6 font-medium;
+		}
+
+		&__tab--mine[aria-selected='true'] {
+			@apply text-accent-blue border-accent-blue border-b-2;
+		}
+
+		&__tab--public[aria-selected='true'] {
+			@apply text-success-800 border-success-800 border-b-2;
+		}
+
+		&__panel[aria-hidden='true'] {
+			@apply hidden;
+		}
+
+		&__panel {
+			@apply mt-4 rounded-2xl;
+		}
+	}
+}
