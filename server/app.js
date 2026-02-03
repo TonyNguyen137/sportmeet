@@ -13,7 +13,7 @@ const projectRoot = path.join(__dirname, '..');
 
 // Set up the view engine and views directory for rendering dynamic content
 // Set EJS as the view engine
-app.set('views', path.join(projectRoot, 'views'));
+app.set('views', path.join(projectRoot, 'server', 'views'));
 app.set('view engine', 'ejs');
 
 // Serve static files (like CSS, images, and client-side JavaScript) from the 'public' directory
