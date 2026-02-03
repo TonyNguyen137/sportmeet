@@ -1,0 +1,44 @@
+<section id="view-groups" class="hidden">
+	<div class="flex flex-col justify-between gap-x-4 gap-y-3 md:flex-row md:items-center">
+		<div>
+			<h2 class="text-h1 text-dark font-bold">Gruppenverwaltung</h2>
+			<p>Verwalte deine Freundeskreise für private Termine</p>
+		</div>
+		<div class="flex flex-col gap-3 lg:flex-row">
+			<button
+				class="bg-accent-blue shadow-accent-dark-blue/30 hover:bg-accent-dark-blue flex w-full shrink-0 cursor-pointer items-center gap-[8px] rounded-md px-[24px] py-[12px] text-white shadow-lg transition-colors [--focus-color:var(--color-body)] md:w-fit">
+				<svg width="20" height="20" aria-hidden="true" class="block">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#plus' %>"></use>
+				</svg>
+				<span> Gruppe erstellen</span>
+			</button>
+			<button
+				class="bg-accent-blue shadow-accent-dark-blue/30 hover:bg-accent-dark-blue flex w-full shrink-0 cursor-pointer items-center gap-[8px] rounded-md px-[24px] py-[12px] text-white shadow-lg transition-colors [--focus-color:var(--color-body)] md:w-fit">
+				<svg width="20" height="20" aria-hidden="true" class="block">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#link' %>"></use>
+				</svg>
+				<span> Gruppe beitreten</span>
+			</button>
+		</div>
+	</div>
+
+	<div class="pane mt-6">
+		<div class="mx-auto flex max-w-[50ch] flex-col items-center gap-3 text-center">
+			<div class="bg-secondary inline-grid h-20 w-20 place-items-center rounded-[100%]">
+				<svg
+					width="40"
+					height="40"
+					class="text-accent-blue"
+					aria-hidden="true"
+					class="block">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+				</svg>
+			</div>
+			<h3 class="text-md text-dark font-bold">Noch keine Gruppen</h3>
+			<p>
+				Du bist noch in keiner Gruppe. Erstelle deine eigene Gruppe oder tritt einer
+				bestehenden Gruppe bei.
+			</p>
+		</div>
+	</div>
+</section>

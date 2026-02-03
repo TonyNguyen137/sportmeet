@@ -1,0 +1,44 @@
+<div class="tabs mt-10">
+	<div class="tabs__list border-b-1 border-neutral-50" role="tablist">
+		<button
+			class="tabs__tab tabs__tab--mine"
+			type="button"
+			id="tab-1"
+			role="tab"
+			aria-selected="true"
+			aria-controls="tabpanel-1">
+			Meine Termine
+		</button>
+		<button
+			class="tabs__tab tabs__tab--public"
+			type="button"
+			id="tab-2"
+			role="tab"
+			aria-selected="false"
+			aria-controls="tabpanel-2"
+			tabindex="-1">
+			Öffentliche Termine
+		</button>
+	</div>
+	<div class="tabs__wrapper-panels">
+		<section
+			class="tabs__panel pane"
+			id="tabpanel-1"
+			role="tabpanel"
+			aria-hidden="false"
+			aria-labelledby="tab-1"
+			tabindex="0">
+			<%- include("./empty-list.ejs") %>
+		</section>
+
+		<section
+			class="tabs__panel pane"
+			id="tabpanel-2"
+			role="tabpanel"
+			aria-hidden="true"
+			aria-labelledby="tab-2"
+			tabindex="0">
+			<%- include("./empty-public-list.ejs") %>
+		</section>
+	</div>
+</div>

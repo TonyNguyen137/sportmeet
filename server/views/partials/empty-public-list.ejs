@@ -1,0 +1,16 @@
+<div class="mx-auto flex max-w-[50ch] flex-col items-center gap-3 text-center">
+	<div class="bg-success-100 inline-grid h-20 w-20 place-items-center rounded-[100%]">
+		<svg width="40" height="40" class="text-success-800" aria-hidden="true" class="block">
+			<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+		</svg>
+	</div>
+	<h3 class="text-md text-dark font-bold">Keine öffentlichen Termine verfügbar</h3>
+	<p>Aktuell gibt es keine öffentlichen Termine in deiner Umgebung.</p>
+	<button
+		class="bg-success-800 hover:bg-success-900 focus:ring-success-300 mt-4 flex w-fit cursor-pointer items-center justify-center gap-2 rounded-md px-6 py-4 font-medium text-white transition-colors focus:ring-4 focus:outline-none">
+		<svg width="20" height="20" aria-hidden="true" class="block">
+			<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+		</svg>
+		<span>öffentliche Termine suchen</span>
+	</button>
+</div>

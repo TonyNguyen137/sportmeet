@@ -1,0 +1,11 @@
+<%- include("../partials/header", { variant: "user" }) %>
+
+<main>
+	<h1 class="sr-only">Dashboard</h1>
+
+	<div class="container mx-auto px-[12px] py-[32px]">
+		<%- include("../partials/events-view") %> <%- include("../partials/groups-view") %>
+	</div>
+</main>
+
+<%- include("../partials/modal") %> <%- include("../partials/footer") %>

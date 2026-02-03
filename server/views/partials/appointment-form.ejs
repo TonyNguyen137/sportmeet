@@ -1,0 +1,336 @@
+<form
+	action=""
+	class="w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+	<div class="flex items-center justify-between border-b border-gray-200 p-6">
+		<div>
+			<h2 class="text-2xl font-bold text-gray-900">Neuen Termin erstellen</h2>
+			<p class="mt-1 text-sm text-gray-600">
+				Erstelle einen öffentlichen oder privaten Termin
+			</p>
+		</div>
+		<button
+			type="button"
+			data-close-modal
+			class="cursor-pointer text-gray-400 hover:text-gray-600">
+			<svg width="20" height="20" aria-hidden="true" class="block">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+			</svg>
+		</button>
+	</div>
+	<div class="max-h-[70vh] space-y-5 overflow-y-auto p-6">
+		<div class="tabs tabs--apointement-form">
+			<label class="mb-3 block text-sm font-medium text-gray-700">Sichtbarkeit *</label>
+			<div class="tabs__list grid grid-cols-2 gap-3">
+				<button
+					type="button"
+					id="tab-public"
+					role="tab"
+					aria-selected="true"
+					aria-controls="tabpanel-public"
+					tabindex="-1"
+					class="tabs__tab group rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-gray-300 aria-selected:border-green-500 aria-selected:bg-green-50">
+					<div class="flex items-center gap-3">
+						<div class="rounded-lg bg-gray-100 p-2 group-aria-selected:bg-green-500">
+							<svg
+								class="text-gray-600 group-aria-selected:text-white"
+								aria-hidden="true"
+								width="24"
+								height="24"
+								aria-hidden="true">
+								<use
+									href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#globe' %>"></use>
+							</svg>
+						</div>
+						<div class="text-left">
+							<p class="font-semibold text-gray-900">Öffentlich</p>
+							<p class="text-xs text-gray-500">Für alle sichtbar</p>
+						</div>
+					</div>
+				</button>
+				<button
+					type="button"
+					id="tab-privat"
+					role="tab"
+					aria-selected="false"
+					aria-controls="tabpanel-privat"
+					tabindex="-1"
+					class="tabs__tab group rounded-xl border-2 border-gray-200 p-4 transition-all hover:border-gray-300 aria-selected:border-blue-500 aria-selected:bg-blue-50">
+					<div class="flex items-center gap-3">
+						<div class="rounded-lg bg-gray-100 p-2 group-aria-selected:bg-blue-500">
+							<svg
+								class="text-gray-600 group-aria-selected:text-white"
+								aria-hidden="true"
+								width="24"
+								height="24"
+								aria-hidden="true">
+								<use
+									href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+							</svg>
+						</div>
+						<div class="text-left">
+							<p class="font-semibold text-gray-900">Privat</p>
+							<p class="text-xs text-gray-500">Nur für Gruppe</p>
+						</div>
+					</div>
+				</button>
+			</div>
+			<div class="tabs__wrapper-panels">
+				<section
+					class="tabs__panel [&[aria-hidden='false']]:flex [&[aria-hidden='false']]:flex-col [&[aria-hidden='false']]:gap-4"
+					id="tabpanel-public"
+					role="tabpanel"
+					aria-hidden="false"
+					aria-labelledby="tab-public"
+					tabindex="0">
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700">Sportart *</label
+						><select
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+							<option value="">Wähle eine Sportart...</option>
+							<option value="Fußball">Fußball</option>
+							<option value="Basketball">Basketball</option>
+							<option value="Volleyball">Volleyball</option>
+							<option value="Tennis">Tennis</option>
+							<option value="Badminton">Badminton</option>
+							<option value="Tischtennis">Tischtennis</option>
+							<option value="Joggen/Laufen">Joggen/Laufen</option>
+							<option value="Schwimmen">Schwimmen</option>
+							<option value="Fitness/Gym">Fitness/Gym</option>
+							<option value="Yoga">Yoga</option>
+							<option value="Klettern">Klettern</option>
+							<option value="Radfahren">Radfahren</option>
+							<option value="Wandern">Wandern</option>
+							<option value="custom">✏️ Eigene Sportart eingeben...</option>
+						</select>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Titel des Termins *</label
+						><input
+							placeholder="z.B. Hallenfußball, Morgen-Yoga, 10km Lauf..."
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							type="text" />
+						<p class="mt-1 text-xs text-gray-500">
+							Gib deinem Termin einen aussagekräftigen Namen
+						</p>
+					</div>
+
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="mb-2 block text-sm font-medium text-gray-700">Datum *</label
+							><input
+								class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="date" />
+						</div>
+						<div>
+							<label class="mb-2 block text-sm font-medium text-gray-700">Uhrzeit *</label
+							><input
+								class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="time" />
+						</div>
+					</div>
+
+					<div>
+						<label class="mb-3 block text-sm font-medium text-gray-700">Adresse *</label>
+						<div class="mb-3 grid grid-cols-3 gap-3">
+							<div class="col-span-2">
+								<input
+									placeholder="Straße (z.B. Musterstraße)"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+							<div>
+								<input
+									placeholder="Nr."
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+						</div>
+						<div class="mb-3 grid grid-cols-3 gap-3">
+							<div>
+								<input
+									placeholder="PLZ"
+									maxlength="5"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+							<div class="col-span-2">
+								<input
+									placeholder="Stadt (z.B. Köln)"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+						</div>
+						<div>
+							<input
+								placeholder="Ort/Venue (optional, z.B. Sporthalle Nord)"
+								class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="text" />
+						</div>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Max. Teilnehmer *</label
+						><input
+							placeholder="z.B. 10"
+							min="2"
+							max="100"
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							type="number" />
+						<p class="mt-1 text-xs text-gray-500">
+							Wie viele Personen können maximal teilnehmen?
+						</p>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Beschreibung (optional)</label
+						><textarea
+							placeholder="z.B. Alle Levels willkommen! Bitte Hallenschuhe mitbringen..."
+							rows="3"
+							class="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+						<p class="mt-1 text-xs text-gray-500">
+							Zusätzliche Informationen: Skill-Level, was mitzubringen ist, etc.
+						</p>
+					</div>
+				</section>
+				<section
+					class="tabs__panel [&[aria-hidden='false']]:flex [&[aria-hidden='false']]:flex-col [&[aria-hidden='false']]:gap-4"
+					id="tabpanel-privat"
+					role="tabpanel"
+					aria-hidden="true"
+					aria-labelledby="tab-privat"
+					tabindex="0">
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Gruppe auswählen *</label
+						><select
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+							<option value="">Wähle eine Gruppe...</option>
+							<option value="1">Fußball Freunde</option>
+							<option value="2">Fitness Crew</option>
+							<option value="3">Laufgruppe</option>
+						</select>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700">Sportart *</label
+						><select
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+							<option value="">Wähle eine Sportart...</option>
+							<option value="Fußball">Fußball</option>
+							<option value="Basketball">Basketball</option>
+							<option value="Volleyball">Volleyball</option>
+							<option value="Tennis">Tennis</option>
+							<option value="Badminton">Badminton</option>
+							<option value="Tischtennis">Tischtennis</option>
+							<option value="Joggen/Laufen">Joggen/Laufen</option>
+							<option value="Schwimmen">Schwimmen</option>
+							<option value="Fitness/Gym">Fitness/Gym</option>
+							<option value="Yoga">Yoga</option>
+							<option value="Klettern">Klettern</option>
+							<option value="Radfahren">Radfahren</option>
+							<option value="Wandern">Wandern</option>
+							<option value="custom">✏️ Eigene Sportart eingeben...</option>
+						</select>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Titel des Termins *</label
+						><input
+							placeholder="z.B. Hallenfußball, Morgen-Yoga, 10km Lauf..."
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							type="text" />
+						<p class="mt-1 text-xs text-gray-500">
+							Gib deinem Termin einen aussagekräftigen Namen
+						</p>
+					</div>
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="mb-2 block text-sm font-medium text-gray-700">Datum *</label
+							><input
+								class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="date" />
+						</div>
+						<div>
+							<label class="mb-2 block text-sm font-medium text-gray-700">Uhrzeit *</label
+							><input
+								class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="time" />
+						</div>
+					</div>
+					<div>
+						<label class="mb-3 block text-sm font-medium text-gray-700">Adresse *</label>
+						<div class="mb-3 grid grid-cols-3 gap-3">
+							<div class="col-span-2">
+								<input
+									placeholder="Straße (z.B. Musterstraße)"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+							<div>
+								<input
+									placeholder="Nr."
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+						</div>
+						<div class="mb-3 grid grid-cols-3 gap-3">
+							<div>
+								<input
+									placeholder="PLZ"
+									maxlength="5"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+							<div class="col-span-2">
+								<input
+									placeholder="Stadt (z.B. Köln)"
+									class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									type="text" />
+							</div>
+						</div>
+						<div>
+							<input
+								placeholder="Ort/Venue (optional, z.B. Sporthalle Nord)"
+								class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+								type="text" />
+						</div>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Max. Teilnehmer *</label
+						><input
+							placeholder="z.B. 10"
+							min="2"
+							max="100"
+							class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							type="number" />
+						<p class="mt-1 text-xs text-gray-500">
+							Wie viele Personen können maximal teilnehmen?
+						</p>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-medium text-gray-700"
+							>Beschreibung (optional)</label
+						><textarea
+							placeholder="z.B. Alle Levels willkommen! Bitte Hallenschuhe mitbringen..."
+							rows="3"
+							class="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex gap-3 border-t border-gray-200 bg-gray-50 p-6">
+		<button
+			type="button"
+			data-close-modal
+			class="flex-1 cursor-pointer rounded-xl border border-gray-200 bg-white px-6 py-3 font-medium transition-all hover:bg-gray-100">
+			Abbrechen</button
+		><button
+			type="submit"
+			class="flex-1 cursor-pointer rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700">
+			Termin erstellen
+		</button>
+	</div>
+</form>

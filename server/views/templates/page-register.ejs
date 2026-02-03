@@ -1,0 +1,142 @@
+<%- include("../partials/header") %>
+
+<main class="max-w-[448px] place-self-center p-[16px]">
+	<div class="login rounded-default bg-white p-[16px] text-center sm:p-[32px]">
+		<div
+			class="bg-accent-blue mx-auto mb-4 flex h-[64px] w-[64px] items-center justify-center rounded-full">
+			<svg width="32" height="32" aria-hidden="true" class="text-white">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#user' %>"></use>
+			</svg>
+		</div>
+		<h1 class="text-h1 leading-none font-bold text-black">Konto erstellen</h1>
+		<p class="mt-4">Registrieren Sie sich für ein neues Konto</p>
+		<form class="login__form text-neutral mt-5 text-start" action="">
+			<div class="login__group">
+				<label class="text-sm text-black" for="email">E-Mail-Adresse</label>
+				<div
+					class="focus-within:outline-accent-blue mt-1 flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
+					<svg class="text-neutral-400" width="20" height="20" aria-hidden="true">
+						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#email' %>"></use>
+					</svg>
+
+					<input
+						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
+						type="email"
+						id="email"
+						name="email"
+						placeholder="ihre@email.com"
+						required />
+				</div>
+			</div>
+
+			<div class="login__group mt-4">
+				<label class="text-sm text-black" for="email">Passwort</label>
+				<div
+					class="focus-within:outline-accent-blue mt-1 flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
+					<svg class="text-neutral-400" width="20" height="20" aria-hidden="true">
+						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#lock' %>"></use>
+					</svg>
+
+					<input
+						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
+						type="password"
+						id="password"
+						name="password"
+						placeholder="••••••••"
+						required />
+					<button
+						class="btn btn--toggle-visibility grid cursor-pointer [grid-template-areas:'stack']"
+						aria-label="Passwort anzeigen">
+						<svg
+							class="eye text-neutral-400 [grid-area:stack]"
+							width="20"
+							height="20"
+							aria-hidden="true">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#eye' %>"></use>
+						</svg>
+						<svg
+							class="eye-off hidden text-neutral-400 [grid-area:stack]"
+							width="20"
+							height="20"
+							aria-hidden="true">
+							<use
+								href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#eye-off' %>"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<div class="mt-3 space-y-1">
+				<p class="text-xs font-medium text-gray-600">Ihr Passwort muss enthalten:</p>
+				<ul class="text-xsm space-y-1 text-xs text-gray-600">
+					<li class="flex items-center gap-2">
+						<span
+							class="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100"
+							>○</span
+						>Mindestens 8 Zeichen
+					</li>
+					<li class="flex items-center gap-2">
+						<span
+							class="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100"
+							>○</span
+						>Einen Großbuchstaben
+					</li>
+					<li class="flex items-center gap-2">
+						<span
+							class="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100"
+							>○</span
+						>Eine Zahl
+					</li>
+				</ul>
+			</div>
+
+			<div class="login__group mt-4">
+				<label class="text-sm text-black" for="email">Passwort bestätigen</label>
+				<div
+					class="focus-within:outline-accent-blue mt-1 flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
+					<svg class="text-neutral-400" width="20" height="20" aria-hidden="true">
+						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#lock' %>"></use>
+					</svg>
+
+					<input
+						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
+						type="password"
+						id="password"
+						name="password"
+						placeholder="••••••••"
+						required />
+					<button
+						class="btn btn--toggle-visibility grid cursor-pointer [grid-template-areas:'stack']"
+						aria-label="Passwort anzeigen">
+						<svg
+							class="eye text-neutral-400 [grid-area:stack]"
+							width="20"
+							height="20"
+							aria-hidden="true">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#eye' %>"></use>
+						</svg>
+						<svg
+							class="eye-off hidden text-neutral-400 [grid-area:stack]"
+							width="20"
+							height="20"
+							aria-hidden="true">
+							<use
+								href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#eye-off' %>"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+			<button
+				type="submit"
+				class="bg-accent-blue hover:bg-accent-dark-blue mt-4 w-full cursor-pointer rounded-sm p-[12px] text-white transition-colors duration-200 ease-in-out">
+				Registrieren
+			</button>
+			<p class="mt-4 text-center">
+				Bereits ein Konto?
+				<a href="/" class="text-accent-blue hover:underline">zur Anmeldung</a>
+			</p>
+		</form>
+	</div>
+</main>
+
+<%- include("../partials/footer") %>
