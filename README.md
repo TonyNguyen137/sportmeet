@@ -36,4 +36,4 @@ The following diagram shows the high-level folder and file structure of the proj
 
 ### Folder Structure Overview
 
-![Project Folder Structure](./docs/images/2026-01-01-project-structure-v1.png)
+![Project Folder Structure](./docs/images/2026-02-03-project-structure-v1.png)
