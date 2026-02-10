@@ -59,8 +59,6 @@ export default class Modal {
 
 		const modalTarget = e.target.closest('[data-close-modal]')?.dataset?.modalTarget;
 
-		console.log('close modal Target', modalTarget);
-
 		if (modalTarget) {
 			const targetEl = this.root.querySelector(modalTarget);
 			if (targetEl) {
