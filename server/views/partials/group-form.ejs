@@ -1,0 +1,98 @@
+<form
+	id="group-form"
+	action=""
+	class="hidden w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+	<div class="flex items-center justify-between border-b border-gray-200 p-6">
+		<div>
+			<h2 class="text-2xl font-bold text-gray-900">Neue Gruppe erstellen</h2>
+			<p class="mt-1 text-sm text-gray-600">Erstelle deine eigene Sportgruppe</p>
+		</div>
+		<button
+			type="button"
+			data-close-modal
+			data-modal-target="#group-form"
+			aria-label="Form schließen"
+			class="close-group-form cursor-pointer text-gray-400 hover:text-gray-600">
+			<svg width="20" height="20" aria-hidden="true" class="block">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+			</svg>
+		</button>
+	</div>
+	<div class="space-y-5 p-6">
+		<div>
+			<label class="mb-2 block text-sm font-medium text-gray-700">Gruppenname *</label
+			><input
+				placeholder="z.B. Fußball Freunde, Laufgruppe Köln..."
+				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+				type="text" />
+		</div>
+		<div>
+			<label class="mb-2 block text-sm font-medium text-gray-700"
+				>Beschreibung (optional)</label
+			><textarea
+				placeholder="Beschreibe deine Gruppe..."
+				rows="3"
+				class="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+		</div>
+		<div>
+			<label class="mb-3 block text-sm font-medium text-gray-700">Farbe wählen</label>
+			<div class="flex gap-3">
+				<button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-blue-700 bg-blue-500 shadow-sm transition-transform hover:scale-105"></button
+				><button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-transparent bg-green-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
+				><button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-transparent bg-purple-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
+				><button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-transparent bg-red-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
+				><button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-transparent bg-yellow-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
+				><button
+					type="button"
+					class="h-12 w-12 rounded-xl border-2 border-transparent bg-pink-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button>
+			</div>
+		</div>
+		<div class="rounded-xl border border-purple-200 bg-purple-50 p-4">
+			<div class="flex items-start gap-3">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-circle-alert mt-0.5 h-5 w-5 text-purple-600">
+					<circle cx="12" cy="12" r="10"></circle>
+					<line x1="12" x2="12" y1="8" y2="12"></line>
+					<line x1="12" x2="12.01" y1="16" y2="16"></line>
+				</svg>
+				<p class="text-sm text-purple-900">
+					Du erhältst einen Einladungslink zum Teilen mit Freunden. Als Ersteller bist du
+					automatisch Administrator.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex gap-3 border-t border-gray-200 bg-gray-50 p-6">
+		<button
+			type="button"
+			data-modal-target="#group-form"
+			data-close-modal
+			class="close-group-form flex-1 cursor-pointer rounded-xl border border-gray-200 bg-white px-6 py-3 font-medium transition-all hover:bg-gray-100">
+			Abbrechen</button
+		><button
+			type="submit"
+			class="flex-1 cursor-pointer rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700">
+			Termin erstellen
+		</button>
+	</div>
+</form>

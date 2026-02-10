@@ -25,10 +25,19 @@ export default class ToggleDisplay {
 		const closeTargetSelector = toggleEl.dataset[NAMESPACE + 'CloseTarget'];
 		const closeTargetEls = document.querySelectorAll(closeTargetSelector);
 
+		const closeBtnsSelector = toggleEl.dataset[NAMESPACE + 'CloseBtn'];
+		const closeBtns = document.querySelectorAll(closeBtnsSelector);
+
 		toggleEl.addEventListener(
 			'click',
 			this._toggle.bind(this, toggleEl, targetEls, closeTargetEls)
 		);
+
+		if (closeBtns && closeBtns.length > 0) {
+			closeBtns.forEach((btn) => {
+				btn.addEventListener('click', this._reset.bind(this, toggleEl, targetEls));
+			});
+		}
 	}
 
 	// handler methods
@@ -67,5 +76,12 @@ export default class ToggleDisplay {
 
 			closeEl.classList.add(CLASS_HIDDEN);
 		});
+	}
+
+	_reset(toggleEl, targetEls) {
+		targetEls.forEach((el) => {
+			el.classList.add(CLASS_HIDDEN);
+		});
+		toggleEl.ariaExpanded = false;
 	}
 }

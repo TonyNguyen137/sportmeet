@@ -13,8 +13,16 @@ new ToggleDisplay();
 const modalEl = document.querySelector('.modal');
 const modal = modalEl ? new Modal(modalEl) : null;
 
-document.addEventListener('click', (e) => {
-	if (!modal) return;
-	if (e.target.closest('[data-open-modal]')) modal.open();
-	if (e.target.closest('[data-close-modal]')) modal.close();
-});
+document.addEventListener(
+	'click',
+	(e) => {
+		if (!modal) return;
+		if (e.target.closest('[data-open-modal]')) {
+			modal.open(e);
+		}
+		if (e.target.closest('[data-close-modal]')) {
+			modal.close(e);
+		}
+	},
+	false
+);
