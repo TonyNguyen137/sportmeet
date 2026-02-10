@@ -44,7 +44,7 @@ if (fs.existsSync(manifestPath)) {
 // Set EJS as the view engine
 app.set('views', path.join(projectRoot, 'server', 'views'));
 app.set('view engine', 'ejs');
-app.use(express.json());
+// app.use(express.json());
 
 // ==========================================
 // ROUTES

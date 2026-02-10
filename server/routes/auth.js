@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 
+import { formParser } from '../utils/auth.js';
+
 // GET /register -> Zeigt das Formular an
 router.get('/register', (req, res) => {
 	res.render('base', {
@@ -10,8 +12,10 @@ router.get('/register', (req, res) => {
 });
 
 // Route: POST /register
-router.post('/register', (req, res) => {
-	const { username, email, password } = req.body;
+router.post('/register', formParser, (req, res) => {
+	console.log('body', req.body);
+
+	const { email, password } = req.body;
 
 	if (!email || !password) {
 		return res.status(400).json({ error: 'Daten unvollständig' });
@@ -19,7 +23,7 @@ router.post('/register', (req, res) => {
 
 	res.status(201).json({
 		message: 'User erfolgreich registriert',
-		user: username
+		email: email
 	});
 });
 
