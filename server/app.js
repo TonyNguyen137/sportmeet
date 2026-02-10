@@ -2,7 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'url';
 import express from 'express';
-
+import authRoutes from './routes/auth.js';
 const app = express();
 
 // Determine the directory name of the current file
@@ -10,11 +10,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Define the project root directory
 const projectRoot = path.join(__dirname, '..');
-
-// Set up the view engine and views directory for rendering dynamic content
-// Set EJS as the view engine
-app.set('views', path.join(projectRoot, 'server', 'views'));
-app.set('view engine', 'ejs');
 
 // Serve static files (like CSS, images, and client-side JavaScript) from the 'public' directory
 const PUBLIC_DIR_SLUG = '/public';
@@ -41,8 +36,21 @@ if (fs.existsSync(manifestPath)) {
 	console.warn('[assets] manifest.json not found:', manifestPath);
 }
 
-// -------------------------------
+// ==========================================
+// Middleware
+// ==========================================
 
+// Set up the view engine and views directory for rendering dynamic content
+// Set EJS as the view engine
+app.set('views', path.join(projectRoot, 'server', 'views'));
+app.set('view engine', 'ejs');
+app.use(express.json());
+
+// ==========================================
+// ROUTES
+// ==========================================
+
+// --- Home Route ---
 app.get('/', (req, res) => {
 	res.render('base', {
 		title: 'SportMeet Startseite',
@@ -50,12 +58,10 @@ app.get('/', (req, res) => {
 	});
 });
 
-app.get('/register', (req, res) => {
-	res.render('base', {
-		title: 'SportMeet Registrierung',
-		template: 'page-register'
-	});
-});
+// --- Auth Routes (/register, /login etc.) ---
+app.use('/auth', authRoutes);
+
+// -------------------------------
 
 app.get('/forgot-password', (req, res) => {
 	res.render('base', {
