@@ -6,6 +6,7 @@ import ToggleDisplay from './behaviors/ToggleDisplay.js';
 import Modal from './components/Modal.js';
 import { DeleteAccount } from './behaviors/DeleteAccount.js';
 import { LogoutAccount } from './behaviors/LogoutAccount.js';
+import { PasswordVisibilityToggle } from './behaviors/PasswordVisibilityToggle.js';
 
 new ViewSwitcher();
 new Tabs();
@@ -13,6 +14,7 @@ new Dropdown();
 new ToggleDisplay();
 new DeleteAccount();
 new LogoutAccount();
+new PasswordVisibilityToggle();
 
 const modalEl = document.querySelector('.modal');
 const modal = modalEl ? new Modal(modalEl) : null;
