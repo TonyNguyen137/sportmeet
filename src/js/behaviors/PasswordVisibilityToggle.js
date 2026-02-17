@@ -19,7 +19,10 @@ export class PasswordVisibilityToggle {
 				const isVisible = input.type === 'text';
 				if (eye) eye.classList.toggle(CLASS_HIDDEN, isVisible);
 				if (eyeOff) eyeOff.classList.toggle(CLASS_HIDDEN, !isVisible);
-				btn.setAttribute('aria-label', isVisible ? 'Passwort verbergen' : 'Passwort anzeigen');
+				btn.setAttribute(
+					'aria-label',
+					isVisible ? 'Passwort verbergen' : 'Passwort anzeigen'
+				);
 			});
 		});
 	}
