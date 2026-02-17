@@ -1,4 +1,5 @@
 <% const isUserPage = typeof variant !== "undefined" && variant === "user" %>
+
 <header
 	class="<%= isUserPage ? 'text-center' : '' %> sticky top-0 left-0 w-full bg-white p-[16px] lg:p-[32px]">
 	<div class="container mx-auto flex items-center gap-[8px] lg:gap-[24px]">
@@ -49,9 +50,10 @@
 			<button
 				class="dropdown__toggle flex cursor-pointer items-center gap-2 text-white [--focus-color:var(--color-body)]"
 				aria-label="Konfiguration">
-				<span class="user text-md bg-accent-blue h-[36px] w-[36px] shrink-0 rounded-full"
-					>U</span
-				>
+				<span class="user text-md bg-accent-blue h-[36px] w-[36px] shrink-0 rounded-full">
+					<% if (locals.currentUser && currentUser.first_name) { %> <%=
+					currentUser.first_name.charAt(0).toUpperCase() %> <% } %>
+				</span>
 
 				<svg
 					aria-hidden="true"
@@ -69,17 +71,23 @@
 				<div
 					class="popover-header bg-accent-blue flex items-center gap-2 px-5 py-4 text-white">
 					<span
-						class="user text-md text-light grid h-[40px] w-[40px] shrink-0 place-content-center rounded-full bg-white/20"
-						>U</span
-					>
+						class="user text-md text-light grid h-[40px] w-[40px] shrink-0 place-content-center rounded-full bg-white/20">
+						<% if (locals.currentUser && currentUser.first_name) { %> <%=
+						currentUser.first_name.charAt(0).toUpperCase() %> <% } %>
+					</span>
 					<div class="flex flex-col items-start">
-						<span class="font-medium">User name</span>
-						<span class="text-sm text-blue-100">user.email@gmail.com</span>
+						<span class="font-medium">
+							<% if (locals.currentUser) { %> <%= currentUser.first_name %> <%=
+							currentUser.last_name %> <% } %>
+						</span>
+						<span class="text-sm text-blue-100">
+							<% if (locals.currentUser) { %> <%= currentUser.email %> <% } %></span
+						>
 					</div>
 				</div>
 				<div class="popover-body bg-white p-2">
 					<button
-						class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors hover:bg-gray-50">
+						class="btn-logout flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors hover:bg-gray-50">
 						<div class="rounded-sm bg-gray-100 p-2">
 							<svg
 								class="text-gray-600"
@@ -98,7 +106,7 @@
 						</div>
 					</button>
 					<button
-						class="flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors hover:bg-gray-50">
+						class="btn-delete-account flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors hover:bg-gray-50">
 						<div class="rounded-sm bg-red-100 p-2">
 							<svg
 								class="text-red-600"

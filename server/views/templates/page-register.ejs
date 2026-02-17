@@ -15,6 +15,44 @@
 			action="/auth/register"
 			method="POST">
 			<div class="login__group">
+				<label class="text-sm text-black" for="firstName">Vorname</label>
+				<div
+					class="focus-within:outline-accent-blue flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
+					<svg class="text-neutral-400" width="20" height="20" aria-hidden="true">
+						<use
+							href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#id-card' %>"></use>
+					</svg>
+
+					<input
+						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
+						type="text"
+						id="firstName"
+						name="firstName"
+						placeholder="Ihr Vorname"
+						required />
+				</div>
+			</div>
+
+			<div class="login__group mt-4">
+				<label class="text-sm text-black" for="lastName">Nachname</label>
+				<div
+					class="focus-within:outline-accent-blue flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
+					<svg class="text-neutral-400" width="20" height="20" aria-hidden="true">
+						<use
+							href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#id-card' %>"></use>
+					</svg>
+
+					<input
+						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
+						type="text"
+						id="lastName"
+						name="lastName"
+						placeholder="Ihr Nachname"
+						required />
+				</div>
+			</div>
+
+			<div class="login__group mt-4">
 				<label class="text-sm text-black" for="email">E-Mail-Adresse</label>
 				<div
 					class="focus-within:outline-accent-blue mt-1 flex items-center gap-[12px] rounded-sm px-[16px] py-[12px] outline outline-neutral-100 focus-within:outline focus-within:outline-[2px]">
@@ -104,8 +142,8 @@
 					<input
 						class="grow placeholder:text-neutral-400 focus-visible:outline-0"
 						type="password"
-						id="password"
-						name="password"
+						id="passwordConfirm"
+						name="passwordConfirm"
 						placeholder="••••••••"
 						required />
 					<button

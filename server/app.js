@@ -1,12 +1,26 @@
+// External Packages
+import express from 'express';
+import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
+
+// Node.js Built-in Modules
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'url';
-import express from 'express';
-import authRoutes from './routes/auth.js';
-const app = express();
 
-// Determine the directory name of the current file
+// Local Project Files
+import pool from './models/db.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
+import { checkAuth } from './utils/auth.js';
+import { loadUserData } from './utils/load-user-data.js'; // Pfad und Endung wichtig!
+import config from './config.js';
+
+// Setup __dirname for ES Modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const app = express();
+const PostgresStore = connectPgSimple(session);
 
 // Define the project root directory
 const projectRoot = path.join(__dirname, '..');
@@ -40,11 +54,34 @@ if (fs.existsSync(manifestPath)) {
 // Middleware
 // ==========================================
 
-// Set up the view engine and views directory for rendering dynamic content
-// Set EJS as the view engine
+// -- Set up the view engine and views directory for rendering dynamic content --
 app.set('views', path.join(projectRoot, 'server', 'views'));
+
+// -- Set EJS as the view engine --
 app.set('view engine', 'ejs');
-// app.use(express.json());
+
+// -- Set Session --
+// Session configuration
+app.use(
+	session({
+		// Store session data in PostgreSQL to persist through server restarts
+		store: new PostgresStore({
+			pool: pool,
+			tableName: 'session'
+		}),
+		name: 'sportmeet_sid',
+		secret: config.sessionSecret,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			maxAge: 1000 * 60 * 60 * 24,
+			httpOnly: true,
+			secure: config.env === 'production'
+		}
+	})
+);
+
+app.use(loadUserData);
 
 // ==========================================
 // ROUTES
@@ -52,14 +89,21 @@ app.set('view engine', 'ejs');
 
 // --- Home Route ---
 app.get('/', (req, res) => {
+	if (req.session && req.session.userId) {
+		return res.redirect('/me');
+	}
 	res.render('base', {
 		title: 'SportMeet Startseite',
 		template: 'index'
 	});
 });
 
-// --- Auth Routes (/register, /login etc.) ---
+// --- Auth Routes  ---
 app.use('/auth', authRoutes);
+
+// --- User Routes  ---
+
+app.use('/user', userRoutes); // Profilverwaltung / Account löschen
 
 // -------------------------------
 
@@ -70,11 +114,17 @@ app.get('/forgot-password', (req, res) => {
 	});
 });
 
-app.get('/me', (req, res) => {
-	res.render('base', {
-		title: 'SportMeet - Mein User Dashboard',
-		template: 'page-single'
-	});
+app.get('/me', checkAuth, async (req, res) => {
+	try {
+		// 2. Die Daten an das Template übergeben
+		res.render('base', {
+			title: 'SportMeet - Mein User Dashboard',
+			template: 'page-single'
+		});
+	} catch (err) {
+		console.error('Fehler beim Laden des Dashboards:', err);
+		res.status(500).send('Server Fehler');
+	}
 });
 
 export default app;
