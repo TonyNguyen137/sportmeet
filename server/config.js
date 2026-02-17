@@ -9,7 +9,11 @@ const config = {
 	host: process.env.DB_HOST ?? 'localhost',
 	database: process.env.DB_NAME ?? 'sportmeet_db',
 	password: process.env.DB_PASSWORD,
-	dbPort: Number(process.env.DB_PORT ?? 5432)
+	dbPort: Number(process.env.DB_PORT ?? 5433),
+	sessionSecret: process.env.SESSION_SECRET,
+	dbConnectionString:
+		process.env.DATABASE_URL ||
+		`postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 };
 
 export default config;
