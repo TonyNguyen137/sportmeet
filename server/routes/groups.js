@@ -15,7 +15,8 @@ const ALLOWED_GROUP_COLORS = new Set([
 	'#EC4899'
 ]);
 
-const createInviteCode = () => `SM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+const createInviteCode = () =>
+	`SM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
 const extractInviteCode = (rawInput) => {
 	if (!rawInput) {
 		return null;
@@ -40,7 +41,10 @@ const extractInviteCode = (rawInput) => {
 		}
 	}
 
-	candidate = candidate.split('?')[0].split('#')[0].replace(/^\/+|\/+$/g, '');
+	candidate = candidate
+		.split('?')[0]
+		.split('#')[0]
+		.replace(/^\/+|\/+$/g, '');
 
 	return candidate ? candidate.toUpperCase() : null;
 };
@@ -156,7 +160,9 @@ router.post('/join', checkAuth, formParser, async (req, res) => {
 	}
 
 	if (!inviteCode) {
-		return res.status(400).send('Ein gueltiger Einladungslink oder Code ist erforderlich.');
+		return res
+			.status(400)
+			.send('Ein gueltiger Einladungslink oder Code ist erforderlich.');
 	}
 
 	const client = await pool.connect();
@@ -164,13 +170,16 @@ router.post('/join', checkAuth, formParser, async (req, res) => {
 	try {
 		await client.query('BEGIN');
 
-		const groupResult = await client.query('SELECT id FROM groups WHERE invite_code = $1', [
-			inviteCode
-		]);
+		const groupResult = await client.query(
+			'SELECT id FROM groups WHERE invite_code = $1',
+			[inviteCode]
+		);
 
 		if (groupResult.rows.length === 0) {
 			await client.query('ROLLBACK');
-			return res.status(404).send('Gruppe mit diesem Einladungslink wurde nicht gefunden.');
+			return res
+				.status(404)
+				.send('Gruppe mit diesem Einladungslink wurde nicht gefunden.');
 		}
 
 		const groupId = groupResult.rows[0].id;

@@ -31,9 +31,8 @@
 	</div>
 
 	<div class="pane mt-6">
-		<% if (Array.isArray(userGroups) && userGroups.length > 0) { %>
-		<%- include("./groups", { groups: userGroups }) %>
-		<% } else { %>
+		<% if (Array.isArray(userGroups) && userGroups.length > 0) { %> <%-
+		include("./groups", { groups: userGroups }) %> <% } else { %>
 		<div class="mx-auto flex max-w-[50ch] flex-col items-center gap-3 text-center">
 			<%- include("./empty-group-list") %>
 		</div>

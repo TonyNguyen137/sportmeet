@@ -24,7 +24,16 @@ router.post('/', checkAuth, formParser, async (req, res) => {
 		return res.status(401).send('Nicht autorisiert');
 	}
 
-	if (!sport || !title || !date || !time || !street || !houseNumber || !postalCode || !city) {
+	if (
+		!sport ||
+		!title ||
+		!date ||
+		!time ||
+		!street ||
+		!houseNumber ||
+		!postalCode ||
+		!city
+	) {
 		return res.status(400).send('Bitte alle Pflichtfelder ausfuellen.');
 	}
 
@@ -42,11 +51,17 @@ router.post('/', checkAuth, formParser, async (req, res) => {
 		});
 	} catch (err) {
 		console.error('Geocoding Fehler:', err);
-		return res.status(502).send('Adresse konnte aktuell nicht geprueft werden. Bitte spaeter erneut versuchen.');
+		return res
+			.status(502)
+			.send(
+				'Adresse konnte aktuell nicht geprueft werden. Bitte spaeter erneut versuchen.'
+			);
 	}
 
 	if (!coordinates) {
-		return res.status(422).send('Adresse konnte nicht gefunden werden. Bitte Eingaben pruefen.');
+		return res
+			.status(422)
+			.send('Adresse konnte nicht gefunden werden. Bitte Eingaben pruefen.');
 	}
 
 	const client = await pool.connect();
