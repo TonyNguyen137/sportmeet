@@ -23,6 +23,7 @@ export default class ViewSwitcher {
 		this._currentActive = this._buttons.find((el) => el.classList.contains(CLASS_ACTIVE));
 
 		this._panels = new Map();
+
 		this._buttons.forEach((button) => {
 			const panelId = button.getAttribute('aria-controls');
 
@@ -36,10 +37,27 @@ export default class ViewSwitcher {
 		});
 
 		this._bindEvents();
+		this._applyInitialViewFromHash();
 	}
 
 	_bindEvents() {
 		this._blockEl.addEventListener('click', this._setViews.bind(this));
+	}
+
+	_applyInitialViewFromHash() {
+		const hash = window.location.hash.replace('#', '');
+		console.log('hash', hash);
+
+		if (!hash) return;
+
+		const targetPanelId = hash === 'groups' ? 'view-groups' : hash;
+		const targetButton = this._buttons.find(
+			(button) => button.getAttribute('aria-controls') === targetPanelId
+		);
+
+		if (!targetButton || targetButton === this._currentActive) return;
+
+		this._setViews({ target: targetButton });
 	}
 
 	// event listener

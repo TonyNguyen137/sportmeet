@@ -1,6 +1,7 @@
 <form
 	id="group-form"
-	action=""
+	action="/groups"
+	method="POST"
 	class="hidden w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
 	<div class="flex items-center justify-between border-b border-gray-200 p-6">
 		<div>
@@ -22,6 +23,8 @@
 		<div>
 			<label class="mb-2 block text-sm font-medium text-gray-700">Gruppenname *</label
 			><input
+				name="groupName"
+				required
 				placeholder="z.B. Fußball Freunde, Laufgruppe Köln..."
 				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
 				type="text" />
@@ -30,31 +33,44 @@
 			<label class="mb-2 block text-sm font-medium text-gray-700"
 				>Beschreibung (optional)</label
 			><textarea
+				name="description"
 				placeholder="Beschreibe deine Gruppe..."
 				rows="3"
 				class="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
 		</div>
 		<div>
 			<label class="mb-3 block text-sm font-medium text-gray-700">Farbe wählen</label>
-			<div class="flex gap-3">
-				<button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-blue-700 bg-blue-500 shadow-sm transition-transform hover:scale-105"></button
-				><button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-transparent bg-green-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
-				><button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-transparent bg-purple-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
-				><button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-transparent bg-red-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
-				><button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-transparent bg-yellow-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button
-				><button
-					type="button"
-					class="h-12 w-12 rounded-xl border-2 border-transparent bg-pink-500 shadow-sm transition-transform hover:scale-105 hover:border-gray-300"></button>
+			<div class="flex flex-wrap gap-3">
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#3B82F6" checked />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#3B82F6] shadow-sm transition-transform hover:scale-105 peer-checked:border-blue-900"></span>
+				</label>
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#22C55E" />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#22C55E] shadow-sm transition-transform hover:scale-105 peer-checked:border-green-900"></span>
+				</label>
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#A855F7" />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#A855F7] shadow-sm transition-transform hover:scale-105 peer-checked:border-purple-900"></span>
+				</label>
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#EF4444" />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#EF4444] shadow-sm transition-transform hover:scale-105 peer-checked:border-red-900"></span>
+				</label>
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#EAB308" />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#EAB308] shadow-sm transition-transform hover:scale-105 peer-checked:border-yellow-900"></span>
+				</label>
+				<label class="cursor-pointer">
+					<input class="peer sr-only" type="radio" name="groupColor" value="#EC4899" />
+					<span
+						class="block h-10 w-10 rounded-full border-2 border-transparent bg-[#EC4899] shadow-sm transition-transform hover:scale-105 peer-checked:border-pink-900"></span>
+				</label>
 			</div>
 		</div>
 		<div class="rounded-xl border border-purple-200 bg-purple-50 p-4">
@@ -92,7 +108,7 @@
 		><button
 			type="submit"
 			class="flex-1 cursor-pointer rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700">
-			Termin erstellen
+			Gruppe erstellen
 		</button>
 	</div>
 </form>

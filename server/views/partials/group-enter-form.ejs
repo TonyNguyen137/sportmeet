@@ -1,6 +1,7 @@
 <form
 	id="group-enter-form"
-	action=""
+	action="/groups/join"
+	method="POST"
 	class="hidden w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
 	<div class="flex items-center justify-between border-b border-gray-200 p-6">
 		<div>
@@ -21,7 +22,7 @@
 	<div class="space-y-5 p-6">
 		<div>
 			<label class="mb-2 block text-sm font-medium text-gray-700"
-				>Einladungslink oder Code *</label
+				>Einladungscode *</label
 			>
 			<div class="relative">
 				<svg
@@ -39,12 +40,18 @@
 					<path d="M15 7h2a5 5 0 1 1 0 10h-2"></path>
 					<line x1="8" x2="16" y1="12" y2="12"></line></svg
 				><input
-					placeholder="https://sportmate.de/join/abc123 oder ABC123"
+					name="inviteCode"
+					required
+					pattern="^SM-[A-F0-9]{8}$"
+					title="Bitte gib einen gueltigen Code im Format SM-XXXXXXXX ein."
+					placeholder="z.B. SM-95FCED66"
+					autocapitalize="characters"
+					autocomplete="off"
 					class="w-full rounded-xl border border-gray-200 py-3 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 					type="text" />
 			</div>
 			<p class="mt-2 text-xs text-gray-500">
-				Füge den Einladungslink oder Code ein, den du erhalten hast
+				Gib den Einladungscode ein, den du erhalten hast
 			</p>
 		</div>
 		<div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
@@ -65,13 +72,13 @@
 					<line x1="12" x2="12.01" y1="16" y2="16"></line>
 				</svg>
 				<div>
-					<p class="mb-1 text-sm font-medium text-blue-900">Wie funktioniert es?</p>
-					<ul class="space-y-1 text-sm text-blue-700">
-						<li>• Einladungslink von einem Freund erhalten</li>
-						<li>• Link oder Code hier einfügen</li>
-						<li>• Sofort Zugriff auf Gruppentermine</li>
-					</ul>
-				</div>
+						<p class="mb-1 text-sm font-medium text-blue-900">Wie funktioniert es?</p>
+						<ul class="space-y-1 text-sm text-blue-700">
+							<li>• Einladungscode von einem Freund erhalten</li>
+							<li>• Code hier eingeben (Format: SM-XXXXXXXX)</li>
+							<li>• Sofort Zugriff auf Gruppentermine</li>
+						</ul>
+					</div>
 			</div>
 		</div>
 	</div>
@@ -86,7 +93,7 @@
 		><button
 			type="submit"
 			class="flex-1 cursor-pointer rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700">
-			Termin erstellen
+			Gruppe beitreten
 		</button>
 	</div>
 </form>

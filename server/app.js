@@ -12,6 +12,8 @@ import { fileURLToPath } from 'url';
 import pool from './models/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
+import eventsRoutes from './routes/events.js';
+import groupsRoutes from './routes/groups.js';
 import { checkAuth } from './utils/auth.js';
 import { loadUserData } from './utils/load-user-data.js'; // Pfad und Endung wichtig!
 import config from './config.js';
@@ -104,6 +106,8 @@ app.use('/auth', authRoutes);
 // --- User Routes  ---
 
 app.use('/user', userRoutes); // Profilverwaltung / Account löschen
+app.use('/events', eventsRoutes); // Termine erstellen
+app.use('/groups', groupsRoutes); // Gruppen erstellen
 
 // -------------------------------
 

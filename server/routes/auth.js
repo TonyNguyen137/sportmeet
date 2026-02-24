@@ -66,8 +66,6 @@ router.post('/login', formParser, async (req, res) => {
 			const user = result.rows[0];
 			const match = await bcrypt.compare(password, user.password_hash);
 			console.log('mail', email);
-			console.log('match', match);
-			console.log('user: ', user);
 
 			if (match) {
 				req.session.userId = user.id;

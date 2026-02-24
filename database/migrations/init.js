@@ -5,7 +5,6 @@ export const shorthands = undefined;
 
 /**
  * @param pgm {import('node-pg-migrate').MigrationBuilder}
- * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
@@ -37,6 +36,7 @@ export const up = (pgm) => {
 		},
 		name: { type: 'varchar(120)', notNull: true },
 		invite_code: { type: 'varchar(32)', notNull: true, unique: true },
+		color: { type: 'varchar(7)', notNull: true, default: '#3B82F6' },
 		created_by: {
 			type: 'bigint',
 			notNull: true,
@@ -216,7 +216,6 @@ export const up = (pgm) => {
 
 /**
  * @param pgm {import('node-pg-migrate').MigrationBuilder}
- * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
 export const down = (pgm) => {
