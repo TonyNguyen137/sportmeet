@@ -85,10 +85,7 @@ export const runEventReminderJob = async () => {
 				});
 				emailsSent += 1;
 
-				const marked = await markReminderDeliverySent(
-					recipient.id,
-					recipient.user_id
-				);
+				const marked = await markReminderDeliverySent(recipient.id, recipient.user_id);
 				if (marked) {
 					deliveriesMarked += 1;
 				} else {

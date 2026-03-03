@@ -197,13 +197,9 @@ export const up = (pgm) => {
 		},
 		sent_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') }
 	});
-	pgm.addConstraint(
-		'event_reminder_deliveries',
-		'event_reminder_deliveries_pkey',
-		{
-			primaryKey: ['event_id', 'user_id']
-		}
-	);
+	pgm.addConstraint('event_reminder_deliveries', 'event_reminder_deliveries_pkey', {
+		primaryKey: ['event_id', 'user_id']
+	});
 
 	// 9) SESSION
 	pgm.createTable('session', {
