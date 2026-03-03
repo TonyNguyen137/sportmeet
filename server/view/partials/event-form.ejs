@@ -1,0 +1,286 @@
+<% const hasUserGroups = Array.isArray(userGroups) && userGroups.length > 0; const todayLocal = new Date();
+todayLocal.setMinutes(todayLocal.getMinutes() - todayLocal.getTimezoneOffset()); const todayDateValue = todayLocal.toISOString().slice(0,
+10); const eventFormFeedback = locals.eventFormFeedback || {}; const eventFormErrors = Array.isArray(eventFormFeedback.errors) ?
+eventFormFeedback.errors : []; const eventFormValues = eventFormFeedback.values || {}; %>
+
+<form
+	id="appointment-form"
+	data-event-form
+	action="/events"
+	method="POST"
+	class="w-full max-w-2xl rounded-2xl border border-gray-200 bg-white shadow-xl">
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+	<div class="flex items-center justify-between border-b border-gray-200 p-6">
+		<div>
+			<h2 class="text-2xl font-bold text-gray-900">Neuen Termin erstellen</h2>
+			<p class="mt-1 text-sm text-gray-600">Erstelle einen öffentlichen oder privaten Termin</p>
+		</div>
+		<button
+			type="button"
+			data-modal-close
+			class="close-appointment-form cursor-pointer text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-gray-500">
+			<svg width="20" height="20" aria-hidden="true" class="block">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+			</svg>
+		</button>
+	</div>
+
+	<div class="space-y-4 overflow-y-auto p-6">
+		<div
+			class="<%= eventFormErrors.length ? 'mb-4 focus:outline-amber-700' : 'mb-4 focus:outline-amber-700' %> hidden rounded-lg border border-amber-200 bg-amber-50 p-4 focus:outline-2 focus:outline-offset-[0.15lh]"
+			data-error-container
+			tabindex="-1">
+			<div class="flex items-start gap-2">
+				<svg width="16" height="16" aria-hidden="true" class="mt-0.5 flex-shrink-0 text-amber-600">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#alert' %>"></use>
+				</svg>
+				<div class="text-start">
+					<p class="text-sm font-semibold text-amber-800" data-error-title>
+						<%= eventFormFeedback.errorTitle || 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:' %>
+					</p>
+					<ul data-error-list class="mt-1 list-disc ps-[0.85em]">
+						<% if (eventFormErrors.length) { %> <% eventFormErrors.forEach((error) => { %>
+						<li class="text-sm text-amber-700"><%= error %></li>
+						<% }) %> <% } %>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div data-event-visibility-root>
+			<input type="hidden" name="visibility" value="<%= eventFormValues.visibility || 'public' %>" data-event-visibility-input />
+			<label class="mb-3 block text-sm font-medium text-gray-700">Sichtbarkeit *</label>
+			<% if (!hasUserGroups) { %>
+			<p class="mb-3 rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-medium text-sky-800">
+				Fuer private Termine brauchst du zuerst eine Gruppe.
+			</p>
+			<% } %>
+			<div class="grid gap-3 sm:grid-cols-2">
+				<button
+					type="button"
+					data-event-visibility-option="public"
+					aria-pressed="true"
+					class="group rounded-xl border-2 border-green-500 bg-green-50 p-4 text-left transition-all">
+					<div class="flex items-center gap-3">
+						<div class="rounded-lg bg-green-500 p-2">
+							<svg class="text-white" aria-hidden="true" width="24" height="24">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#globe' %>"></use>
+							</svg>
+						</div>
+						<div>
+							<p class="font-semibold text-gray-900">Öffentlich</p>
+							<p class="text-xs text-gray-500">Für alle sichtbar</p>
+						</div>
+					</div>
+				</button>
+
+				<% if (hasUserGroups) { %>
+				<button
+					type="button"
+					data-event-visibility-option="private"
+					aria-pressed="false"
+					class="group rounded-xl border-2 border-gray-200 bg-white p-4 text-left transition-all hover:border-blue-300">
+					<div class="flex items-center gap-3">
+						<div class="rounded-lg bg-gray-100 p-2">
+							<svg class="text-gray-700" aria-hidden="true" width="24" height="24">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+							</svg>
+						</div>
+						<div>
+							<p class="font-semibold text-gray-900">Privat</p>
+							<p class="text-xs text-gray-500">Nur für deine Gruppe</p>
+						</div>
+					</div>
+				</button>
+				<% } %>
+			</div>
+		</div>
+
+		<div class="hidden" data-event-private-fields>
+			<label for="group-id" class="mb-2 block text-sm font-medium text-gray-700">Gruppe auswählen</label>
+			<select
+				id="group-id"
+				name="groupId"
+				data-event-group-select
+				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+				<option value="">Wähle eine Gruppe...</option>
+				<% userGroups.forEach((group) => { %> <% if (String(eventFormValues.groupId || '') === String(group.id)) { %>
+				<option value="<%= group.id %>" selected="selected"><%= group.name %></option>
+				<% } else { %>
+				<option value="<%= group.id %>"><%= group.name %></option>
+				<% } %> <% }) %>
+			</select>
+		</div>
+
+		<div>
+			<label for="sport-id" class="mb-2 block text-sm font-medium text-gray-700">Sportart</label>
+			<select
+				id="sport-id"
+				name="sportId"
+				data-field-label="Sportart"
+				required
+				data-sport-select
+				data-custom-target="#custom-sport"
+				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+				<option value="">Wähle eine Sportart...</option>
+				<% if (Array.isArray(sports)) { %> <% sports.forEach((sport) => { %> <% if (String(eventFormValues.sportId || '') ===
+				String(sport.id)) { %>
+				<option value="<%= sport.id %>" selected="selected"><%= sport.name %></option>
+				<% } else { %>
+				<option value="<%= sport.id %>"><%= sport.name %></option>
+				<% } %> <% }) %> <% } %> <% if (String(eventFormValues.sportId || '') === 'custom') { %>
+				<option value="custom" selected="selected">✏️ Eigene Sportart eingeben...</option>
+				<% } else { %>
+				<option value="custom">✏️ Eigene Sportart eingeben...</option>
+				<% } %>
+			</select>
+		</div>
+
+		<div id="custom-sport" class="hidden">
+			<label for="custom-sport-name" class="mb-2 block text-sm font-medium text-gray-700">Eigene Sportart *</label>
+			<input
+				data-field-label="Sportart"
+				required
+				id="custom-sport-name"
+				name="customSportName"
+				type="text"
+				value="<%= eventFormValues.customSportName || '' %>"
+				maxlength="80"
+				data-custom-sport-input
+				placeholder="z.B. Pickleball"
+				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+		</div>
+
+		<div>
+			<label for="event-title" class="mb-2 block text-sm font-medium text-gray-700">Titel des Termins</label>
+			<input
+				data-field-label="Titel des Termins"
+				id="event-title"
+				name="title"
+				value="<%= eventFormValues.title || '' %>"
+				required
+				placeholder="z.B. Hallenfußball, Morgen-Yoga, 10km Lauf..."
+				class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+				type="text" />
+		</div>
+
+		<div class="grid grid-cols-2 gap-4">
+			<div>
+				<label for="event-date" class="mb-2 block text-sm font-medium text-gray-700">Datum*</label>
+				<input
+					data-field-label="Datum"
+					id="event-date"
+					name="date"
+					value="<%= eventFormValues.date || '' %>"
+					required
+					min="<%= todayDateValue %>"
+					class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					type="date" />
+			</div>
+			<div>
+				<label for="event-time" class="mb-2 block text-sm font-medium text-gray-700">Uhrzeit *</label>
+				<input
+					data-field-label="Uhrzeit"
+					id="event-time"
+					name="time"
+					value="<%= eventFormValues.time || '' %>"
+					required
+					class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					type="time" />
+			</div>
+		</div>
+
+		<div>
+			<label for="event-street" class="mb-3 block text-sm font-medium text-gray-700">Adresse *</label>
+			<div class="mb-3 grid grid-cols-3 gap-3">
+				<div class="col-span-2">
+					<input
+						data-field-label="Adresse"
+						id="event-street"
+						name="street"
+						value="<%= eventFormValues.street || '' %>"
+						required
+						placeholder="Straße (z.B. Musterstraße)"
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						type="text" />
+				</div>
+				<div>
+					<label for="event-house-number" class="sr-only">Hausnummer *</label>
+					<input
+						data-field-label="Hausnummer"
+						id="event-house-number"
+						name="houseNumber"
+						value="<%= eventFormValues.houseNumber || '' %>"
+						required
+						placeholder="Nr."
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						type="text" />
+				</div>
+			</div>
+			<div class="mb-3 grid grid-cols-3 gap-3">
+				<div>
+					<label for="event-postal-code" class="sr-only">Postleizahl</label>
+
+					<input
+						id="event-postal-code"
+						name="postalCode"
+						value="<%= eventFormValues.postalCode || '' %>"
+						required
+						placeholder="PLZ"
+						maxlength="5"
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						type="text" />
+				</div>
+				<div class="col-span-2">
+					<label for="event-city" class="sr-only">Stadt</label>
+
+					<input
+						id="event-city"
+						name="city"
+						value="<%= eventFormValues.city || '' %>"
+						required
+						placeholder="Stadt (z.B. Köln)"
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						type="text" />
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<label for="event-location-name" class="mb-3 block">Location</label>
+			<input
+				id="event-location-name"
+				name="locationName"
+				value="<%= eventFormValues.locationName || '' %>"
+				placeholder="(optional, z.B. Sporthalle Nord)"
+				class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+				type="text" />
+		</div>
+
+		<div>
+			<label for="event-description" class="mb-2 block text-sm font-medium text-gray-700">Beschreibung (optional)</label>
+			<textarea
+				id="event-description"
+				name="description"
+				placeholder="z.B. Alle Levels willkommen! Bitte Hallenschuhe mitbringen..."
+				rows="3"
+				class="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+<%= eventFormValues.description || '' %></textarea
+			>
+		</div>
+	</div>
+
+	<div class="flex flex-wrap gap-3 border-t border-gray-200 bg-gray-50 p-6">
+		<button
+			type="button"
+			data-modal-close
+			class="close-appointment-form w-fit grow cursor-pointer rounded-xl border border-gray-200 bg-white px-3 py-3 font-medium transition-all hover:bg-gray-100 md:px-6">
+			Abbrechen
+		</button>
+		<button
+			type="submit"
+			class="w-fit grow cursor-pointer rounded-xl bg-blue-600 px-3 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all [--focus-color:black] hover:bg-blue-700 md:px-6">
+			Termin erstellen
+		</button>
+	</div>
+</form>

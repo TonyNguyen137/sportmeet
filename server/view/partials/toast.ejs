@@ -1,0 +1,19 @@
+<% if (toast && toast.message) { %>
+<div class="pointer-events-none fixed top-5 left-1/2 z-[1100] w-[min(92vw,560px)] -translate-x-1/2" data-toast-root>
+	<div
+		class="<%= toast.variant === 'error' ? 'border-red-200 text-red-800' : toast.variant === 'warning' ? 'border-amber-200 text-amber-800' : 'border-emerald-200 text-emerald-800' %> pointer-events-auto -translate-y-3 rounded-lg border bg-amber-50 bg-emerald-50 bg-red-50 px-5 py-4 opacity-0 shadow-xl transition-all duration-300 ease-out"
+		role="status"
+		aria-live="polite"
+		data-toast
+		data-toast-duration="<%= toast.duration || 3000 %>">
+		<div class="flex items-start gap-3">
+			<p class="flex-1 text-base font-semibold"><%= toast.message %></p>
+			<button type="button" class="cursor-pointer rounded-sm p-1 hover:bg-black/5" data-toast-close aria-label="Toast schließen">
+				<svg width="16" height="16" aria-hidden="true">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+				</svg>
+			</button>
+		</div>
+	</div>
+</div>
+<% } %>

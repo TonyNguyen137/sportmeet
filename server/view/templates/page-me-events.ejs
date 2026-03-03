@@ -1,0 +1,17 @@
+<%- include("../parts/header", { variant: "user" }) %>
+
+<main class="grid">
+	<h1 class="sr-only">Dashboard</h1>
+
+	<div class="container mx-auto px-[12px] py-[32px]"><%- include("../partials/events-view") %></div>
+</main>
+
+<% if (locals.eventFormFeedback && Array.isArray(eventFormFeedback.errors) && eventFormFeedback.errors.length) { %>
+<button type="button" class="hidden" id="open-event-form-with-errors" data-modal-open="grouped:event-form"></button>
+<script>
+	window.addEventListener('DOMContentLoaded', () => {
+		const trigger = document.getElementById('open-event-form-with-errors');
+		if (trigger) trigger.click();
+	});
+</script>
+<% } %> <%- include("../partials/modal") %> <%- include("../parts/footer") %>

@@ -1,4 +1,6 @@
-export class DeleteAccount {
+import { getCsrfToken } from '../utils.js';
+
+export default class DeleteAccount {
 	constructor() {
 		this.deleteAccountButton = document.querySelector('.btn-delete-account');
 
@@ -21,7 +23,8 @@ export class DeleteAccount {
 			fetch('/user/delete-account', {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					'X-CSRF-Token': getCsrfToken()
 				}
 				// Wir schicken keinen Body, da die Session dem Server sagt, wer gelöscht wird
 			})

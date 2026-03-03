@@ -1,0 +1,101 @@
+<form
+	id="group-enter-form"
+	data-group-enter-form
+	action="/groups/join"
+	method="POST"
+	class="w-[550px] max-w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+	<div class="flex items-center justify-between border-b border-gray-200 p-6">
+		<div>
+			<h2 class="text-2xl font-bold text-gray-900">Gruppe beitreten</h2>
+			<p class="mt-1 text-sm text-gray-600">Tritt einer bestehenden Gruppe bei</p>
+		</div>
+		<button
+			type="button"
+			data-modal-close
+			aria-label="Modal schließen"
+			class="close-enter-form cursor-pointer text-gray-400 hover:text-gray-600">
+			<svg width="20" height="20" aria-hidden="true" class="block">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+			</svg>
+		</button>
+	</div>
+	<div class="space-y-5 p-6">
+		<div
+			class="mb-4 hidden rounded-lg border border-amber-200 bg-amber-50 p-4 focus:outline-2 focus:outline-offset-[0.15lh] focus:outline-amber-700"
+			data-error-container
+			tabindex="-1">
+			<div class="flex items-start gap-2">
+				<svg width="16" height="16" aria-hidden="true" class="mt-0.5 flex-shrink-0 text-amber-600">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#alert' %>"></use>
+				</svg>
+				<div class="text-start">
+					<p class="text-sm font-semibold text-amber-800" data-error-title>Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:</p>
+					<ul data-error-list class="mt-1 list-disc ps-[0.85em]"></ul>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<label class="mb-2 block text-sm font-medium text-gray-700" for="inviteCode">Einladungscode *</label>
+			<div class="relative">
+				<svg width="20" height="20" aria-hidden="true" class="absolute top-1/2 left-3 block h-5 w-5 -translate-y-1/2 text-gray-400">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#link' %>"></use>
+				</svg>
+				<input
+					name="inviteCode"
+					id="inviteCode"
+					required
+					pattern="^SM-[A-F0-9]{8}$"
+					title="Bitte gib einen gültigen Code im Format
+				SM-XXXXXXXX ein."
+					placeholder="z.B. SM-95FCED66"
+					autocapitalize="characters"
+					autocomplete="off"
+					class="w-full rounded-xl border border-gray-200 py-3 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					type="text" />
+			</div>
+			<p class="mt-2 text-xs text-gray-500">Gib den Einladungscode ein, den du erhalten hast</p>
+		</div>
+		<div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+			<div class="flex items-start gap-3">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-circle-alert mt-0.5 h-5 w-5 text-blue-600">
+					<circle cx="12" cy="12" r="10"></circle>
+					<line x1="12" x2="12" y1="8" y2="12"></line>
+					<line x1="12" x2="12.01" y1="16" y2="16"></line>
+				</svg>
+				<div>
+					<p class="mb-1 text-sm font-medium text-blue-900">Wie funktioniert es?</p>
+					<ul class="space-y-1 text-sm text-blue-700">
+						<li>• Einladungscode von einem Freund erhalten</li>
+						<li>• Code hier eingeben (Format: SM-XXXXXXXX)</li>
+						<li>• Sofort Zugriff auf Gruppentermine</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex gap-3 border-t border-gray-200 bg-gray-50 p-6">
+		<button
+			type="button"
+			data-modal-close
+			class="close-enter-form flex-1 cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 font-medium transition-all hover:bg-gray-100">
+			Abbrechen</button
+		><button
+			type="submit"
+			class="flex-1 cursor-pointer rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all [--focus-color:black] hover:bg-blue-700">
+			Gruppe beitreten
+		</button>
+	</div>
+</form>

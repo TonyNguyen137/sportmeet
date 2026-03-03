@@ -1,0 +1,15 @@
+<div
+	data-modal="grouped"
+	class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 data-[modal-isopen=true]:grid data-[modal-isopen=true]:place-content-center">
+	<div
+		data-modal-inner
+		class="relative max-h-[95vh] w-full max-w-[95vw] overflow-y-auto rounded-xl bg-white p-3"
+		aria-modal="true"
+		role="dialog">
+		<div data-modal-group="event-form" class="hidden data-[modal-group-active=true]:block"><%- include("./event-form") %></div>
+
+		<div data-modal-group="group-form" class="hidden data-[modal-group-active=true]:block"><%- include("./group-form") %></div>
+
+		<div data-modal-group="enter-form" class="hidden data-[modal-group-active=true]:block"><%- include("./group-enter-form") %></div>
+	</div>
+</div>

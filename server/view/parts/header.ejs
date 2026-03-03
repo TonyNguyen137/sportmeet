@@ -1,0 +1,119 @@
+<% const isUserPage = typeof variant !== "undefined" && variant === "user" const currentDashboardPage = typeof activeDashboardPage !==
+"undefined" ? activeDashboardPage : locals.activeDashboardPage || "" %>
+
+<header
+	class="<%= isUserPage ? 'text-center' : '' %> sticky top-0 left-0 z-[999] w-full bg-white p-[16px] shadow-[0_2px_10px_rgba(17,24,39,0.08)] lg:px-[32px] lg:pt-[32px] lg:pb-[16px]">
+	<div class="<%= isUserPage ? '' : 'justify-center' %> container mx-auto flex items-center gap-[8px] lg:gap-[24px]">
+		<a href="/" aria-label="zur Startseite">
+			<img
+				draggable="false"
+				class="[@media(min-width:500px)]:hidden"
+				src="<%= publicPrefix + '/' + 'sportmeet-icon.svg' %>"
+				width="38"
+				height="54"
+				alt="SportsMeet Logo Mobile" />
+			<img
+				draggable="false"
+				class="hidden [@media(min-width:500px)]:inline"
+				src="<%= publicPrefix + '/' + 'sportmeet-logo.svg' %>"
+				width="212"
+				height="53"
+				alt="SportsMeet Logo Desktop" />
+		</a>
+
+		<% if (isUserPage) { %>
+
+		<nav class="navigation ms-auto" aria-label="Haupt">
+			<ul class="flex gap-[8px] lg:gap-[24px]">
+				<li>
+					<a
+						href="/me"
+						class="<%= `text-md ${ currentDashboardPage === 'events' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent' }` %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						aria-current="<%= currentDashboardPage === 'events' ? 'page' : undefined %>">
+						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
+						</svg>
+						<span id="event-label" class="hidden sm:inline"> Termine </span>
+					</a>
+				</li>
+				<li>
+					<a
+						href="/me/groups"
+						class="<%= `text-md ${ currentDashboardPage === 'groups' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent' }` %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						aria-current="<%= currentDashboardPage === 'groups' ? 'page' : undefined %>">
+						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+						</svg>
+						<span id="group-label" class="hidden sm:inline"> Gruppen </span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		<div class="group relative" data-dropdown>
+			<button
+				class="flex cursor-pointer items-center gap-2 text-white [--focus-color:var(--color-body)]"
+				data-dropdown-toggle
+				type="button"
+				aria-haspopup="menu"
+				aria-expanded="false"
+				aria-label="Konfiguration">
+				<span class="user text-md bg-accent-blue grid h-[36px] w-[36px] shrink-0 place-items-center rounded-full">
+					<% if (locals.currentUser && currentUser.first_name) { %> <%= currentUser.first_name.charAt(0).toUpperCase() %> <% } %>
+				</span>
+
+				<svg aria-hidden="true" width="24" height="24" aria-hidden="true" class="text-body">
+					<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#chevron-down' %>"></use>
+				</svg>
+			</button>
+
+			<div
+				class="absolute right-0 bottom-0 hidden translate-y-[calc(100%+15px)] overflow-hidden rounded-sm border border-gray-200 shadow-lg group-data-[dropdown-is-open]:block"
+				aria-hidden="true"
+				data-dropdown-list>
+				<div class="bg-accent-blue flex items-center gap-2 px-5 py-4 text-white">
+					<span class="user text-md text-light grid h-[40px] w-[40px] shrink-0 place-content-center rounded-full bg-white/20">
+						<% if (locals.currentUser && currentUser.first_name) { %> <%= currentUser.first_name.charAt(0).toUpperCase() %> <% } %>
+					</span>
+					<div class="flex flex-col items-start">
+						<span class="font-medium">
+							<% if (locals.currentUser) { %> <%= currentUser.first_name %> <%= currentUser.last_name %> <% } %>
+						</span>
+						<span class="text-sm text-blue-100"> <% if (locals.currentUser) { %> <%= currentUser.email %> <% } %></span>
+					</div>
+				</div>
+				<div class="bg-white p-2">
+					<button
+						class="btn-logout flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors [--focus-color:var(--color-body)] hover:bg-gray-50"
+						type="button">
+						<div class="rounded-sm bg-gray-100 p-2">
+							<svg class="text-gray-600" aria-hidden="true" width="20" height="20" aria-hidden="true">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#logout' %>"></use>
+							</svg>
+						</div>
+
+						<div class="flex w-max flex-col items-start">
+							<p class="font-medium text-gray-900">Abmelden</p>
+							<p class="text-xs text-gray-500">aus deinem Account ausloggen</p>
+						</div>
+					</button>
+					<button
+						class="btn-delete-account flex w-full cursor-pointer items-center gap-2 rounded-sm px-4 py-3 transition-colors [--focus-color:var(--color-body)] hover:bg-gray-50"
+						type="button">
+						<div class="rounded-sm bg-red-100 p-2">
+							<svg class="text-red-600" aria-hidden="true" width="20" height="20" aria-hidden="true">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#delete-account' %>"></use>
+							</svg>
+						</div>
+						<div class="flex w-max flex-col items-start">
+							<p class="font-medium text-red-600">Account löschen</p>
+							<span class="text-xs text-red-500">Dein Konto dauerhaft entfernen</span>
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<% } %>
+	</div>
+</header>

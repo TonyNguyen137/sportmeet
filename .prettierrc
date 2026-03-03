@@ -13,9 +13,10 @@
 
 	"overrides": [
 		{
-			"files": ["*.ejs"],
+			"files": ["**/*.ejs"],
 			"options": {
-				"parser": "html"
+				"parser": "html",
+				"printWidth": 140
 			}
 		},
 

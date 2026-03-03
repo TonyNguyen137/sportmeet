@@ -1,4 +1,4 @@
-import { toArray, select, wrap } from '../utils.js';
+import { toArray, select } from '../utils.js';
 
 export default class Tabs {
 	constructor() {
@@ -21,6 +21,12 @@ export default class Tabs {
 		// Prevent selecting panels from nested tabs
 		rootEl.panelEls = toArray(':scope > .tabs__panel', rootEl.wrapperPanelsEl);
 
+		// Ensure there is always an active tab to keep keyboard navigation stable.
+		if (!rootEl.currentActiveTabEl && rootEl.tabEls && rootEl.tabEls[0]) {
+			rootEl.currentActiveTabEl = rootEl.tabEls[0];
+			this._setTab(rootEl.currentActiveTabEl, true, rootEl);
+		}
+
 		// Event Listener
 		rootEl.tabListEl.addEventListener('click', this._activeTab.bind(this));
 		rootEl.tabListEl.addEventListener('keydown', this._keypressed.bind(this));
@@ -42,9 +48,14 @@ export default class Tabs {
 	_moveTab(event, direction = 0) {
 		event.preventDefault();
 		const rootEl = event.currentTarget.closest('.tabs');
-		const currentActiveTabIndex = rootEl.tabEls.indexOf(rootEl.currentActiveTabEl);
+		const focusedTabEl = event.target.closest('.tabs__tab');
+		const currentTabEl = focusedTabEl || rootEl.currentActiveTabEl;
+		const currentTabIndex = rootEl.tabEls.indexOf(currentTabEl);
+		if (currentTabIndex < 0) return;
 
-		const nextTabEl = wrap(rootEl.tabEls, currentActiveTabIndex + direction);
+		const nextTabIndex =
+			(currentTabIndex + direction + rootEl.tabEls.length) % rootEl.tabEls.length;
+		const nextTabEl = rootEl.tabEls[nextTabIndex];
 
 		this._setTab(rootEl.currentActiveTabEl, false, rootEl);
 		this._setTab(nextTabEl, true, rootEl);
@@ -69,17 +80,16 @@ export default class Tabs {
 	}
 
 	_activeTab(e) {
-		console.log('clicked active tab');
-
 		const clickedTabEl = e.target.closest('.tabs__tab');
-
-		if (clickedTabEl === e.currentTarget.currentActiveTabEl || !clickedTabEl) return;
+		if (!clickedTabEl) return;
 
 		const rootEl = e.currentTarget.closest('.tabs');
+		if (clickedTabEl === rootEl.currentActiveTabEl) return;
 
 		this._setTab(rootEl.currentActiveTabEl, false, rootEl);
 		this._setTab(clickedTabEl, true, rootEl);
 
+		clickedTabEl.focus();
 		rootEl.currentActiveTabEl = clickedTabEl;
 	}
 }

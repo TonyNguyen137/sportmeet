@@ -14,6 +14,23 @@ const config = {
 	geocodingProvider: process.env.GEOCODING_PROVIDER ?? 'nominatim',
 	geocodingUserAgent:
 		process.env.GEOCODING_USER_AGENT ?? 'sportmeet/0.1 (dev@sportmeet.local)',
+	brevoApiKey: process.env.BREVO_API_KEY ?? '',
+	mailFromName: process.env.MAIL_FROM_NAME ?? 'Sportmeet',
+	mailFromAddress: process.env.MAIL_FROM_ADDRESS ?? '',
+	appBaseUrl: process.env.APP_BASE_URL ?? 'http://localhost:3000',
+	eventReminderEnabled: process.env.EVENT_REMINDER_ENABLED !== 'false',
+	eventReminderIntervalMinutes: Math.max(
+		1,
+		Number(process.env.EVENT_REMINDER_INTERVAL_MINUTES || 15)
+	),
+	eventReminderLeadMinutes: Math.max(
+		1,
+		Number(process.env.EVENT_REMINDER_LEAD_MINUTES || 10)
+	),
+	eventReminderWindowMinutes: Math.max(
+		1,
+		Number(process.env.EVENT_REMINDER_WINDOW_MINUTES || 15)
+	),
 	dbConnectionString:
 		process.env.DATABASE_URL ||
 		`postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`

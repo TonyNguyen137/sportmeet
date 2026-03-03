@@ -1,4 +1,6 @@
-export class LogoutAccount {
+import { getCsrfToken } from '../utils.js';
+
+export default class LogoutAccount {
 	constructor() {
 		this.logoutButton = document.querySelector('.btn-logout');
 
@@ -11,9 +13,12 @@ export class LogoutAccount {
 
 	async handleLogout() {
 		try {
-			const response = await fetch('/auth/logout', {
+			const response = await fetch('/logout', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' }
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-Token': getCsrfToken()
+				}
 			});
 
 			if (response.ok) {

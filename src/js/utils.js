@@ -20,3 +20,10 @@ export function wrap(min, max, index) {
 	// Handle numeric range input
 	return this.wrapRange(min, max, index);
 }
+
+export function getCsrfToken() {
+	return (
+		document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')?.trim() ||
+		''
+	);
+}

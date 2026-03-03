@@ -21,7 +21,7 @@
 		}
 
 		&__panel {
-			@apply mt-4 rounded-2xl;
+			@apply mt-4;
 		}
 	}
 }

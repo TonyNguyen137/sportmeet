@@ -1,34 +1,37 @@
 import '../css/styles.css';
-import ViewSwitcher from './components/ViewSwitcher.js';
 import Tabs from './components/Tabs.js';
 import Dropdown from './components/Dropdown.js';
+import ModalManager from './components/Modal.js';
+import Toast from './components/Toast.js';
+import FormFactory from './components/FormFactory.js';
 import ToggleDisplay from './behaviors/ToggleDisplay.js';
-import Modal from './components/Modal.js';
-import { DeleteAccount } from './behaviors/DeleteAccount.js';
-import { LogoutAccount } from './behaviors/LogoutAccount.js';
-import { PasswordVisibilityToggle } from './behaviors/PasswordVisibilityToggle.js';
+import CustomSportField from './behaviors/CustomSportField.js';
+import CopyToClipboard from './behaviors/CopyToClipboard.js';
+import DeleteAccount from './behaviors/DeleteAccount.js';
+import DeleteGroup from './behaviors/DeleteGroup.js';
+import DeleteEvent from './behaviors/DeleteEvent.js';
+import EventVisibilitySwitcher from './behaviors/EventVisibilitySwitcher.js';
+import LogoutAccount from './behaviors/LogoutAccount.js';
+import RemoveGroupMember from './behaviors/RemoveGroupMember.js';
+import RemoveEventParticipant from './behaviors/RemoveEventParticipant.js';
+import RemoveEventComment from './behaviors/RemoveEventComment.js';
+import PublicEventsLoader from './behaviors/PublicEventsLoader.js';
 
-new ViewSwitcher();
 new Tabs();
 new Dropdown();
+new Toast();
 new ToggleDisplay();
+new CustomSportField();
+new EventVisibilitySwitcher();
+new CopyToClipboard();
 new DeleteAccount();
+new DeleteGroup();
+new DeleteEvent();
+new RemoveGroupMember();
+new RemoveEventParticipant();
+new RemoveEventComment();
+new PublicEventsLoader();
 new LogoutAccount();
-new PasswordVisibilityToggle();
+new ModalManager();
 
-const modalEl = document.querySelector('.modal');
-const modal = modalEl ? new Modal(modalEl) : null;
-
-document.addEventListener(
-	'click',
-	(e) => {
-		if (!modal) return;
-		if (e.target.closest('[data-open-modal]')) {
-			modal.open(e);
-		}
-		if (e.target.closest('[data-close-modal]')) {
-			modal.close(e);
-		}
-	},
-	false
-);
+FormFactory.createAll();

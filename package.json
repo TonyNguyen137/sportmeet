@@ -19,7 +19,10 @@
 		"migrate:up": "node-pg-migrate up -m database/migrations ",
 		"migrate:down": "node-pg-migrate down -m database/migrations",
 		"migrate:create": "node-pg-migrate create -m database/migrations",
-		"db:init": "node database/setup-db.js && npm run migrate:up"
+		"db:init": "node database/setup-db.js && npm run migrate:up",
+		"db:seed:sports": "node database/seed-default-sports.js",
+		"db:seed:start-users": "node database/seed-start-users.js",
+		"db:seed:all": "npm run db:seed:sports && npm run db:seed:start-users"
 	},
 	"dependencies": {
 		"bcrypt": "^6.0.0",
@@ -28,7 +31,8 @@
 		"ejs": "^3.1.10",
 		"express": "^5.2.1",
 		"express-session": "^1.19.0",
-		"pg": "^8.18.0"
+		"pg": "^8.18.0",
+		"sib-api-v3-sdk": "^8.5.0"
 	},
 	"browserslist": [
 		"defaults"
