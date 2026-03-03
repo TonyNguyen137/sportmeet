@@ -72,37 +72,50 @@ export const createEvent = async (req, res) => {
 		return res.status(401).send('Nicht autorisiert');
 	}
 
-	if (
-		!sportId ||
-		!title ||
-		!date ||
-		!time ||
-		!street ||
-		!houseNumber ||
-		!postalCode ||
-		!city
-	) {
-		return redirectToEvents('warning', 'Bitte alle Pflichtfelder ausfüllen.');
+	const missingRequiredErrors = [];
+	const normalizedVisibility =
+		String(visibility || 'public').trim() === 'private' ? 'private' : 'public';
+	if (!String(sportId || '').trim()) missingRequiredErrors.push('Sportart auswählen');
+	if (!String(title || '').trim()) missingRequiredErrors.push('Titel des Termins');
+	if (!String(date || '').trim()) missingRequiredErrors.push('Datum');
+	if (!String(time || '').trim()) missingRequiredErrors.push('Uhrzeit');
+	if (!String(street || '').trim()) missingRequiredErrors.push('Adresse');
+	if (!String(houseNumber || '').trim())
+		missingRequiredErrors.push('Hausnummer');
+	if (!String(postalCode || '').trim()) missingRequiredErrors.push('PLZ');
+	if (!String(city || '').trim()) missingRequiredErrors.push('Stadt');
+	if (normalizedVisibility === 'private' && !String(groupId || '').trim()) {
+		missingRequiredErrors.push('Gruppe auswählen');
+	}
+
+	if (missingRequiredErrors.length > 0) {
+		return redirectToEventFormWithFeedback({
+			errorTitle: 'Bitte überprüfe deine Eingaben:',
+			errors: missingRequiredErrors,
+			values: buildEventFormValues(req.body)
+		});
 	}
 
 	const selectedSportId = String(sportId).trim();
 	const normalizedCustomSportName = String(customSportName || '').trim();
 	const isCustomSport = selectedSportId === 'custom';
-	const normalizedVisibility =
-		String(visibility || 'public').trim() === 'private' ? 'private' : 'public';
 
 	if (isCustomSport && !normalizedCustomSportName) {
-		return redirectToEvents(
-			'warning',
-			'Bitte gib eine eigene Sportart ein oder waehle eine vorhandene Sportart.'
-		);
+		return redirectToEventFormWithFeedback({
+			errorTitle: 'Bitte überprüfe deine Eingaben:',
+			errors: ['Bitte gib eine eigene Sportart ein.'],
+			values: buildEventFormValues(req.body)
+		});
 	}
 
 	if (!isCustomSport && normalizedCustomSportName) {
-		return redirectToEvents(
-			'warning',
-			'Bitte waehle entweder eine Sportart aus der Liste oder gib eine eigene Sportart ein.'
-		);
+		return redirectToEventFormWithFeedback({
+			errorTitle: 'Bitte überprüfe deine Eingaben:',
+			errors: [
+				'Bitte waehle entweder eine Sportart aus der Liste oder gib eine eigene Sportart ein.'
+			],
+			values: buildEventFormValues(req.body)
+		});
 	}
 
 	let groupIdForInsert = null;
@@ -111,15 +124,20 @@ export const createEvent = async (req, res) => {
 	if (!isPublicEvent) {
 		const parsedGroupId = Number.parseInt(String(groupId || ''), 10);
 		if (!Number.isInteger(parsedGroupId) || parsedGroupId <= 0) {
-			return redirectToEvents('warning', 'Bitte waehle eine gueltige Gruppe aus.');
+			return redirectToEventFormWithFeedback({
+				errorTitle: 'Bitte überprüfe deine Eingaben:',
+				errors: ['Bitte waehle eine gueltige Gruppe fuer private Termine aus.'],
+				values: buildEventFormValues(req.body)
+			});
 		}
 
 		const isMember = await isUserMemberOfGroup(parsedGroupId, userId);
 		if (!isMember) {
-			return redirectToEvents(
-				'warning',
-				'Du kannst nur private Termine in deinen eigenen Gruppen erstellen.'
-			);
+			return redirectToEventFormWithFeedback({
+				errorTitle: 'Bitte überprüfe deine Eingaben:',
+				errors: ['Du kannst nur private Termine in deinen eigenen Gruppen erstellen.'],
+				values: buildEventFormValues(req.body)
+			});
 		}
 
 		groupIdForInsert = parsedGroupId;

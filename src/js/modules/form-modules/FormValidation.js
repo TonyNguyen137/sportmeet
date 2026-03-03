@@ -15,9 +15,9 @@ export class FormValidation {
 		this.errorContainer = this.form.querySelector(this.options.errorContainerSelector);
 		this.errorList = this.errorContainer?.querySelector(this.options.errorListSelector);
 		this.errorTitle = this.errorContainer?.querySelector(this.options.errorTitleSelector);
-		this.fields = Array.from(this.form.querySelectorAll(this.options.requiredSelector));
+		this.fields = [];
 
-		if (this.fields.length === 0) return;
+		if (this.getRequiredFields().length === 0) return;
 
 		this.init();
 	}
@@ -52,8 +52,13 @@ export class FormValidation {
 	};
 
 	validate() {
+		this.fields = this.getRequiredFields();
 		this.fields.forEach((field) => this.validateField(field));
 		return this.collectErrors();
+	}
+
+	getRequiredFields() {
+		return Array.from(this.form.querySelectorAll(this.options.requiredSelector));
 	}
 
 	validateField(field) {
