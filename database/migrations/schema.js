@@ -181,17 +181,29 @@ export const up = (pgm) => {
 		created_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') }
 	});
 
-	// 8) EVENT_REMINDERS
-	pgm.createTable('event_reminders', {
+	// 8) EVENT_REMINDER_DELIVERIES (pro User genau einmal)
+	pgm.createTable('event_reminder_deliveries', {
 		event_id: {
 			type: 'bigint',
 			notNull: true,
 			references: '"events"',
-			onDelete: 'CASCADE',
-			primaryKey: true
+			onDelete: 'CASCADE'
+		},
+		user_id: {
+			type: 'bigint',
+			notNull: true,
+			references: '"users"',
+			onDelete: 'CASCADE'
 		},
 		sent_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') }
 	});
+	pgm.addConstraint(
+		'event_reminder_deliveries',
+		'event_reminder_deliveries_pkey',
+		{
+			primaryKey: ['event_id', 'user_id']
+		}
+	);
 
 	// 9) SESSION
 	pgm.createTable('session', {
@@ -230,6 +242,7 @@ export const up = (pgm) => {
 	pgm.createIndex('events', 'group_id');
 	pgm.createIndex('events', 'is_public');
 	pgm.createIndex('comments', 'event_id');
+	pgm.createIndex('event_reminder_deliveries', 'sent_at');
 	pgm.createIndex('session', 'expire');
 	pgm.createIndex('password_reset_tokens', 'user_id');
 	pgm.createIndex('password_reset_tokens', 'expires_at');
@@ -242,7 +255,7 @@ export const up = (pgm) => {
 export const down = (pgm) => {
 	pgm.dropTable('password_reset_tokens');
 	pgm.dropTable('session');
-	pgm.dropTable('event_reminders');
+	pgm.dropTable('event_reminder_deliveries');
 	pgm.dropTable('comments');
 	pgm.dropTable('event_participants');
 	pgm.dropTable('events');

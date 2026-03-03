@@ -454,31 +454,33 @@ export const deleteEventByIdForCreator = async (eventId, userId) => {
 	return result.rowCount > 0;
 };
 
-export const findEventsDueForReminder = async (
+export const findReminderRecipientsDue = async (
 	leadMinutes = 10,
 	windowMinutes = 15,
-	limit = 200
+	limit = 500
 ) => {
 	const result = await pool.query(
 		`SELECT
 			e.id,
 			e.title,
-			e.start_datetime
+			e.start_datetime,
+			u.id AS user_id,
+			u.email,
+			u.first_name,
+			u.last_name
 		 FROM events e
+		 INNER JOIN event_participants ep
+		 	ON ep.event_id = e.id
+		 INNER JOIN users u
+		 	ON u.id = ep.user_id
+		 LEFT JOIN event_reminder_deliveries erd
+		 	ON erd.event_id = e.id
+			AND erd.user_id = u.id
 		 WHERE e.start_datetime >= (NOW() + make_interval(mins => $1))
 		   AND e.start_datetime < (NOW() + make_interval(mins => $1 + $2))
-		   AND NOT EXISTS (
-				SELECT 1
-				FROM event_reminders er
-				WHERE er.event_id = e.id
-		   )
-		   AND EXISTS (
-				SELECT 1
-				FROM event_participants ep
-				WHERE ep.event_id = e.id
-				  AND ep.status = 'accepted'
-		   )
-		 ORDER BY e.start_datetime ASC
+		   AND ep.status = 'accepted'
+		   AND erd.event_id IS NULL
+		 ORDER BY e.start_datetime ASC, e.id ASC, u.id ASC
 		 LIMIT $3`,
 		[leadMinutes, windowMinutes, limit]
 	);
@@ -486,32 +488,13 @@ export const findEventsDueForReminder = async (
 	return result.rows;
 };
 
-export const findAcceptedParticipantsForEvent = async (eventId, limit = 500) => {
+export const markReminderDeliverySent = async (eventId, userId) => {
 	const result = await pool.query(
-		`SELECT
-			u.id AS user_id,
-			u.email,
-			u.first_name,
-			u.last_name
-		 FROM event_participants ep
-		 INNER JOIN users u ON u.id = ep.user_id
-		 WHERE ep.event_id = $1
-		   AND ep.status = 'accepted'
-		 ORDER BY u.id ASC
-		 LIMIT $2`,
-		[eventId, limit]
-	);
-
-	return result.rows;
-};
-
-export const markEventReminderSent = async (eventId) => {
-	const result = await pool.query(
-		`INSERT INTO event_reminders (event_id, sent_at)
-		 VALUES ($1, NOW())
-		 ON CONFLICT (event_id) DO NOTHING
+		`INSERT INTO event_reminder_deliveries (event_id, user_id, sent_at)
+		 VALUES ($1, $2, NOW())
+		 ON CONFLICT (event_id, user_id) DO NOTHING
 		 RETURNING event_id`,
-		[eventId]
+		[eventId, userId]
 	);
 
 	return result.rowCount > 0;

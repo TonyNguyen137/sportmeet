@@ -2,15 +2,13 @@
  * Event Reminder Service
  * ----------------------
  * Step 4: Mail dispatch for selected recipients.
- * - DB query for events in configurable reminder window
- * - DB query for accepted participants per event
+ * - DB query for due recipients in configurable reminder window
  * - send reminder emails per recipient
- * - idempotency marker write in event_reminders
+ * - idempotency marker write in event_reminder_deliveries (event_id + user_id)
  */
 import {
-	findAcceptedParticipantsForEvent,
-	findEventsDueForReminder,
-	markEventReminderSent
+	findReminderRecipientsDue,
+	markReminderDeliverySent
 } from '../model/events-model.js';
 import config from '../config.js';
 import { sendMail } from '../utils/mailer.js';
@@ -38,91 +36,81 @@ export const runEventReminderJob = async () => {
 	try {
 		const leadMinutes = config.eventReminderLeadMinutes;
 		const windowMinutes = config.eventReminderWindowMinutes;
-		const dueEvents = await findEventsDueForReminder(leadMinutes, windowMinutes, 200);
+		const dueRecipients = await findReminderRecipientsDue(
+			leadMinutes,
+			windowMinutes,
+			1000
+		);
+		const uniqueEventCount = new Set(dueRecipients.map((row) => row.id)).size;
 
 		console.info('[event-reminder] due events selected', {
-			count: dueEvents.length,
+			count: uniqueEventCount,
+			recipientsCount: dueRecipients.length,
 			leadMinutes,
 			windowMinutes
 		});
 
-		let totalRecipients = 0;
-		const eventRecipientBatches = [];
-
-		for (const event of dueEvents) {
-			const recipients = await findAcceptedParticipantsForEvent(event.id, 500);
-			totalRecipients += recipients.length;
-
-			eventRecipientBatches.push({
-				event,
-				recipients
-			});
-		}
-
 		console.info('[event-reminder] recipients selected', {
-			eventsCount: eventRecipientBatches.length,
-			totalRecipients
+			eventsCount: uniqueEventCount,
+			totalRecipients: dueRecipients.length
 		});
 
 		let emailsSent = 0;
 		let emailFailures = 0;
-		let remindersMarked = 0;
-		let remindersNotMarked = 0;
+		let deliveriesMarked = 0;
+		let deliveriesNotMarked = 0;
 
-		for (const batch of eventRecipientBatches) {
-			const { event, recipients } = batch;
-			let eventHadFailures = false;
+		for (const recipient of dueRecipients) {
+			const eventUrl = `${config.appBaseUrl.replace(/\/+$/, '')}/events/${recipient.id}`;
+			const friendlyStartTime = formatDateTimeBerlin(recipient.start_datetime);
 
-			for (const recipient of recipients) {
-				const eventUrl = `${config.appBaseUrl.replace(/\/+$/, '')}/events/${event.id}`;
-				const friendlyStartTime = formatDateTimeBerlin(event.start_datetime);
+			const subject = `Erinnerung: ${recipient.title} in ${leadMinutes} Minuten`;
+			const html = `
+				<p>Hallo ${recipient.first_name || ''},</p>
+				<p>Erinnerung: Dein Termin startet in etwa ${leadMinutes} Minuten.</p>
+				<ul>
+					<li><strong>Titel:</strong> ${recipient.title}</li>
+					<li><strong>Zeit:</strong> ${friendlyStartTime}</li>
+				</ul>
+				<p>
+					<a href="${eventUrl}">Termin öffnen</a>
+				</p>
+			`;
 
-				const subject = `Erinnerung: ${event.title} in ${leadMinutes} Minuten`;
-				const html = `
-					<p>Hallo ${recipient.first_name || ''},</p>
-					<p>Erinnerung: Dein Termin startet in etwa ${leadMinutes} Minuten.</p>
-					<ul>
-						<li><strong>Titel:</strong> ${event.title}</li>
-						<li><strong>Zeit:</strong> ${friendlyStartTime}</li>
-					</ul>
-					<p>
-						<a href="${eventUrl}">Termin öffnen</a>
-					</p>
-				`;
+			try {
+				await sendMail({
+					to: recipient.email,
+					subject,
+					html
+				});
+				emailsSent += 1;
 
-				try {
-					await sendMail({
-						to: recipient.email,
-						subject,
-						html
-					});
-					emailsSent += 1;
-				} catch (mailError) {
-					emailFailures += 1;
-					eventHadFailures = true;
-					console.error('[event-reminder] mail send failed', {
-						eventId: event.id,
-						recipientEmail: recipient.email,
-						error: mailError?.message || mailError
-					});
-				}
-			}
-
-			if (!eventHadFailures && recipients.length > 0) {
-				const marked = await markEventReminderSent(event.id);
+				const marked = await markReminderDeliverySent(
+					recipient.id,
+					recipient.user_id
+				);
 				if (marked) {
-					remindersMarked += 1;
+					deliveriesMarked += 1;
+				} else {
+					deliveriesNotMarked += 1;
 				}
-			} else {
-				remindersNotMarked += 1;
+			} catch (mailError) {
+				emailFailures += 1;
+				deliveriesNotMarked += 1;
+				console.error('[event-reminder] mail send failed', {
+					eventId: recipient.id,
+					userId: recipient.user_id,
+					recipientEmail: recipient.email,
+					error: mailError?.message || mailError
+				});
 			}
 		}
 
 		console.info('[event-reminder] mail dispatch finished', {
 			emailsSent,
 			emailFailures,
-			remindersMarked,
-			remindersNotMarked
+			deliveriesMarked,
+			deliveriesNotMarked
 		});
 
 		const finishedAt = new Date();
@@ -137,12 +125,12 @@ export const runEventReminderJob = async () => {
 			startedAt,
 			finishedAt,
 			durationMs: finishedAt.getTime() - startedAt.getTime(),
-			dueEventsCount: dueEvents.length,
-			totalRecipients,
+			dueEventsCount: uniqueEventCount,
+			totalRecipients: dueRecipients.length,
 			emailsSent,
 			emailFailures,
-			remindersMarked,
-			remindersNotMarked
+			deliveriesMarked,
+			deliveriesNotMarked
 		};
 	} catch (error) {
 		const failedAt = new Date();

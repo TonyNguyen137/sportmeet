@@ -21,7 +21,7 @@ export default class CopyToClipboard {
 		const defaultLabel = button.dataset.copyDefaultLabel || labelEl?.textContent || '';
 
 		try {
-			await navigator.clipboard.writeText(text);
+			await this.copyText(text);
 
 			this.setIconState(button, true);
 
@@ -31,6 +31,33 @@ export default class CopyToClipboard {
 			});
 		} catch (error) {
 			console.error('Kopieren fehlgeschlagen:', error);
+		}
+	}
+
+	async copyText(text) {
+		// Modern API: works in secure contexts (https/localhost).
+		if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+			await navigator.clipboard.writeText(text);
+			return;
+		}
+
+		// Fallback for older/insecure environments.
+		const textArea = document.createElement('textarea');
+		textArea.value = text;
+		textArea.setAttribute('readonly', '');
+		textArea.style.position = 'fixed';
+		textArea.style.top = '-9999px';
+		textArea.style.left = '-9999px';
+
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+
+		const success = document.execCommand('copy');
+		document.body.removeChild(textArea);
+
+		if (!success) {
+			throw new Error('Clipboard API nicht verfügbar und Fallback fehlgeschlagen.');
 		}
 	}
 
