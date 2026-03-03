@@ -80,8 +80,7 @@ export const createEvent = async (req, res) => {
 	if (!String(date || '').trim()) missingRequiredErrors.push('Datum');
 	if (!String(time || '').trim()) missingRequiredErrors.push('Uhrzeit');
 	if (!String(street || '').trim()) missingRequiredErrors.push('Adresse');
-	if (!String(houseNumber || '').trim())
-		missingRequiredErrors.push('Hausnummer');
+	if (!String(houseNumber || '').trim()) missingRequiredErrors.push('Hausnummer');
 	if (!String(postalCode || '').trim()) missingRequiredErrors.push('PLZ');
 	if (!String(city || '').trim()) missingRequiredErrors.push('Stadt');
 	if (normalizedVisibility === 'private' && !String(groupId || '').trim()) {
