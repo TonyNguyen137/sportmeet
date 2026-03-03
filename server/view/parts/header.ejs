@@ -1,5 +1,5 @@
-<% const isUserPage = typeof variant !== "undefined" && variant === "user" const currentDashboardPage = typeof activeDashboardPage !==
-"undefined" ? activeDashboardPage : locals.activeDashboardPage || "" %>
+<% var isUserPage = typeof variant !== "undefined" && variant === "user"; var currentDashboardPage = typeof activeDashboardPage !==
+"undefined" ? activeDashboardPage : locals.activeDashboardPage || ""; %>
 
 <header
 	class="<%= isUserPage ? 'text-center' : '' %> sticky top-0 left-0 z-[999] w-full bg-white p-[16px] shadow-[0_2px_10px_rgba(17,24,39,0.08)] lg:px-[32px] lg:pt-[32px] lg:pb-[16px]">
@@ -28,7 +28,7 @@
 				<li>
 					<a
 						href="/me"
-						class="<%= `text-md ${ currentDashboardPage === 'events' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent' }` %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						class="<%= 'text-md ' + (currentDashboardPage === 'events' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent') %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
 						aria-current="<%= currentDashboardPage === 'events' ? 'page' : undefined %>">
 						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
@@ -39,7 +39,7 @@
 				<li>
 					<a
 						href="/me/groups"
-						class="<%= `text-md ${ currentDashboardPage === 'groups' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent' }` %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						class="<%= 'text-md ' + (currentDashboardPage === 'groups' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent') %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
 						aria-current="<%= currentDashboardPage === 'groups' ? 'page' : undefined %>">
 						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
