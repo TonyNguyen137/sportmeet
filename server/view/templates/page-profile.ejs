@@ -1,0 +1,73 @@
+<%- include("../parts/header", { variant: "user", activeDashboardPage: 'profile' }) %>
+
+<main>
+	<div class="container mx-auto max-w-2xl px-[12px] py-[32px]">
+		<section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+			<div class="mb-6">
+				<h1 class="text-h1 font-bold text-gray-900">Mein Profil</h1>
+				<p class="mt-1 text-sm text-gray-600">Verwalte deine Basisdaten für deinen Account.</p>
+			</div>
+
+			<% if (profileSuccessMessage) { %>
+			<div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+				<%= profileSuccessMessage %>
+			</div>
+			<% } %>
+
+			<% if (Array.isArray(profileErrors) && profileErrors.length > 0) { %>
+			<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+				<p class="font-semibold"><%= profileErrorTitle || 'Bitte überprüfe deine Eingaben:' %></p>
+				<ul class="mt-2 list-disc ps-5">
+					<% profileErrors.forEach((error) => { %>
+					<li><%= error %></li>
+					<% }) %>
+				</ul>
+			</div>
+			<% } %>
+
+			<form method="POST" action="/user/profile" class="space-y-4">
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+				<div>
+					<label for="profile-first-name" class="mb-2 block text-sm font-medium text-gray-700">Vorname</label>
+					<input
+						id="profile-first-name"
+						name="firstName"
+						type="text"
+						required
+						value="<%= profileValues.firstName || '' %>"
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+				</div>
+
+				<div>
+					<label for="profile-last-name" class="mb-2 block text-sm font-medium text-gray-700">Nachname</label>
+					<input
+						id="profile-last-name"
+						name="lastName"
+						type="text"
+						required
+						value="<%= profileValues.lastName || '' %>"
+						class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+				</div>
+
+				<div>
+					<label for="profile-email" class="mb-2 block text-sm font-medium text-gray-700">E-Mail-Adresse</label>
+					<input
+						id="profile-email"
+						type="email"
+						value="<%= profileValues.email || '' %>"
+						readonly
+						class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-500" />
+				</div>
+
+				<button
+					type="submit"
+					class="w-full cursor-pointer rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700 sm:w-fit">
+					Profil speichern
+				</button>
+			</form>
+		</section>
+	</div>
+</main>
+
+<%- include("../parts/footer") %>

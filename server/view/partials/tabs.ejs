@@ -1,16 +1,25 @@
 <div class="tabs mt-5 flex flex-col">
 	<div class="tabs__list border-b-1 border-neutral-50" role="tablist">
 		<button class="tabs__tab tabs__tab--mine" type="button" id="tab-1" role="tab" aria-selected="true" aria-controls="tabpanel-1">
-			Meine Termine
+			Relevante Termine
 		</button>
 		<button
 			class="tabs__tab tabs__tab--public"
 			type="button"
 			id="tab-2"
-			data-public-events-tab
 			role="tab"
 			aria-selected="false"
 			aria-controls="tabpanel-2"
+			tabindex="-1">
+			Von mir erstellt
+		</button>
+		<button
+			class="tabs__tab tabs__tab--public"
+			type="button"
+			id="tab-3"
+			data-public-events-tab
+			aria-selected="false"
+			aria-controls="tabpanel-3"
 			tabindex="-1">
 			Öffentliche Termine
 		</button>
@@ -26,7 +35,7 @@
 					<div class="mb-3 flex items-start justify-between">
 						<div class="flex-1">
 							<h3 class="text-lg font-semibold text-gray-900"><%= event.title %></h3>
-							<div class="mt-1 flex flex-wrap items-center gap-2">
+						<div class="mt-1 flex flex-wrap items-center gap-2">
 								<% if (event.is_public) { %>
 								<span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
 									>Öffentlich</span
@@ -39,28 +48,38 @@
 								<span class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-800"
 									><%= event.sport_name %></span
 								>
+								<% if (event.current_user_status === 'accepted' && !event.is_created_by_current_user) { %>
+								<span class="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700"
+									>Zugesagt</span
+								>
+								<% } %>
 							</div>
 						</div>
 					</div>
 
 					<div class="mb-4 space-y-2 text-sm text-gray-600">
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
 							</svg>
 							<span><%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) %> Uhr</span>
 						</div>
+						<% if (event.location_name) { %>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
-								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#globe' %>"></use>
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
 							</svg>
-							<span>
-								<%= event.location_name ? `${event.location_name} - ${event.street} ${event.house_number}, ${event.postal_code}
-								${event.city}` : `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %>
-							</span>
+							<span><%= event.location_name %></span>
+						</div>
+						<% } %>
+						<div class="flex items-center gap-2">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
+							</svg>
+							<span><%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %></span>
 						</div>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
 							</svg>
 							<span><%= event.accepted_count %> Teilnehmer zugesagt</span>
@@ -91,12 +110,104 @@
 			role="tabpanel"
 			aria-hidden="true"
 			aria-labelledby="tab-2"
+			tabindex="0">
+			<% if (Array.isArray(createdEvents) && createdEvents.length > 0) { %>
+			<div class="mt-4 grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+				<% createdEvents.forEach((event) => { %>
+				<a
+					href="/events/<%= event.id %>"
+					class="block rounded-xl border border-amber-100 bg-gradient-to-br from-white to-amber-50 p-5 shadow-sm transition-all [--focus-color:var(--color-accent-blue)] hover:to-amber-100 hover:shadow-md focus:outline-none">
+					<div class="mb-3 flex items-start justify-between">
+						<div class="flex-1">
+							<h3 class="text-lg font-semibold text-gray-900"><%= event.title %></h3>
+							<div class="mt-1 flex flex-wrap items-center gap-2">
+								<% if (event.is_public) { %>
+								<span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
+									>Öffentlich</span
+								>
+								<% } else { %>
+								<span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
+									><%= event.group_name || 'Privat' %></span
+								>
+								<% } %>
+								<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800"
+									><%= event.sport_name %></span
+								>
+							</div>
+						</div>
+					</div>
+
+					<div class="mb-4 space-y-2 text-sm text-gray-600">
+						<div class="flex items-center gap-2">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
+							</svg>
+							<span><%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) %> Uhr</span>
+						</div>
+						<% if (event.location_name) { %>
+						<div class="flex items-center gap-2">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
+							</svg>
+							<span><%= event.location_name %></span>
+						</div>
+						<% } %>
+						<div class="flex items-center gap-2">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
+							</svg>
+							<span><%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %></span>
+						</div>
+						<div class="flex items-center gap-2">
+							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
+							</svg>
+							<span><%= event.accepted_count %> Teilnehmer zugesagt</span>
+						</div>
+					</div>
+
+					<div class="flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-3">
+						<span class="text-xs text-gray-600"
+							>Erstellt von <span class="font-semibold text-gray-900"><%= event.creator_name %></span></span
+						>
+						<span class="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700">
+							Von dir erstellt
+						</span>
+					</div>
+				</a>
+				<% }) %>
+			</div>
+			<% } else { %>
+			<div class="grid h-full place-content-center"><%- include("./empty-list.ejs") %></div>
+			<% } %>
+		</section>
+
+		<section
+			class="tabs__panel pane"
+			id="tabpanel-3"
+			role="tabpanel"
+			aria-hidden="true"
+			aria-labelledby="tab-3"
 			tabindex="0"
 			data-public-events-panel
 			data-public-events-sprite-url="<%= publicPrefix + '/' + assets['sprite.svg'] %>">
 			<div class="mt-4 grid hidden w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" data-public-events-results></div>
 
-			<div class="grid h-full place-content-center" data-public-events-empty><%- include("./empty-public-list.ejs") %></div>
+			<div class="hidden h-full place-content-center" data-public-events-loading>
+				<div class="mx-auto flex max-w-[50ch] flex-col items-center gap-4 py-10 text-center">
+					<div class="inline-grid h-20 w-20 place-items-center rounded-full bg-blue-50">
+						<svg width="36" height="36" class="animate-spin text-blue-700" aria-hidden="true">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
+						</svg>
+					</div>
+					<div class="space-y-1">
+						<h3 class="text-md font-bold text-dark">Öffentliche Termine werden geladen</h3>
+						<p class="text-gray-600">Wir suchen gerade Termine in deiner Umgebung.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="hidden h-full place-content-center" data-public-events-empty><%- include("./empty-public-list.ejs") %></div>
 		</section>
 	</div>
 </div>

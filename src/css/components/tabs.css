@@ -5,7 +5,7 @@
 		}
 
 		&__tab {
-			@apply text-body text-default cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-3 px-6 font-medium;
+			@apply text-xsm cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-1 text-xs font-medium sm:text-[1rem] md:p-3 md:px-6;
 		}
 
 		&__tab--mine[aria-selected='true'] {

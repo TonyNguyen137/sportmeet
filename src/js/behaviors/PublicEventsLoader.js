@@ -3,6 +3,7 @@ export default class PublicEventsLoader {
 		this.tabEl = document.querySelector('[data-public-events-tab]');
 		this.panelEl = document.querySelector('[data-public-events-panel]');
 		this.resultsEl = document.querySelector('[data-public-events-results]');
+		this.loadingEl = document.querySelector('[data-public-events-loading]');
 		this.emptyEl = document.querySelector('[data-public-events-empty]');
 		this.retryBtn = document.querySelector('[data-public-events-search]');
 		this.spriteUrl = this.panelEl?.dataset.publicEventsSpriteUrl || '/public/sprite.svg';
@@ -10,7 +11,7 @@ export default class PublicEventsLoader {
 		this.hasLoadedOnce = false;
 		this.isLoading = false;
 
-		if (!this.tabEl || !this.panelEl || !this.resultsEl || !this.emptyEl) {
+		if (!this.tabEl || !this.panelEl || !this.resultsEl || !this.loadingEl || !this.emptyEl) {
 			return;
 		}
 
@@ -22,14 +23,17 @@ export default class PublicEventsLoader {
 
 		if (this.retryBtn) {
 			this.retryBtn.addEventListener('click', () => {
-				this.load({ force: true, userInitiated: true });
+				this.load({ force: true });
 			});
 		}
 	}
 
-	setState({ showResults = false, showEmpty = false } = {}) {
+	setState({ showResults = false, showLoading = false, showEmpty = false } = {}) {
 		this.resultsEl.classList.toggle('hidden', !showResults);
+		this.loadingEl.classList.toggle('hidden', !showLoading);
+		this.loadingEl.classList.toggle('grid', showLoading);
 		this.emptyEl.classList.toggle('hidden', !showEmpty);
+		this.emptyEl.classList.toggle('grid', showEmpty);
 	}
 
 	setSearchButtonLoading(isLoading) {
@@ -106,9 +110,8 @@ export default class PublicEventsLoader {
 			.map((event) => {
 				const fullAddress =
 					`${event.street || ''} ${event.house_number || ''}, ${event.postal_code || ''} ${event.city || ''}`.trim();
-				const locationText = event.location_name
-					? `${event.location_name} - ${fullAddress}`
-					: fullAddress || 'Adresse folgt';
+				const locationText = event.location_name ? this.escapeHtml(event.location_name) : '';
+				const addressText = fullAddress || 'Adresse folgt';
 
 				return `
 					<a
@@ -126,19 +129,27 @@ export default class PublicEventsLoader {
 
 						<div class="mb-4 space-y-2 text-sm text-gray-600">
 							<div class="flex items-center gap-2">
-								<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
+								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 									<use href="${this.escapeHtml(`${this.spriteUrl}#calendar`)}"></use>
 								</svg>
 								<span>${this.escapeHtml(this.formatDateTime(event.start_datetime))}</span>
 							</div>
+							${event.location_name ? `
 							<div class="flex items-center gap-2">
-								<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
-									<use href="${this.escapeHtml(`${this.spriteUrl}#globe`)}"></use>
+								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+									<use href="${this.escapeHtml(`${this.spriteUrl}#building`)}"></use>
 								</svg>
-								<span>${this.escapeHtml(locationText)}</span>
+								<span>${locationText}</span>
+							</div>
+							` : ''}
+							<div class="flex items-center gap-2">
+								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+									<use href="${this.escapeHtml(`${this.spriteUrl}#address`)}"></use>
+								</svg>
+								<span>${this.escapeHtml(addressText)}</span>
 							</div>
 							<div class="flex items-center gap-2">
-								<svg aria-hidden="true" width="16" height="16" class="text-gray-400">
+								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 									<use href="${this.escapeHtml(`${this.spriteUrl}#group`)}"></use>
 								</svg>
 								<span>${this.escapeHtml(event.accepted_count)} Teilnehmer zugesagt</span>
@@ -155,7 +166,7 @@ export default class PublicEventsLoader {
 			.join('');
 	}
 
-	async load({ force = false, userInitiated = false } = {}) {
+	async load({ force = false } = {}) {
 		if (this.isLoading) {
 			return;
 		}
@@ -165,17 +176,17 @@ export default class PublicEventsLoader {
 		}
 
 		this.isLoading = true;
-		this.setState({ showResults: false, showEmpty: true });
+		this.setState({ showResults: false, showLoading: true, showEmpty: false });
 		this.setSearchButtonLoading(true);
 
 		try {
-			if (userInitiated) {
-				await this.delay(1000);
-			}
+			const minimumLoadingTime = this.delay(2000);
 
 			const position = await this.getCurrentPosition();
 			if (!position) {
-				this.setState({ showResults: false, showEmpty: true });
+				await minimumLoadingTime;
+				this.resultsEl.innerHTML = '';
+				this.setState({ showResults: false, showLoading: false, showEmpty: true });
 				return;
 			}
 
@@ -194,22 +205,25 @@ export default class PublicEventsLoader {
 				throw new Error('Nearby events request failed');
 			}
 
+			await minimumLoadingTime;
+
 			const payload = await response.json();
 			const events = Array.isArray(payload?.events) ? payload.events : [];
 
 			if (events.length === 0) {
 				this.resultsEl.innerHTML = '';
-				this.setState({ showResults: false, showEmpty: true });
+				this.setState({ showResults: false, showLoading: false, showEmpty: true });
 				this.hasLoadedOnce = true;
 				return;
 			}
 
 			this.renderEvents(events);
-			this.setState({ showResults: true, showEmpty: false });
+			this.setState({ showResults: true, showLoading: false, showEmpty: false });
 			this.hasLoadedOnce = true;
 		} catch (error) {
 			console.error('Fehler beim Laden öffentlicher Termine:', error);
-			this.setState({ showResults: false, showEmpty: true });
+			await this.delay(2000);
+			this.setState({ showResults: false, showLoading: false, showEmpty: true });
 		} finally {
 			this.setSearchButtonLoading(false);
 			this.isLoading = false;

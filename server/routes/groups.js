@@ -1,22 +1,55 @@
 import express from 'express';
-import { checkAuth, formParser } from '../utils/auth.js';
+import { formParser } from '../utils/auth.js';
+import { checkAuth } from '../middlewares/check-auth.js';
 import {
 	createGroup,
 	deleteGroup,
 	getGroupById,
+	getGroupMembersList,
 	joinGroupFromInviteLink,
 	joinGroup,
 	regenerateGroupInvite,
 	removeGroupMember
 } from '../controller/groups-controller.js';
 
-const router = express.Router();
-router.get('/join', checkAuth, joinGroupFromInviteLink);
-router.get('/:groupId', checkAuth, getGroupById);
-router.post('/', checkAuth, formParser, createGroup);
-router.post('/join', checkAuth, formParser, joinGroup);
-router.post('/:groupId/regenerate-invite', checkAuth, regenerateGroupInvite);
-router.post('/:groupId/delete', checkAuth, deleteGroup);
-router.post('/:groupId/members/:memberId/remove', checkAuth, removeGroupMember);
+export const createGroupsRouter = (
+	handlers = {
+		checkAuth,
+		formParser,
+		createGroup,
+		deleteGroup,
+		getGroupById,
+		getGroupMembersList,
+		joinGroupFromInviteLink,
+		joinGroup,
+		regenerateGroupInvite,
+		removeGroupMember
+	}
+) => {
+	const router = express.Router();
+	router.get('/join', handlers.checkAuth, handlers.joinGroupFromInviteLink);
+	router.get('/:groupId', handlers.checkAuth, handlers.getGroupById);
+	router.get('/:groupId/members', handlers.checkAuth, handlers.getGroupMembersList);
+	router.post('/', handlers.checkAuth, handlers.formParser, handlers.createGroup);
+	router.post('/join', handlers.checkAuth, handlers.formParser, handlers.joinGroup);
+	router.post(
+		'/:groupId/regenerate-invite',
+		handlers.checkAuth,
+		handlers.regenerateGroupInvite
+	);
+	router.post('/:groupId/delete', handlers.checkAuth, handlers.deleteGroup);
+	router.post(
+		'/:groupId/members/:memberId/remove',
+		handlers.checkAuth,
+		handlers.removeGroupMember
+	);
+	router.delete(
+		'/:groupId/members/:memberId',
+		handlers.checkAuth,
+		handlers.removeGroupMember
+	);
 
-export default router;
+	return router;
+};
+
+export default createGroupsRouter();

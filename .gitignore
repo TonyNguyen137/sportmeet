@@ -4,3 +4,6 @@ public
 build
 dist
 .env
+pflichtenheft.txt
+architektur.md
+architektur-checkliste.md

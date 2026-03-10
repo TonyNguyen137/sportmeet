@@ -25,7 +25,7 @@ const config = {
 	),
 	eventReminderLeadMinutes: Math.max(
 		1,
-		Number(process.env.EVENT_REMINDER_LEAD_MINUTES || 10)
+		Number(process.env.EVENT_REMINDER_LEAD_MINUTES || 1440)
 	),
 	eventReminderWindowMinutes: Math.max(
 		1,

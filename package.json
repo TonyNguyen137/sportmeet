@@ -7,7 +7,15 @@
 	"type": "module",
 	"scripts": {
 		"prestart": "npm run build:assets",
+		"predev": "rm -rf public/*",
 		"start": "node server/index.js",
+		"pm2:start": "pm2 start ecosystem.config.cjs --env production",
+		"pm2:restart": "pm2 restart ecosystem.config.cjs --env production",
+		"pm2:stop": "pm2 stop sport-plattform",
+		"pm2:delete": "pm2 delete sport-plattform",
+		"pm2:logs": "pm2 logs sport-plattform",
+		"pm2:status": "pm2 status",
+		"test": "node --test",
 		"dev:server": "node --watch server/index.js",
 		"dev": "concurrently -n assets,server -c yellow,cyan \"npm run watch:assets\" \"wait-on public/manifest.json && npm run dev:server\"",
 		"watch:assets": "webpack --config webpack.config.cjs --mode development --watch",
@@ -22,7 +30,9 @@
 		"db:init": "node database/setup-db.js && npm run migrate:up",
 		"db:seed:sports": "node database/seed-default-sports.js",
 		"db:seed:start-users": "node database/seed-start-users.js",
-		"db:seed:all": "npm run db:seed:sports && npm run db:seed:start-users"
+		"db:seed:start-groups": "node database/seed-start-groups.js",
+		"db:seed:start-events": "node database/seed-start-events.js",
+		"db:seed:all": "npm run db:seed:sports && npm run db:seed:start-users && npm run db:seed:start-groups && npm run db:seed:start-events"
 	},
 	"dependencies": {
 		"bcrypt": "^6.0.0",
@@ -32,6 +42,7 @@
 		"express": "^5.2.1",
 		"express-session": "^1.19.0",
 		"pg": "^8.18.0",
+		"pm2": "^6.0.14",
 		"sib-api-v3-sdk": "^8.5.0"
 	},
 	"browserslist": [

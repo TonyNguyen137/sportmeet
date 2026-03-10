@@ -102,6 +102,33 @@ export const createEventWithCreator = async ({
 	}
 };
 
+export const findEditableEventByIdForCreator = async (eventId, userId) => {
+	const result = await pool.query(
+		`SELECT
+			id,
+			title,
+			description,
+			sport_id,
+			custom_sport_name,
+			start_datetime,
+			location_name,
+			street,
+			house_number,
+			postal_code,
+			city,
+			country,
+			is_public,
+			group_id
+		 FROM events
+		 WHERE id = $1
+		   AND created_by = $2
+		 LIMIT 1`,
+		[eventId, userId]
+	);
+
+	return result.rows[0] || null;
+};
+
 export const findEventForUser = async (eventId, userId) => {
 	const result = await pool.query(
 		`SELECT
@@ -249,6 +276,71 @@ export const addCommentToEvent = async (eventId, userId, content) => {
 			)
 		 RETURNING id`,
 		[eventId, userId, content]
+	);
+
+	return result.rowCount > 0;
+};
+
+export const updateEventByIdForCreator = async (
+	eventId,
+	userId,
+	{
+		title,
+		description,
+		sportId,
+		customSportName,
+		startDatetime,
+		locationName,
+		street,
+		houseNumber,
+		postalCode,
+		city,
+		country,
+		latitude,
+		longitude,
+		isPublic,
+		groupId
+	}
+) => {
+	const result = await pool.query(
+		`UPDATE events
+		 SET title = $3,
+		 	 description = $4,
+		 	 sport_id = $5,
+		 	 custom_sport_name = $6,
+		 	 start_datetime = $7,
+		 	 location_name = $8,
+		 	 street = $9,
+		 	 house_number = $10,
+		 	 postal_code = $11,
+		 	 city = $12,
+		 	 country = $13,
+		 	 latitude = $14,
+		 	 longitude = $15,
+		 	 is_public = $16,
+		 	 group_id = $17
+		 WHERE id = $1
+		   AND created_by = $2
+		 RETURNING id`,
+		[
+			eventId,
+			userId,
+			title,
+			description,
+			sportId,
+			customSportName,
+			startDatetime,
+			locationName,
+			street,
+			houseNumber,
+			postalCode,
+			city,
+			country,
+			latitude,
+			longitude,
+			isPublic,
+			groupId
+		]
 	);
 
 	return result.rowCount > 0;
@@ -464,15 +556,33 @@ export const findReminderRecipientsDue = async (
 			e.id,
 			e.title,
 			e.start_datetime,
+			e.location_name,
+			e.street,
+			e.house_number,
+			e.postal_code,
+			e.city,
 			u.id AS user_id,
 			u.email,
 			u.first_name,
-			u.last_name
+			u.last_name,
+			COALESCE(participants.participant_names, '') AS participant_names
 		 FROM events e
 		 INNER JOIN event_participants ep
 		 	ON ep.event_id = e.id
 		 INNER JOIN users u
 		 	ON u.id = ep.user_id
+		 LEFT JOIN LATERAL (
+			SELECT string_agg(
+				trim(participant_user.first_name || ' ' || participant_user.last_name),
+				', '
+				ORDER BY participant_user.first_name ASC, participant_user.last_name ASC
+			) AS participant_names
+			FROM event_participants participant_ep
+			INNER JOIN users participant_user
+				ON participant_user.id = participant_ep.user_id
+			WHERE participant_ep.event_id = e.id
+			  AND participant_ep.status = 'accepted'
+		 ) participants ON TRUE
 		 LEFT JOIN event_reminder_deliveries erd
 		 	ON erd.event_id = e.id
 			AND erd.user_id = u.id

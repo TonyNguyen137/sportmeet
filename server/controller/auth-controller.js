@@ -16,140 +16,179 @@ import {
 
 const PASSWORD_RESET_TTL_MINUTES = 5;
 
-const redirectToLoginWithFeedback = (
-	req,
-	res,
-	{
-		errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
-		errors = [],
-		values = {}
-	} = {}
-) =>
-	saveFlashAndRedirect(req, res, {
-		key: FLASH_KEYS.loginFeedback,
-		payload: { errorTitle, errors, values },
-		redirectTo: '/'
-	});
-
-const redirectToRegisterWithFeedback = (
-	req,
-	res,
-	{
-		errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
-		errors = [],
-		values = {}
-	} = {}
-) =>
-	saveFlashAndRedirect(req, res, {
-		key: FLASH_KEYS.registerFeedback,
-		payload: { errorTitle, errors, values },
-		redirectTo: '/register'
-	});
-
-const redirectToForgotPasswordWithFeedback = (
-	req,
-	res,
-	{ errorTitle = '', errors = [], successMessage = '', values = {} } = {}
-) =>
-	saveFlashAndRedirect(req, res, {
-		key: FLASH_KEYS.forgotPasswordFeedback,
-		payload: { errorTitle, errors, successMessage, values },
-		redirectTo: '/forgot-password'
-	});
-
-const redirectToResetPasswordWithFeedback = (
-	req,
-	res,
-	{ errorTitle = '', errors = [], successMessage = '', values = {} } = {}
-) =>
-	saveFlashAndRedirect(req, res, {
-		key: FLASH_KEYS.resetPasswordFeedback,
-		payload: { errorTitle, errors, successMessage, values },
-		redirectTo: `/reset-password?token=${encodeURIComponent(values.token || '')}`
-	});
-
-const createResetToken = () => {
-	const token = crypto.randomBytes(32).toString('hex');
-	const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-	return { token, tokenHash };
+const defaultDeps = {
+	bcrypt,
+	config,
+	consumeFlash,
+	flashKeys: FLASH_KEYS,
+	saveFlashAndRedirect,
+	getPasswordRequirementErrors,
+	isValidEmail,
+	sendMail,
+	createUser,
+	findUserForLogin,
+	findUserIdByEmail,
+	findUserPasswordHashById,
+	findValidPasswordResetToken,
+	replacePasswordResetToken,
+	updatePasswordByResetToken,
+	createResetToken: () => {
+		const token = crypto.randomBytes(32).toString('hex');
+		const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+		return { token, tokenHash };
+	},
+	hashToken: (value) => crypto.createHash('sha256').update(value).digest('hex')
 };
 
-const getAppBaseUrl = (req) =>
-	(config.appBaseUrl || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
+export const createAuthController = (deps = defaultDeps) => {
+	const {
+		bcrypt: bcryptLib,
+		config: appConfig,
+		consumeFlash: consumeFlashValue,
+		flashKeys,
+		saveFlashAndRedirect: saveFlashAndRedirectValue,
+		getPasswordRequirementErrors: getPasswordRequirementErrorsValue,
+		isValidEmail: isValidEmailValue,
+		sendMail: sendMailValue,
+		createUser: createUserValue,
+		findUserForLogin: findUserForLoginValue,
+		findUserIdByEmail: findUserIdByEmailValue,
+		findUserPasswordHashById: findUserPasswordHashByIdValue,
+		findValidPasswordResetToken: findValidPasswordResetTokenValue,
+		replacePasswordResetToken: replacePasswordResetTokenValue,
+		updatePasswordByResetToken: updatePasswordByResetTokenValue,
+		createResetToken,
+		hashToken
+	} = deps;
 
-export const getRegisterPage = (req, res) => {
-	const registerFeedback = consumeFlash(req, FLASH_KEYS.registerFeedback, {});
-
-	res.render('base', {
-		title: 'SportMeet Registrierung',
-		template: 'page-register',
-		loginErrorTitle:
-			registerFeedback.errorTitle ||
-			'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
-		loginErrors: registerFeedback.errors || [],
-		loginValues: registerFeedback.values || {}
-	});
-};
-
-export const getForgotPasswordPage = (req, res) => {
-	const forgotFeedback = consumeFlash(req, FLASH_KEYS.forgotPasswordFeedback, {});
-
-	return res.render('base', {
-		title: 'SportMeet Passwort vergessen',
-		template: 'page-forgot-password',
-		forgotErrorTitle: forgotFeedback.errorTitle || '',
-		forgotErrors: forgotFeedback.errors || [],
-		forgotSuccessMessage: forgotFeedback.successMessage || '',
-		forgotValues: forgotFeedback.values || {}
-	});
-};
-
-export const getPrivacyPage = (req, res) => {
-	return res.render('base', {
-		title: 'SportMeet Datenschutzerklärung',
-		template: 'page-privacy-policy'
-	});
-};
-
-export const forgotPassword = async (req, res) => {
-	const email = String(req.body?.email || '').trim();
-	const values = { email };
-
-	if (!email) {
-		return redirectToForgotPasswordWithFeedback(req, res, {
-			errorTitle: 'Fehlende Angaben:',
-			errors: ['E-Mail-Adresse'],
-			values
+	const redirectToLoginWithFeedback = (
+		req,
+		res,
+		{
+			errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
+			errors = [],
+			values = {}
+		} = {}
+	) =>
+		saveFlashAndRedirectValue(req, res, {
+			key: flashKeys.loginFeedback,
+			payload: { errorTitle, errors, values },
+			redirectTo: '/'
 		});
-	}
 
-	if (!isValidEmail(email)) {
-		return redirectToForgotPasswordWithFeedback(req, res, {
-			errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-			errors: ['Gültige E-Mail-Adresse'],
-			values
+	const redirectToRegisterWithFeedback = (
+		req,
+		res,
+		{
+			errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
+			errors = [],
+			values = {}
+		} = {}
+	) =>
+		saveFlashAndRedirectValue(req, res, {
+			key: flashKeys.registerFeedback,
+			payload: { errorTitle, errors, values },
+			redirectTo: '/register'
 		});
-	}
 
-	const genericSuccessMessage =
-		'Wenn ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.';
+	const redirectToForgotPasswordWithFeedback = (
+		req,
+		res,
+		{ errorTitle = '', errors = [], successMessage = '', values = {} } = {}
+	) =>
+		saveFlashAndRedirectValue(req, res, {
+			key: flashKeys.forgotPasswordFeedback,
+			payload: { errorTitle, errors, successMessage, values },
+			redirectTo: '/forgot-password'
+		});
 
-	try {
-		const user = await findUserIdByEmail(email);
+	const redirectToResetPasswordWithFeedback = (
+		req,
+		res,
+		{ errorTitle = '', errors = [], successMessage = '', values = {} } = {}
+	) =>
+		saveFlashAndRedirectValue(req, res, {
+			key: flashKeys.resetPasswordFeedback,
+			payload: { errorTitle, errors, successMessage, values },
+			redirectTo: `/reset-password?token=${encodeURIComponent(values.token || '')}`
+		});
 
-		if (user) {
-			const { token, tokenHash } = createResetToken();
-			const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MINUTES * 60 * 1000);
+	const getAppBaseUrl = (req) =>
+		(appConfig.appBaseUrl || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
 
-			await replacePasswordResetToken(user.id, tokenHash, expiresAt);
+	const getRegisterPage = (req, res) => {
+		const registerFeedback = consumeFlashValue(req, flashKeys.registerFeedback, {});
 
-			const resetLink = `${getAppBaseUrl(req)}/reset-password?token=${encodeURIComponent(token)}`;
-			const expiresInMinutes = PASSWORD_RESET_TTL_MINUTES;
+		res.render('base', {
+			title: 'SportMeet Registrierung',
+			template: 'page-register',
+			loginErrorTitle:
+				registerFeedback.errorTitle ||
+				'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
+			loginErrors: registerFeedback.errors || [],
+			loginValues: registerFeedback.values || {}
+		});
+	};
 
-			await sendMail({
-				to: email,
-				subject: 'SportMeet Passwort zurücksetzen',
-				html: `
+	const getForgotPasswordPage = (req, res) => {
+		const forgotFeedback = consumeFlashValue(req, flashKeys.forgotPasswordFeedback, {});
+
+		return res.render('base', {
+			title: 'SportMeet Passwort vergessen',
+			template: 'page-forgot-password',
+			forgotErrorTitle: forgotFeedback.errorTitle || '',
+			forgotErrors: forgotFeedback.errors || [],
+			forgotSuccessMessage: forgotFeedback.successMessage || '',
+			forgotValues: forgotFeedback.values || {}
+		});
+	};
+
+	const getPrivacyPage = (req, res) => {
+		return res.render('base', {
+			title: 'SportMeet Datenschutzerklärung',
+			template: 'page-privacy-policy'
+		});
+	};
+
+	const forgotPassword = async (req, res) => {
+		const email = String(req.body?.email || '').trim();
+		const values = { email };
+
+		if (!email) {
+			return redirectToForgotPasswordWithFeedback(req, res, {
+				errorTitle: 'Fehlende Angaben:',
+				errors: ['E-Mail-Adresse'],
+				values
+			});
+		}
+
+		if (!isValidEmailValue(email)) {
+			return redirectToForgotPasswordWithFeedback(req, res, {
+				errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
+				errors: ['Gültige E-Mail-Adresse'],
+				values
+			});
+		}
+
+		const genericSuccessMessage =
+			'Wenn ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.';
+
+		try {
+			const user = await findUserIdByEmailValue(email);
+
+			if (user) {
+				const { token, tokenHash } = createResetToken();
+				const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MINUTES * 60 * 1000);
+
+				await replacePasswordResetTokenValue(user.id, tokenHash, expiresAt);
+
+				const resetLink = `${getAppBaseUrl(req)}/reset-password?token=${encodeURIComponent(token)}`;
+				const expiresInMinutes = PASSWORD_RESET_TTL_MINUTES;
+
+				await sendMailValue({
+					to: email,
+					subject: 'SportMeet Passwort zurücksetzen',
+					html: `
 					<p>Hallo,</p>
 					<p>du hast ein Zurücksetzen deines Passworts angefordert.</p>
 					<p>
@@ -158,278 +197,303 @@ export const forgotPassword = async (req, res) => {
 					<p>Der Link ist ${expiresInMinutes} Minuten gültig.</p>
 					<p>Wenn du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
 				`
+				});
+			}
+
+			return redirectToForgotPasswordWithFeedback(req, res, {
+				successMessage: genericSuccessMessage
 			});
+		} catch (err) {
+			console.error('Passwort-reset Anforderung fehlgeschlagen:', err);
+			return res.status(500).send('Ein interner Fehler ist aufgetreten.');
 		}
+	};
 
-		return redirectToForgotPasswordWithFeedback(req, res, {
-			successMessage: genericSuccessMessage
-		});
-	} catch (err) {
-		console.error('Passwort-reset Anforderung fehlgeschlagen:', err);
-		return res.status(500).send('Ein interner Fehler ist aufgetreten.');
-	}
-};
+	const getResetPasswordPage = async (req, res) => {
+		const token = String(req.query?.token || '').trim();
+		const resetFeedback = consumeFlashValue(req, flashKeys.resetPasswordFeedback, {});
 
-export const getResetPasswordPage = async (req, res) => {
-	const token = String(req.query?.token || '').trim();
-	const resetFeedback = consumeFlash(req, FLASH_KEYS.resetPasswordFeedback, {});
-
-	if (!token) {
-		return redirectToForgotPasswordWithFeedback(req, res, {
-			errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
-			errors: ['Der Link ist ungültig oder unvollständig.']
-		});
-	}
-
-	try {
-		const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-		const resetToken = await findValidPasswordResetToken(tokenHash);
-		if (!resetToken) {
+		if (!token) {
 			return redirectToForgotPasswordWithFeedback(req, res, {
 				errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
-				errors: ['Der Link ist ungültig oder bereits abgelaufen.']
+				errors: ['Der Link ist ungültig oder unvollständig.']
 			});
 		}
-	} catch (err) {
-		console.error('Fehler beim Laden der Reset-Seite:', err);
-		return res.status(500).send('Ein interner Fehler ist aufgetreten.');
-	}
 
-	return res.render('base', {
-		title: 'SportMeet Passwort neu setzen',
-		template: 'page-reset-password',
-		resetErrorTitle: resetFeedback.errorTitle || '',
-		resetErrors: resetFeedback.errors || [],
-		resetSuccessMessage: resetFeedback.successMessage || '',
-		resetValues: { token, ...(resetFeedback.values || {}) },
-		resetTokenError: '',
-		resetTokenValid: true
-	});
-};
+		try {
+			const tokenHash = hashToken(token);
+			const resetToken = await findValidPasswordResetTokenValue(tokenHash);
+			if (!resetToken) {
+				return redirectToForgotPasswordWithFeedback(req, res, {
+					errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
+					errors: ['Der Link ist ungültig oder bereits abgelaufen.']
+				});
+			}
+		} catch (err) {
+			console.error('Fehler beim Laden der Reset-Seite:', err);
+			return res.status(500).send('Ein interner Fehler ist aufgetreten.');
+		}
 
-export const resetPassword = async (req, res) => {
-	const token = String(req.body?.token || '').trim();
-	const password = String(req.body?.password || '');
-	const passwordConfirm = String(req.body?.passwordConfirm || '');
-	const values = { token };
-
-	if (!token) {
-		return redirectToForgotPasswordWithFeedback(req, res, {
-			errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
-			errors: ['Der Link ist ungültig oder unvollständig.']
+		return res.render('base', {
+			title: 'SportMeet Passwort neu setzen',
+			template: 'page-reset-password',
+			resetErrorTitle: resetFeedback.errorTitle || '',
+			resetErrors: resetFeedback.errors || [],
+			resetSuccessMessage: resetFeedback.successMessage || '',
+			resetValues: { token, ...(resetFeedback.values || {}) },
+			resetTokenError: '',
+			resetTokenValid: true
 		});
-	}
+	};
 
-	if (!password || !passwordConfirm) {
-		return redirectToResetPasswordWithFeedback(req, res, {
-			errorTitle: 'Fehlende Angaben:',
-			errors: ['Passwort', 'Passwort-Bestätigung'],
-			values
-		});
-	}
+	const resetPassword = async (req, res) => {
+		const token = String(req.body?.token || '').trim();
+		const password = String(req.body?.password || '');
+		const passwordConfirm = String(req.body?.passwordConfirm || '');
+		const values = { token };
 
-	if (password !== passwordConfirm) {
-		return redirectToResetPasswordWithFeedback(req, res, {
-			errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-			errors: ['Passwörter stimmen nicht überein.'],
-			values
-		});
-	}
-
-	const passwordRequirementErrors = getPasswordRequirementErrors(password);
-	if (passwordRequirementErrors.length > 0) {
-		return redirectToResetPasswordWithFeedback(req, res, {
-			errorTitle: 'Passwort-Anforderungen nicht erfüllt:',
-			errors: passwordRequirementErrors,
-			values
-		});
-	}
-
-	try {
-		const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-		const resetTokenRow = await findValidPasswordResetToken(tokenHash);
-
-		if (!resetTokenRow) {
+		if (!token) {
 			return redirectToForgotPasswordWithFeedback(req, res, {
 				errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
-				errors: ['Der Link ist ungültig oder bereits abgelaufen.']
+				errors: ['Der Link ist ungültig oder unvollständig.']
 			});
 		}
 
-		const currentPasswordHash = await findUserPasswordHashById(resetTokenRow.user_id);
-
-		if (!currentPasswordHash) {
-			return redirectToForgotPasswordWithFeedback(req, res, {
-				errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
-				errors: ['Das zugehörige Benutzerkonto wurde nicht gefunden.']
+		if (!password || !passwordConfirm) {
+			return redirectToResetPasswordWithFeedback(req, res, {
+				errorTitle: 'Fehlende Angaben:',
+				errors: ['Passwort', 'Passwort-Bestätigung'],
+				values
 			});
 		}
 
-		const isSamePassword = await bcrypt.compare(password, currentPasswordHash);
-		if (isSamePassword) {
+		if (password !== passwordConfirm) {
 			return redirectToResetPasswordWithFeedback(req, res, {
 				errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-				errors: ['Neues Passwort muss sich vom aktuellen Passwort unterscheiden.'],
+				errors: ['Passwörter stimmen nicht überein.'],
 				values
 			});
 		}
 
-		const hashedPassword = await bcrypt.hash(password, 10);
-		await updatePasswordByResetToken(
-			resetTokenRow.user_id,
-			resetTokenRow.id,
-			hashedPassword
-		);
+		const passwordRequirementErrors = getPasswordRequirementErrorsValue(password);
+		if (passwordRequirementErrors.length > 0) {
+			return redirectToResetPasswordWithFeedback(req, res, {
+				errorTitle: 'Passwort-Anforderungen nicht erfüllt:',
+				errors: passwordRequirementErrors,
+				values
+			});
+		}
 
-		return saveFlashAndRedirect(req, res, {
-			key: FLASH_KEYS.authSuccess,
-			payload: {
-				message: 'Passwort erfolgreich aktualisiert. Bitte anmelden.'
-			},
-			redirectTo: '/'
-		});
-	} catch (err) {
-		console.error('Passwort-zurücksetzen fehlgeschlagen:', err);
-		return res.status(500).send('Ein interner Fehler ist aufgetreten.');
-	}
-};
+		try {
+			const tokenHash = hashToken(token);
+			const resetTokenRow = await findValidPasswordResetTokenValue(tokenHash);
 
-export const register = async (req, res) => {
-	const firstName = String(req.body?.firstName || '').trim();
-	const lastName = String(req.body?.lastName || '').trim();
-	const email = String(req.body?.email || '').trim();
-	const password = String(req.body?.password || '');
-	const passwordConfirm = String(req.body?.passwordConfirm || '');
-	const values = { firstName, lastName, email };
-	const missingFields = [];
+			if (!resetTokenRow) {
+				return redirectToForgotPasswordWithFeedback(req, res, {
+					errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
+					errors: ['Der Link ist ungültig oder bereits abgelaufen.']
+				});
+			}
 
-	if (!firstName) missingFields.push('Vorname');
-	if (!lastName) missingFields.push('Nachname');
-	if (!email) missingFields.push('E-Mail-Adresse');
-	if (!password) missingFields.push('Passwort');
-	if (!passwordConfirm) missingFields.push('Passwort-Bestätigung');
+			const currentPasswordHash = await findUserPasswordHashByIdValue(resetTokenRow.user_id);
 
-	if (missingFields.length > 0) {
-		return redirectToRegisterWithFeedback(req, res, {
-			errors: missingFields,
-			values
-		});
-	}
+			if (!currentPasswordHash) {
+				return redirectToForgotPasswordWithFeedback(req, res, {
+					errorTitle: 'Passwort-zurücksetzen fehlgeschlagen:',
+					errors: ['Das zugehörige Benutzerkonto wurde nicht gefunden.']
+				});
+			}
 
-	if (!isValidEmail(email)) {
-		return redirectToRegisterWithFeedback(req, res, {
-			errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-			errors: ['Gültige E-Mail-Adresse'],
-			values
-		});
-	}
+			const isSamePassword = await bcryptLib.compare(password, currentPasswordHash);
+			if (isSamePassword) {
+				return redirectToResetPasswordWithFeedback(req, res, {
+					errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
+					errors: ['Neues Passwort muss sich vom aktuellen Passwort unterscheiden.'],
+					values
+				});
+			}
 
-	if (password !== passwordConfirm) {
-		return redirectToRegisterWithFeedback(req, res, {
-			errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-			errors: ['Passwörter stimmen nicht überein.'],
-			values
-		});
-	}
+			const hashedPassword = await bcryptLib.hash(password, 10);
+			await updatePasswordByResetTokenValue(
+				resetTokenRow.user_id,
+				resetTokenRow.id,
+				hashedPassword
+			);
 
-	const passwordRequirementErrors = getPasswordRequirementErrors(password);
-	if (passwordRequirementErrors.length > 0) {
-		return redirectToRegisterWithFeedback(req, res, {
-			errorTitle: 'Passwort-Anforderungen nicht erfüllt:',
-			errors: passwordRequirementErrors,
-			values
-		});
-	}
+			return saveFlashAndRedirectValue(req, res, {
+				key: flashKeys.authSuccess,
+				payload: {
+					message: 'Passwort erfolgreich aktualisiert. Bitte anmelden.'
+				},
+				redirectTo: '/'
+			});
+		} catch (err) {
+			console.error('Passwort-zurücksetzen fehlgeschlagen:', err);
+			return res.status(500).send('Ein interner Fehler ist aufgetreten.');
+		}
+	};
 
-	try {
-		const saltRounds = 10;
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
-		await createUser({
-			firstName,
-			lastName,
-			email,
-			passwordHash: hashedPassword
-		});
+	const register = async (req, res) => {
+		const firstName = String(req.body?.firstName || '').trim();
+		const lastName = String(req.body?.lastName || '').trim();
+		const email = String(req.body?.email || '').trim();
+		const password = String(req.body?.password || '');
+		const passwordConfirm = String(req.body?.passwordConfirm || '');
+		const values = { firstName, lastName, email };
+		const missingFields = [];
 
-		return saveFlashAndRedirect(req, res, {
-			key: FLASH_KEYS.authSuccess,
-			payload: {
-				message: 'Konto erfolgreich erstellt. Bitte anmelden.',
-				values: { email }
-			},
-			redirectTo: '/'
-		});
-	} catch (err) {
-		if (err.code === '23505') {
+		if (!firstName) missingFields.push('Vorname');
+		if (!lastName) missingFields.push('Nachname');
+		if (!email) missingFields.push('E-Mail-Adresse');
+		if (!password) missingFields.push('Passwort');
+		if (!passwordConfirm) missingFields.push('Passwort-Bestätigung');
+
+		if (missingFields.length > 0) {
 			return redirectToRegisterWithFeedback(req, res, {
-				errorTitle: 'Registrierung fehlgeschlagen:',
-				errors: ['Diese E-Mail-Adresse wird bereits verwendet.'],
+				errors: missingFields,
 				values
 			});
 		}
-		console.error('Registrierungsfehler:', err);
-		return res.status(500).send('Ein interner Fehler ist aufgetreten.');
-	}
-};
 
-export const login = async (req, res) => {
-	const email = String(req.body?.email || '').trim();
-	const password = String(req.body?.password || '');
-	const missingFields = [];
-
-	if (!email) missingFields.push('E-Mail-Adresse');
-	if (!password) missingFields.push('Passwort');
-
-	if (missingFields.length > 0) {
-		return redirectToLoginWithFeedback(req, res, {
-			errors: missingFields,
-			values: { email }
-		});
-	}
-
-	if (!isValidEmail(email)) {
-		return redirectToLoginWithFeedback(req, res, {
-			errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
-			errors: ['Gültige E-Mail-Adresse'],
-			values: { email }
-		});
-	}
-
-	try {
-		const user = await findUserForLogin(email);
-		const match = user ? await bcrypt.compare(password, user.password_hash) : false;
-
-		if (match) {
-			req.session.userId = user.id;
-
-			return req.session.save((err) => {
-				if (err) {
-					console.error('Session save error:', err);
-					return res.status(500).send('Internal Server Error');
-				}
-				return res.redirect('/me');
+		if (!isValidEmailValue(email)) {
+			return redirectToRegisterWithFeedback(req, res, {
+				errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
+				errors: ['Gültige E-Mail-Adresse'],
+				values
 			});
 		}
 
-		return redirectToLoginWithFeedback(req, res, {
-			errorTitle: 'Anmeldung fehlgeschlagen:',
-			errors: ['E-Mail oder Passwort falsch.'],
-			values: { email }
-		});
-	} catch (err) {
-		console.error('Login-Fehler:', err);
-		return res.status(500).send('Server Fehler');
-	}
-};
-
-export const logout = (req, res) => {
-	req.session.destroy((err) => {
-		if (err) {
-			console.error('Logout Fehler:', err);
-			return res.status(500).json({ message: 'Fehler beim Abmelden' });
+		if (password !== passwordConfirm) {
+			return redirectToRegisterWithFeedback(req, res, {
+				errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
+				errors: ['Passwörter stimmen nicht überein.'],
+				values
+			});
 		}
 
-		res.clearCookie('sportmeet_sid');
-		return res.status(200).json({ message: 'Erfolgreich abgemeldet' });
-	});
+		const passwordRequirementErrors = getPasswordRequirementErrorsValue(password);
+		if (passwordRequirementErrors.length > 0) {
+			return redirectToRegisterWithFeedback(req, res, {
+				errorTitle: 'Passwort-Anforderungen nicht erfüllt:',
+				errors: passwordRequirementErrors,
+				values
+			});
+		}
+
+		try {
+			const saltRounds = 10;
+			const hashedPassword = await bcryptLib.hash(password, saltRounds);
+			await createUserValue({
+				firstName,
+				lastName,
+				email,
+				passwordHash: hashedPassword
+			});
+
+			return saveFlashAndRedirectValue(req, res, {
+				key: flashKeys.authSuccess,
+				payload: {
+					message: 'Konto erfolgreich erstellt. Bitte anmelden.',
+					values: { email }
+				},
+				redirectTo: '/'
+			});
+		} catch (err) {
+			if (err.code === '23505') {
+				return redirectToRegisterWithFeedback(req, res, {
+					errorTitle: 'Registrierung fehlgeschlagen:',
+					errors: ['Diese E-Mail-Adresse wird bereits verwendet.'],
+					values
+				});
+			}
+			console.error('Registrierungsfehler:', err);
+			return res.status(500).send('Ein interner Fehler ist aufgetreten.');
+		}
+	};
+
+	const login = async (req, res) => {
+		const email = String(req.body?.email || '').trim();
+		const password = String(req.body?.password || '');
+		const missingFields = [];
+
+		if (!email) missingFields.push('E-Mail-Adresse');
+		if (!password) missingFields.push('Passwort');
+
+		if (missingFields.length > 0) {
+			return redirectToLoginWithFeedback(req, res, {
+				errors: missingFields,
+				values: { email }
+			});
+		}
+
+		if (!isValidEmailValue(email)) {
+			return redirectToLoginWithFeedback(req, res, {
+				errorTitle: 'Bitte überprüfen Sie Ihre Eingaben:',
+				errors: ['Gültige E-Mail-Adresse'],
+				values: { email }
+			});
+		}
+
+		try {
+			const user = await findUserForLoginValue(email);
+			const match = user ? await bcryptLib.compare(password, user.password_hash) : false;
+
+			if (match) {
+				req.session.userId = user.id;
+
+				return req.session.save((err) => {
+					if (err) {
+						console.error('Session save error:', err);
+						return res.status(500).send('Internal Server Error');
+					}
+					return res.redirect('/me');
+				});
+			}
+
+			return redirectToLoginWithFeedback(req, res, {
+				errorTitle: 'Anmeldung fehlgeschlagen:',
+				errors: ['E-Mail oder Passwort falsch.'],
+				values: { email }
+			});
+		} catch (err) {
+			console.error('Login-Fehler:', err);
+			return res.status(500).send('Server Fehler');
+		}
+	};
+
+	const logout = (req, res) => {
+		req.session.destroy((err) => {
+			if (err) {
+				console.error('Logout Fehler:', err);
+				return res.status(500).json({ message: 'Fehler beim Abmelden' });
+			}
+
+			res.clearCookie('sportmeet_sid');
+			return res.status(200).json({ message: 'Erfolgreich abgemeldet' });
+		});
+	};
+
+	return {
+		getRegisterPage,
+		getForgotPasswordPage,
+		getPrivacyPage,
+		forgotPassword,
+		getResetPasswordPage,
+		resetPassword,
+		register,
+		login,
+		logout
+	};
 };
+
+export const {
+	getRegisterPage,
+	getForgotPasswordPage,
+	getPrivacyPage,
+	forgotPassword,
+	getResetPasswordPage,
+	resetPassword,
+	register,
+	login,
+	logout
+} = createAuthController();

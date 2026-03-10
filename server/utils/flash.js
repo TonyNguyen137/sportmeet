@@ -5,6 +5,7 @@ export const FLASH_KEYS = {
 	authSuccess: 'authSuccess',
 	forgotPasswordFeedback: 'forgotPasswordFeedback',
 	resetPasswordFeedback: 'resetPasswordFeedback',
+	profileFeedback: 'profileFeedback',
 	toast: 'toast',
 	eventFormFeedback: 'eventFormFeedback'
 };

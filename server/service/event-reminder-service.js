@@ -63,14 +63,29 @@ export const runEventReminderJob = async () => {
 		for (const recipient of dueRecipients) {
 			const eventUrl = `${config.appBaseUrl.replace(/\/+$/, '')}/events/${recipient.id}`;
 			const friendlyStartTime = formatDateTimeBerlin(recipient.start_datetime);
+			const leadLabel = leadMinutes === 1440 ? '24 Stunden' : `${leadMinutes} Minuten`;
+			const locationText =
+				recipient.location_name ||
+				`${recipient.street || ''} ${recipient.house_number || ''}, ${recipient.postal_code || ''} ${recipient.city || ''}`.trim();
+			const participantList = recipient.participant_names
+				? recipient.participant_names
+						.split(',')
+						.map((entry) => entry.trim())
+						.filter(Boolean)
+				: [];
 
-			const subject = `Erinnerung: ${recipient.title} in ${leadMinutes} Minuten`;
+			const subject = `Erinnerung: ${recipient.title} in ${leadLabel}`;
 			const html = `
 				<p>Hallo ${recipient.first_name || ''},</p>
-				<p>Erinnerung: Dein Termin startet in etwa ${leadMinutes} Minuten.</p>
+				<p>Erinnerung: Dein Termin startet in etwa ${leadLabel}.</p>
 				<ul>
 					<li><strong>Titel:</strong> ${recipient.title}</li>
 					<li><strong>Zeit:</strong> ${friendlyStartTime}</li>
+					<li><strong>Ort:</strong> ${locationText || 'Wird noch bekannt gegeben'}</li>
+				</ul>
+				<p><strong>Teilnehmer:</strong></p>
+				<ul>
+					${participantList.length > 0 ? participantList.map((participant) => `<li>${participant}</li>`).join('') : '<li>Noch keine Teilnehmer eingetragen.</li>'}
 				</ul>
 				<p>
 					<a href="${eventUrl}">Termin öffnen</a>

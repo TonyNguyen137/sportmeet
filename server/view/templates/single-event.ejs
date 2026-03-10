@@ -16,7 +16,7 @@
 			</div>
 
 			<div class="space-y-4 p-4 md:px-8 md:py-5">
-				<% if (event.is_participating) { %>
+				<% if (!event.is_admin && event.is_participating) { %>
 				<div class="flex items-start gap-2">
 					<span class="rounded-sm bg-emerald-50 p-1">
 						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
@@ -26,6 +26,18 @@
 					<div>
 						<p class="text-sm text-gray-500">Status</p>
 						<p class="font-medium text-gray-900">Du nimmst teil</p>
+					</div>
+				</div>
+				<% } else if (!event.is_admin) { %>
+				<div class="flex items-start gap-2">
+					<span class="rounded-sm bg-red-50 p-1">
+						<svg class="text-red-600" aria-hidden="true" width="24" height="24">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#x-mark' %>"></use>
+						</svg>
+					</span>
+					<div>
+						<p class="text-sm text-gray-500">Status</p>
+						<p class="font-medium text-gray-900">Du nimmst nicht teil</p>
 					</div>
 				</div>
 				<% } %> <% if (event.description) { %>
@@ -45,13 +57,53 @@
 				<div class="flex items-start gap-2">
 					<span class="rounded-sm bg-emerald-50 p-1">
 						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
-							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#globe' %>"></use>
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#person' %>"></use>
+						</svg>
+					</span>
+					<div>
+						<p class="text-sm text-gray-500">Sportart</p>
+						<p class="text-gray-900"><%= event.sport_name %></p>
+					</div>
+				</div>
+
+				<div class="flex items-start gap-2">
+					<span class="rounded-sm bg-emerald-50 p-1">
+						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
+						</svg>
+					</span>
+					<div>
+						<p class="text-sm text-gray-500">Datum</p>
+						<p class="text-gray-900">
+							<%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'full', timeStyle: 'short' }) %>
+						</p>
+					</div>
+				</div>
+
+				<% if (event.location_name) { %>
+				<div class="flex items-start gap-2">
+					<span class="rounded-sm bg-emerald-50 p-1">
+						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
+						</svg>
+					</span>
+					<div>
+						<p class="text-sm text-gray-500">Ort</p>
+						<p class="text-gray-900"><%= event.location_name %></p>
+					</div>
+				</div>
+				<% } %>
+
+				<div class="flex items-start gap-2">
+					<span class="rounded-sm bg-emerald-50 p-1">
+						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
 						</svg>
 					</span>
 					<div>
 						<p class="text-sm text-gray-500">Adresse</p>
 						<p class="text-gray-900">
-							<%= event.location_name || `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %>
+							<%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %>
 						</p>
 					</div>
 				</div>
@@ -196,7 +248,10 @@
 				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 				<button
 					type="submit"
-					class="w-full cursor-pointer rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50">
+					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50">
+					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#x-mark' %>"></use>
+					</svg>
 					Nicht teilnehmen
 				</button>
 			</form>
@@ -205,18 +260,30 @@
 				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 				<button
 					type="submit"
-					class="w-full cursor-pointer rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-900/20 transition-colors hover:bg-emerald-700">
+					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-900/20 transition-colors hover:bg-emerald-700">
+					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#check' %>"></use>
+					</svg>
 					Teilnehmen
 				</button>
 			</form>
 			<% } %> <% } else { %>
-			<button
-				type="button"
-				class="btn-delete-event w-full cursor-pointer rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50"
-				data-event-delete-url="/events/<%= event.id %>/delete"
-				data-event-title="<%= event.title %>">
-				Termin löschen
-			</button>
+			<div class="flex flex-col gap-3 sm:flex-row">
+				<% if (!event.is_expired) { %>
+				<a
+					href="/events/<%= event.id %>/edit"
+					class="w-full cursor-pointer rounded-xl border border-blue-100 bg-white px-4 py-3 text-center font-medium text-blue-600 transition-all hover:bg-gray-50">
+					Termin bearbeiten
+				</a>
+				<% } %>
+				<button
+					type="button"
+					class="btn-delete-event w-full cursor-pointer rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50"
+					data-event-delete-url="/events/<%= event.id %>/delete"
+					data-event-title="<%= event.title %>">
+					Termin löschen
+				</button>
+			</div>
 			<% } %>
 		</div>
 	</div>

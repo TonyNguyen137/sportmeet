@@ -12,16 +12,33 @@ import {
 	logout
 } from '../controller/auth-controller.js';
 
-const router = express.Router();
+export const createAuthRouter = (
+	handlers = {
+		formParser,
+		getRegisterPage,
+		getForgotPasswordPage,
+		getPrivacyPage,
+		getResetPasswordPage,
+		register,
+		login,
+		forgotPassword,
+		resetPassword,
+		logout
+	}
+) => {
+	const router = express.Router();
 
-router.get('/register', getRegisterPage);
-router.get('/forgot-password', getForgotPasswordPage);
-router.get('/privacy-policy', getPrivacyPage);
-router.get('/reset-password', getResetPasswordPage);
-router.post('/register', formParser, register);
-router.post('/login', formParser, login);
-router.post('/forgot-password', formParser, forgotPassword);
-router.post('/reset-password', formParser, resetPassword);
-router.post('/logout', logout);
+	router.get('/register', handlers.getRegisterPage);
+	router.get('/forgot-password', handlers.getForgotPasswordPage);
+	router.get('/privacy-policy', handlers.getPrivacyPage);
+	router.get('/reset-password', handlers.getResetPasswordPage);
+	router.post('/register', handlers.formParser, handlers.register);
+	router.post('/login', handlers.formParser, handlers.login);
+	router.post('/forgot-password', handlers.formParser, handlers.forgotPassword);
+	router.post('/reset-password', handlers.formParser, handlers.resetPassword);
+	router.post('/logout', handlers.logout);
 
-export default router;
+	return router;
+};
+
+export default createAuthRouter();

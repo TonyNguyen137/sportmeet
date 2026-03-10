@@ -1,20 +1,31 @@
 <% const hasUserGroups = Array.isArray(userGroups) && userGroups.length > 0; const todayLocal = new Date();
 todayLocal.setMinutes(todayLocal.getMinutes() - todayLocal.getTimezoneOffset()); const todayDateValue = todayLocal.toISOString().slice(0,
 10); const eventFormFeedback = locals.eventFormFeedback || {}; const eventFormErrors = Array.isArray(eventFormFeedback.errors) ?
-eventFormFeedback.errors : []; const eventFormValues = eventFormFeedback.values || {}; %>
+eventFormFeedback.errors : []; const eventFormValues = locals.eventFormValues || eventFormFeedback.values || {}; const eventFormAction =
+locals.eventFormAction || '/events'; const eventFormTitle = locals.eventFormTitle || 'Neuen Termin erstellen'; const
+eventFormDescription = locals.eventFormDescription || 'Erstelle einen öffentlichen oder privaten Termin'; const eventFormSubmitLabel =
+locals.eventFormSubmitLabel || 'Termin erstellen'; const eventFormCancelUrl = locals.eventFormCancelUrl || ''; const isStandaloneEventForm
+= Boolean(eventFormCancelUrl); %>
 
 <form
 	id="appointment-form"
 	data-event-form
-	action="/events"
+	action="<%= eventFormAction %>"
 	method="POST"
 	class="w-full max-w-2xl rounded-2xl border border-gray-200 bg-white shadow-xl">
 	<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 	<div class="flex items-center justify-between border-b border-gray-200 p-6">
 		<div>
-			<h2 class="text-2xl font-bold text-gray-900">Neuen Termin erstellen</h2>
-			<p class="mt-1 text-sm text-gray-600">Erstelle einen öffentlichen oder privaten Termin</p>
+			<h2 class="text-2xl font-bold text-gray-900"><%= eventFormTitle %></h2>
+			<p class="mt-1 text-sm text-gray-600"><%= eventFormDescription %></p>
 		</div>
+		<% if (isStandaloneEventForm) { %>
+		<a href="<%= eventFormCancelUrl %>" class="cursor-pointer text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-gray-500">
+			<svg width="20" height="20" aria-hidden="true" class="block">
+				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
+			</svg>
+		</a>
+		<% } else { %>
 		<button
 			type="button"
 			data-modal-close
@@ -23,6 +34,7 @@ eventFormFeedback.errors : []; const eventFormValues = eventFormFeedback.values 
 				<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#close' %>"></use>
 			</svg>
 		</button>
+		<% } %>
 	</div>
 
 	<div class="space-y-4 overflow-y-auto p-6">
@@ -271,16 +283,24 @@ eventFormFeedback.errors : []; const eventFormValues = eventFormFeedback.values 
 	</div>
 
 	<div class="flex flex-wrap gap-3 border-t border-gray-200 bg-gray-50 p-6">
+		<% if (isStandaloneEventForm) { %>
+		<a
+			href="<%= eventFormCancelUrl %>"
+			class="close-appointment-form w-fit grow rounded-xl border border-gray-200 bg-white px-3 py-3 text-center font-medium transition-all hover:bg-gray-100 md:px-6">
+			Abbrechen
+		</a>
+		<% } else { %>
 		<button
 			type="button"
 			data-modal-close
 			class="close-appointment-form w-fit grow cursor-pointer rounded-xl border border-gray-200 bg-white px-3 py-3 font-medium transition-all hover:bg-gray-100 md:px-6">
 			Abbrechen
 		</button>
+		<% } %>
 		<button
 			type="submit"
 			class="w-fit grow cursor-pointer rounded-xl bg-blue-600 px-3 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-all [--focus-color:black] hover:bg-blue-700 md:px-6">
-			Termin erstellen
+			<%= eventFormSubmitLabel %>
 		</button>
 	</div>
 </form>

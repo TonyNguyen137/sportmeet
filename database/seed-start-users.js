@@ -2,6 +2,11 @@ import pool from '../server/model/db.js';
 
 const START_USERS = [
 	{
+		firstName: 'Tony',
+		lastName: 'Nguyen',
+		email: 'tony.n@gso.schule.koeln'
+	},
+	{
 		firstName: 'Test',
 		lastName: 'User1',
 		email: 'test@user1.de'
