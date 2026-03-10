@@ -22,21 +22,21 @@ export const createEventsRouter = (
 	handlers = {
 		checkAuth,
 		formParser,
-			createEvent,
-			createEventComment,
-			deleteEvent,
-			getEditEventPage,
-			getEventCommentsList,
-			getEventById,
-			getEventParticipantsList,
-			getNearbyPublicEvents,
-			getVisibleEvents,
-			joinEvent,
-			leaveEvent,
-			removeEventComment,
-			removeEventParticipant,
-			updateEvent
-		}
+		createEvent,
+		createEventComment,
+		deleteEvent,
+		getEditEventPage,
+		getEventCommentsList,
+		getEventById,
+		getEventParticipantsList,
+		getNearbyPublicEvents,
+		getVisibleEvents,
+		joinEvent,
+		leaveEvent,
+		removeEventComment,
+		removeEventParticipant,
+		updateEvent
+	}
 ) => {
 	const router = express.Router();
 

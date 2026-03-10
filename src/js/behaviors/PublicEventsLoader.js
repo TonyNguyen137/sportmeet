@@ -11,7 +11,13 @@ export default class PublicEventsLoader {
 		this.hasLoadedOnce = false;
 		this.isLoading = false;
 
-		if (!this.tabEl || !this.panelEl || !this.resultsEl || !this.loadingEl || !this.emptyEl) {
+		if (
+			!this.tabEl ||
+			!this.panelEl ||
+			!this.resultsEl ||
+			!this.loadingEl ||
+			!this.emptyEl
+		) {
 			return;
 		}
 
@@ -110,7 +116,9 @@ export default class PublicEventsLoader {
 			.map((event) => {
 				const fullAddress =
 					`${event.street || ''} ${event.house_number || ''}, ${event.postal_code || ''} ${event.city || ''}`.trim();
-				const locationText = event.location_name ? this.escapeHtml(event.location_name) : '';
+				const locationText = event.location_name
+					? this.escapeHtml(event.location_name)
+					: '';
 				const addressText = fullAddress || 'Adresse folgt';
 
 				return `
@@ -134,14 +142,18 @@ export default class PublicEventsLoader {
 								</svg>
 								<span>${this.escapeHtml(this.formatDateTime(event.start_datetime))}</span>
 							</div>
-							${event.location_name ? `
+							${
+								event.location_name
+									? `
 							<div class="flex items-center gap-2">
 								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 									<use href="${this.escapeHtml(`${this.spriteUrl}#building`)}"></use>
 								</svg>
 								<span>${locationText}</span>
 							</div>
-							` : ''}
+							`
+									: ''
+							}
 							<div class="flex items-center gap-2">
 								<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
 									<use href="${this.escapeHtml(`${this.spriteUrl}#address`)}"></use>

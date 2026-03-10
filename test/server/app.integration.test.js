@@ -4,13 +4,7 @@ import express from 'express';
 import { PassThrough, Readable, Writable } from 'node:stream';
 import { createApp } from '../../server/app.js';
 
-const invokeApp = async ({
-	app,
-	method = 'GET',
-	url = '/',
-	headers = {},
-	body = ''
-}) =>
+const invokeApp = async ({ app, method = 'GET', url = '/', headers = {}, body = '' }) =>
 	await new Promise((resolve, reject) => {
 		const reqStream = new Readable({
 			read() {

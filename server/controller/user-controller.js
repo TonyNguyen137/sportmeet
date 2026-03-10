@@ -16,10 +16,7 @@ export const updateProfile = async (req, res) => {
 			key: FLASH_KEYS.profileFeedback,
 			payload: {
 				errorTitle: 'Bitte überprüfe deine Eingaben:',
-				errors: [
-					...(!firstName ? ['Vorname'] : []),
-					...(!lastName ? ['Nachname'] : [])
-				],
+				errors: [...(!firstName ? ['Vorname'] : []), ...(!lastName ? ['Nachname'] : [])],
 				values
 			},
 			redirectTo: '/me/profile'

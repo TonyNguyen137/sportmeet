@@ -162,7 +162,9 @@ export const createApp = (
 			const sports = await findAllSportsValue();
 			const userId = req.session?.userId;
 			const myEvents = userId ? await findMyEventsForUserValue(userId, 100) : [];
-			const createdEvents = userId ? await findCreatedEventsForUserValue(userId, 100) : [];
+			const createdEvents = userId
+				? await findCreatedEventsForUserValue(userId, 100)
+				: [];
 			const eventFormFeedback = consumeFlashValue(req, flashKeys.eventFormFeedback, {});
 
 			return res.render('base', {
@@ -194,8 +196,7 @@ export const createApp = (
 			profileErrors: profileFeedback.errors || [],
 			profileSuccessMessage: profileFeedback.successMessage || '',
 			profileValues: {
-				firstName:
-					profileFeedback.values?.firstName ?? currentUser.first_name ?? '',
+				firstName: profileFeedback.values?.firstName ?? currentUser.first_name ?? '',
 				lastName: profileFeedback.values?.lastName ?? currentUser.last_name ?? '',
 				email: currentUser.email ?? ''
 			}

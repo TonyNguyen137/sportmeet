@@ -3,17 +3,13 @@
 <main>
 	<div class="container mx-auto px-[12px] py-[32px]">
 		<div class="mb-4">
-			<a
-				href="/events/<%= eventId %>"
-				class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700">
+			<a href="/events/<%= eventId %>" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700">
 				<span aria-hidden="true"><-</span>
 				zurück zum Termin
 			</a>
 		</div>
 
-		<div class="flex justify-center">
-			<%- include("../partials/event-form") %>
-		</div>
+		<div class="flex justify-center"><%- include("../partials/event-form") %></div>
 	</div>
 </main>
 

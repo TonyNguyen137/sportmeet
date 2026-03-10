@@ -197,7 +197,8 @@ test('createEvent reagiert sauber auf Geocoding-Ausfall', async () => {
 		key: flashKeys.toast,
 		payload: {
 			variant: 'error',
-			message: 'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
+			message:
+				'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
 		},
 		redirectTo: '/me'
 	});

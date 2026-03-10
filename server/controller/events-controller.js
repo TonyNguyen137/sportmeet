@@ -31,7 +31,8 @@ const buildEventFormValues = (body = {}) => ({
 	city: String(body.city || '').trim(),
 	locationName: String(body.locationName || '').trim(),
 	description: String(body.description || '').trim(),
-	visibility: String(body.visibility || 'public').trim() === 'private' ? 'private' : 'public',
+	visibility:
+		String(body.visibility || 'public').trim() === 'private' ? 'private' : 'public',
 	groupId: String(body.groupId || '')
 });
 
@@ -122,7 +123,10 @@ export const createEventsController = (deps = defaultDeps) => {
 		req,
 		res
 	}) => {
-		const redirectWithFeedback = ({ errorTitle = 'Bitte überprüfe deine Eingaben:', errors = [] }) =>
+		const redirectWithFeedback = ({
+			errorTitle = 'Bitte überprüfe deine Eingaben:',
+			errors = []
+		}) =>
 			saveFlashAndRedirectValue(req, res, {
 				key: flashKeys.eventFormFeedback,
 				payload: {
@@ -788,7 +792,11 @@ export const createEventsController = (deps = defaultDeps) => {
 		}
 
 		try {
-			const result = await removeEventParticipantByAdminValue(eventId, participantId, userId);
+			const result = await removeEventParticipantByAdminValue(
+				eventId,
+				participantId,
+				userId
+			);
 
 			if (!result.ok) {
 				if (result.code === 'EVENT_EXPIRED') {

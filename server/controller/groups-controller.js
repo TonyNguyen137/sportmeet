@@ -159,7 +159,13 @@ export const createGroupsController = (deps = defaultDeps) => {
 		}
 
 		try {
-			await createGroupWithAdminValue(groupName, description, userId, createInviteCode, 5);
+			await createGroupWithAdminValue(
+				groupName,
+				description,
+				userId,
+				createInviteCode,
+				5
+			);
 			return saveFlashAndRedirectValue(req, res, {
 				key: flashKeys.toast,
 				payload: {

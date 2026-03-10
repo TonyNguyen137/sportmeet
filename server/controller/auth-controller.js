@@ -295,7 +295,9 @@ export const createAuthController = (deps = defaultDeps) => {
 				});
 			}
 
-			const currentPasswordHash = await findUserPasswordHashByIdValue(resetTokenRow.user_id);
+			const currentPasswordHash = await findUserPasswordHashByIdValue(
+				resetTokenRow.user_id
+			);
 
 			if (!currentPasswordHash) {
 				return redirectToForgotPasswordWithFeedback(req, res, {

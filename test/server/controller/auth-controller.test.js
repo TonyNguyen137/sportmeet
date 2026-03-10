@@ -13,7 +13,13 @@ const flashKeys = {
 	eventFormFeedback: 'eventFormFeedback'
 };
 
-const createReq = ({ body = {}, query = {}, session = {}, protocol = 'https', host } = {}) => ({
+const createReq = ({
+	body = {},
+	query = {},
+	session = {},
+	protocol = 'https',
+	host
+} = {}) => ({
 	body,
 	query,
 	session: {
@@ -260,7 +266,10 @@ test('forgotPassword ersetzt Reset-Token und versendet E-Mail bei vorhandenem Us
 	assert.ok(replaceCalls[0][2] instanceof Date);
 	assert.equal(mailCalls.length, 1);
 	assert.equal(mailCalls[0].to, 'tony@example.com');
-	assert.match(mailCalls[0].html, /https:\/\/app\.sportmeet\.test\/reset-password\?token=plain-token/);
+	assert.match(
+		mailCalls[0].html,
+		/https:\/\/app\.sportmeet\.test\/reset-password\?token=plain-token/
+	);
 });
 
 test('getResetPasswordPage rendert Formular bei gueltigem Token', async () => {

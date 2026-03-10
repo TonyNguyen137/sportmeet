@@ -69,7 +69,10 @@ const START_EVENTS = [
 	}
 ];
 
-const findRequiredIds = async (client, { createdByEmail, sportName, groupName = null }) => {
+const findRequiredIds = async (
+	client,
+	{ createdByEmail, sportName, groupName = null }
+) => {
 	const userResult = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [
 		createdByEmail
 	]);

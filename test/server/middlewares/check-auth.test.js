@@ -5,13 +5,9 @@ import { checkAuth } from '../../../server/middlewares/check-auth.js';
 test('checkAuth ruft next bei eingeloggtem Nutzer auf', () => {
 	let nextCalled = false;
 
-	checkAuth(
-		{ session: { userId: 42 } },
-		{},
-		() => {
-			nextCalled = true;
-		}
-	);
+	checkAuth({ session: { userId: 42 } }, {}, () => {
+		nextCalled = true;
+	});
 
 	assert.equal(nextCalled, true);
 });

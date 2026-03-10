@@ -16,11 +16,11 @@ test('saveFlashAndRedirect speichert Flash-Payload und leitet weiter', async () 
 		}
 	};
 
-	await saveFlashAndRedirect(
-		{ session },
-		res,
-		{ key: 'toast', payload: { variant: 'success' }, redirectTo: '/me' }
-	);
+	await saveFlashAndRedirect({ session }, res, {
+		key: 'toast',
+		payload: { variant: 'success' },
+		redirectTo: '/me'
+	});
 
 	assert.deepEqual(session.toast, { variant: 'success' });
 	assert.equal(res.redirectPath, '/me');
@@ -49,11 +49,10 @@ test('saveFlashAndRedirect liefert 500 bei Session-Speicherfehler', async () => 
 	};
 
 	try {
-		await saveFlashAndRedirect(
-			{ session },
-			res,
-			{ key: 'toast', payload: { variant: 'error' } }
-		);
+		await saveFlashAndRedirect({ session }, res, {
+			key: 'toast',
+			payload: { variant: 'error' }
+		});
 	} finally {
 		console.error = originalConsoleError;
 	}

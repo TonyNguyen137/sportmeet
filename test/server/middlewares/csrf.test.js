@@ -1,9 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-	attachCsrfToken,
-	requireCsrfToken
-} from '../../../server/middlewares/csrf.js';
+import { attachCsrfToken, requireCsrfToken } from '../../../server/middlewares/csrf.js';
 
 test('attachCsrfToken erzeugt ein Token in Session und res.locals', () => {
 	const req = { session: {} };

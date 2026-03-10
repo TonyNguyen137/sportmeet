@@ -138,10 +138,7 @@ test('joinGroup meldet unbekannte Gruppe mit 404', async () => {
 	});
 	const res = createRes();
 
-	await controller.joinGroup(
-		createReq({ body: { inviteCode: 'sm-ab12cd34' } }),
-		res
-	);
+	await controller.joinGroup(createReq({ body: { inviteCode: 'sm-ab12cd34' } }), res);
 
 	assert.equal(res.statusCode, 404);
 	assert.equal(res.body, 'Gruppe mit diesem Einladungslink wurde nicht gefunden.');
@@ -259,10 +256,7 @@ test('regenerateGroupInvite verweigert ungueltige IDs', async () => {
 	const { controller } = createController();
 	const res = createRes();
 
-	await controller.regenerateGroupInvite(
-		createReq({ params: { groupId: 'abc' } }),
-		res
-	);
+	await controller.regenerateGroupInvite(createReq({ params: { groupId: 'abc' } }), res);
 
 	assert.equal(res.statusCode, 400);
 	assert.equal(res.body, 'Ungültige Gruppen-ID.');

@@ -2,10 +2,10 @@
 todayLocal.setMinutes(todayLocal.getMinutes() - todayLocal.getTimezoneOffset()); const todayDateValue = todayLocal.toISOString().slice(0,
 10); const eventFormFeedback = locals.eventFormFeedback || {}; const eventFormErrors = Array.isArray(eventFormFeedback.errors) ?
 eventFormFeedback.errors : []; const eventFormValues = locals.eventFormValues || eventFormFeedback.values || {}; const eventFormAction =
-locals.eventFormAction || '/events'; const eventFormTitle = locals.eventFormTitle || 'Neuen Termin erstellen'; const
-eventFormDescription = locals.eventFormDescription || 'Erstelle einen öffentlichen oder privaten Termin'; const eventFormSubmitLabel =
-locals.eventFormSubmitLabel || 'Termin erstellen'; const eventFormCancelUrl = locals.eventFormCancelUrl || ''; const isStandaloneEventForm
-= Boolean(eventFormCancelUrl); %>
+locals.eventFormAction || '/events'; const eventFormTitle = locals.eventFormTitle || 'Neuen Termin erstellen'; const eventFormDescription =
+locals.eventFormDescription || 'Erstelle einen öffentlichen oder privaten Termin'; const eventFormSubmitLabel = locals.eventFormSubmitLabel
+|| 'Termin erstellen'; const eventFormCancelUrl = locals.eventFormCancelUrl || ''; const isStandaloneEventForm =
+Boolean(eventFormCancelUrl); %>
 
 <form
 	id="appointment-form"

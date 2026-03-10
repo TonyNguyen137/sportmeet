@@ -9,12 +9,8 @@
 			</div>
 
 			<% if (profileSuccessMessage) { %>
-			<div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-				<%= profileSuccessMessage %>
-			</div>
-			<% } %>
-
-			<% if (Array.isArray(profileErrors) && profileErrors.length > 0) { %>
+			<div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800"><%= profileSuccessMessage %></div>
+			<% } %> <% if (Array.isArray(profileErrors) && profileErrors.length > 0) { %>
 			<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
 				<p class="font-semibold"><%= profileErrorTitle || 'Bitte überprüfe deine Eingaben:' %></p>
 				<ul class="mt-2 list-disc ps-5">

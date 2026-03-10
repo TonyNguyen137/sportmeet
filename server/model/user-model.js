@@ -16,7 +16,9 @@ export const deleteUserById = async (userId) => {
 			await client.query('DELETE FROM events WHERE group_id = ANY($1::bigint[])', [
 				ownedGroupIds
 			]);
-			await client.query('DELETE FROM groups WHERE id = ANY($1::bigint[])', [ownedGroupIds]);
+			await client.query('DELETE FROM groups WHERE id = ANY($1::bigint[])', [
+				ownedGroupIds
+			]);
 		}
 
 		await client.query('DELETE FROM events WHERE created_by = $1', [userId]);

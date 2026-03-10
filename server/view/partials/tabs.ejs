@@ -35,7 +35,7 @@
 					<div class="mb-3 flex items-start justify-between">
 						<div class="flex-1">
 							<h3 class="text-lg font-semibold text-gray-900"><%= event.title %></h3>
-						<div class="mt-1 flex flex-wrap items-center gap-2">
+							<div class="mt-1 flex flex-wrap items-center gap-2">
 								<% if (event.is_public) { %>
 								<span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700"
 									>Öffentlich</span
@@ -59,27 +59,27 @@
 
 					<div class="mb-4 space-y-2 text-sm text-gray-600">
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
 							</svg>
 							<span><%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) %> Uhr</span>
 						</div>
 						<% if (event.location_name) { %>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
 							</svg>
 							<span><%= event.location_name %></span>
 						</div>
 						<% } %>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
 							</svg>
 							<span><%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %></span>
 						</div>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
 							</svg>
 							<span><%= event.accepted_count %> Teilnehmer zugesagt</span>
@@ -104,13 +104,7 @@
 			<% } %>
 		</section>
 
-		<section
-			class="tabs__panel pane"
-			id="tabpanel-2"
-			role="tabpanel"
-			aria-hidden="true"
-			aria-labelledby="tab-2"
-			tabindex="0">
+		<section class="tabs__panel pane" id="tabpanel-2" role="tabpanel" aria-hidden="true" aria-labelledby="tab-2" tabindex="0">
 			<% if (Array.isArray(createdEvents) && createdEvents.length > 0) { %>
 			<div class="mt-4 grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				<% createdEvents.forEach((event) => { %>
@@ -139,27 +133,27 @@
 
 					<div class="mb-4 space-y-2 text-sm text-gray-600">
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
 							</svg>
 							<span><%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) %> Uhr</span>
 						</div>
 						<% if (event.location_name) { %>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
 							</svg>
 							<span><%= event.location_name %></span>
 						</div>
 						<% } %>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
 							</svg>
 							<span><%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %></span>
 						</div>
 						<div class="flex items-center gap-2">
-							<svg aria-hidden="true" width="16" height="16" class="text-gray-400 flex-shrink-0">
+							<svg aria-hidden="true" width="16" height="16" class="flex-shrink-0 text-gray-400">
 								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>
 							</svg>
 							<span><%= event.accepted_count %> Teilnehmer zugesagt</span>
@@ -201,7 +195,7 @@
 						</svg>
 					</div>
 					<div class="space-y-1">
-						<h3 class="text-md font-bold text-dark">Öffentliche Termine werden geladen</h3>
+						<h3 class="text-md text-dark font-bold">Öffentliche Termine werden geladen</h3>
 						<p class="text-gray-600">Wir suchen gerade Termine in deiner Umgebung.</p>
 					</div>
 				</div>

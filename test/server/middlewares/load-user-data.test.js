@@ -2,7 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createLoadUserData } from '../../../server/middlewares/load-user-data.js';
 
-const createReq = ({ session = {}, protocol = 'https', host = 'sportmeet.test' } = {}) => ({
+const createReq = ({
+	session = {},
+	protocol = 'https',
+	host = 'sportmeet.test'
+} = {}) => ({
 	session,
 	protocol,
 	get(name) {
