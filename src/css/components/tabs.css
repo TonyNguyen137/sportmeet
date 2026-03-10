@@ -1,27 +1,25 @@
 @layer components {
-	.tabs {
-		&__list {
-			@apply flex;
-		}
+	.tabs__list {
+		@apply flex;
+	}
 
-		&__tab {
-			@apply text-xsm cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-1 text-xs font-medium sm:text-[1rem] md:p-3 md:px-6;
-		}
+	.tabs__tab {
+		@apply text-xsm cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-1 text-xs font-medium sm:text-[1rem] md:p-3 md:px-6;
+	}
 
-		&__tab--mine[aria-selected='true'] {
-			@apply text-accent-blue border-accent-blue border-b-2;
-		}
+	.tabs__tab--mine[aria-selected='true'] {
+		@apply border-b-2 border-accent-blue text-accent-blue;
+	}
 
-		&__tab--public[aria-selected='true'] {
-			@apply text-success-800 border-success-800 border-b-2;
-		}
+	.tabs__tab--public[aria-selected='true'] {
+		@apply border-b-2 border-success-800 text-success-800;
+	}
 
-		&__panel[aria-hidden='true'] {
-			@apply hidden;
-		}
+	.tabs__panel[aria-hidden='true'] {
+		@apply hidden;
+	}
 
-		&__panel {
-			@apply mt-4;
-		}
+	.tabs__panel {
+		@apply mt-4;
 	}
 }

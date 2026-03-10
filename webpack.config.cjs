@@ -55,7 +55,28 @@ module.exports = function (env, argv) {
 				filename: outputCss
 			}),
 			new WebpackManifestPlugin({
-				fileName: 'manifest.json' // landet in public/assets/manifest.json
+				fileName: 'manifest.json',
+				generate(seed, files, entrypoints) {
+					const manifest = files.reduce((acc, file) => {
+						acc[file.name] = file.path.replace(/^\//, '');
+						return acc;
+					}, seed);
+
+					for (const [entryName, entryFiles] of Object.entries(entrypoints)) {
+						const jsFile = entryFiles.find((fileName) => fileName.endsWith('.js'));
+						const cssFile = entryFiles.find((fileName) => fileName.endsWith('.css'));
+
+						if (jsFile) {
+							manifest[`${entryName}.js`] = jsFile.replace(/^\//, '');
+						}
+
+						if (cssFile) {
+							manifest[`${entryName}.css`] = cssFile.replace(/^\//, '');
+						}
+					}
+
+					return manifest;
+				}
 			}),
 			new CopyWebpackPlugin({
 				patterns: [
