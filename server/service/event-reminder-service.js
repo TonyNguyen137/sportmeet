@@ -6,10 +6,7 @@
  * - send reminder emails per recipient
  * - idempotency marker write in event_reminder_deliveries (event_id + user_id)
  */
-import {
-	findReminderRecipientsDue,
-	markReminderDeliverySent
-} from '../model/events-model.js';
+import { findReminderRecipientsDue, markReminderDeliverySent } from '../model/events-model.js';
 import config from '../config.js';
 import { sendMail } from '../utils/mailer.js';
 
@@ -36,11 +33,7 @@ export const runEventReminderJob = async () => {
 	try {
 		const leadMinutes = config.eventReminderLeadMinutes;
 		const windowMinutes = config.eventReminderWindowMinutes;
-		const dueRecipients = await findReminderRecipientsDue(
-			leadMinutes,
-			windowMinutes,
-			1000
-		);
+		const dueRecipients = await findReminderRecipientsDue(leadMinutes, windowMinutes, 1000);
 		const uniqueEventCount = new Set(dueRecipients.map((row) => row.id)).size;
 
 		console.info('[event-reminder] due events selected', {

@@ -25,9 +25,7 @@ export default class RemoveGroupMember {
 			return;
 		}
 
-		const isConfirmed = window.confirm(
-			`Möchtest du ${memberName} wirklich aus der Gruppe entfernen?`
-		);
+		const isConfirmed = window.confirm(`Möchtest du ${memberName} wirklich aus der Gruppe entfernen?`);
 
 		if (!isConfirmed) {
 			return;

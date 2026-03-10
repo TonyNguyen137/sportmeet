@@ -34,8 +34,7 @@ const START_USERS = [
 ];
 
 // bcrypt hash for: Admin123!
-const DEFAULT_PASSWORD_HASH =
-	'$2b$10$2pI9xEUty0TYZA3SeIirCupABrSPfmGBBHW5WqSDr7lEYTXnTRL0G';
+const DEFAULT_PASSWORD_HASH = '$2b$10$2pI9xEUty0TYZA3SeIirCupABrSPfmGBBHW5WqSDr7lEYTXnTRL0G';
 
 const seedStartUsers = async () => {
 	try {

@@ -79,11 +79,7 @@ const invokeApp = async ({ app, method = 'GET', url = '/', headers = {}, body = 
 
 const json = (response) => JSON.parse(response.text || '{}');
 
-const createTestApp = ({
-	sessionData = {},
-	consumeFlash = () => ({}),
-	extraAuthRoutes
-} = {}) => {
+const createTestApp = ({ sessionData = {}, consumeFlash = () => ({}), extraAuthRoutes } = {}) => {
 	const authRouter = express.Router();
 	if (extraAuthRoutes) {
 		authRouter.use(extraAuthRoutes);

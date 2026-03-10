@@ -3,8 +3,7 @@ import pool from '../server/model/db.js';
 const START_EVENTS = [
 	{
 		title: 'Feierabendlauf',
-		description:
-			'Lockere 6 km Runde fuer alle Levels. Wir laufen entspannt und trinken danach noch etwas.',
+		description: 'Lockere 6 km Runde fuer alle Levels. Wir laufen entspannt und trinken danach noch etwas.',
 		sportName: 'Joggen/Laufen',
 		startDatetime: '2026-04-23T18:30:00+02:00',
 		locationName: 'Arcaden',
@@ -19,8 +18,7 @@ const START_EVENTS = [
 	},
 	{
 		title: 'After-Work Basketball',
-		description:
-			'Offenes Shooting und lockeres 3-gegen-3. Einfach vorbeikommen, auch wenn du niemanden kennst.',
+		description: 'Offenes Shooting und lockeres 3-gegen-3. Einfach vorbeikommen, auch wenn du niemanden kennst.',
 		sportName: 'Basketball',
 		startDatetime: '2026-04-25T19:00:00+02:00',
 		locationName: 'Sportplatz Kalk',
@@ -51,8 +49,7 @@ const START_EVENTS = [
 	},
 	{
 		title: 'Fussballabend',
-		description:
-			'Interne Runde fuer die Fussbal Warriors. Lockeres Kicken, ein paar Uebungen und dann Match.',
+		description: 'Interne Runde fuer die Fussbal Warriors. Lockeres Kicken, ein paar Uebungen und dann Match.',
 		sportName: 'Fussball',
 		startDatetime: '2026-04-29T18:45:00+02:00',
 		locationName: 'Aldi Süd',
@@ -69,17 +66,9 @@ const START_EVENTS = [
 	}
 ];
 
-const findRequiredIds = async (
-	client,
-	{ createdByEmail, sportName, groupName = null }
-) => {
-	const userResult = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [
-		createdByEmail
-	]);
-	const sportResult = await client.query(
-		'SELECT id FROM sports WHERE name = $1 LIMIT 1',
-		[sportName]
-	);
+const findRequiredIds = async (client, { createdByEmail, sportName, groupName = null }) => {
+	const userResult = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [createdByEmail]);
+	const sportResult = await client.query('SELECT id FROM sports WHERE name = $1 LIMIT 1', [sportName]);
 	const groupResult = groupName
 		? await client.query('SELECT id FROM groups WHERE name = $1 LIMIT 1', [groupName])
 		: { rows: [] };

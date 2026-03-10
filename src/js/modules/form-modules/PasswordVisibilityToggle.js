@@ -3,19 +3,14 @@ import { CLASS_HIDDEN } from '../../css-classes.js';
 export class PasswordVisibilityToggle {
 	constructor(form) {
 		this.form = form;
-		this.toggles = Array.from(
-			form.querySelectorAll('[data-password-toggle], .btn--toggle-visibility')
-		);
+		this.toggles = Array.from(form.querySelectorAll('[data-password-toggle], .btn--toggle-visibility'));
 
 		if (this.toggles.length === 0) return;
 
 		this.pairs = this.toggles
 			.map((toggle) => {
-				const group =
-					toggle.closest('.focus-within\\:outline-accent-blue') || toggle.parentElement;
-				const input = group?.querySelector(
-					'[data-password-input], input[type="password"], input[type="text"]'
-				);
+				const group = toggle.closest('.focus-within\\:outline-accent-blue') || toggle.parentElement;
+				const input = group?.querySelector('[data-password-input], input[type="password"], input[type="text"]');
 				if (!input) return null;
 				return {
 					toggle,
@@ -60,10 +55,7 @@ export class PasswordVisibilityToggle {
 			pair.eyeOpen.classList.toggle(CLASS_HIDDEN, pair.isVisible);
 			pair.eyeClosed.classList.toggle(CLASS_HIDDEN, !pair.isVisible);
 		}
-		pair.toggle.setAttribute(
-			'aria-label',
-			pair.isVisible ? 'Passwort verbergen' : 'Passwort anzeigen'
-		);
+		pair.toggle.setAttribute('aria-label', pair.isVisible ? 'Passwort verbergen' : 'Passwort anzeigen');
 	}
 
 	destroy() {

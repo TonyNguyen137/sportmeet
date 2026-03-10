@@ -1,10 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-	PASSWORD_MIN_LENGTH,
-	getPasswordRequirementErrors,
-	isValidEmail
-} from '../../../server/utils/validators.js';
+import { PASSWORD_MIN_LENGTH, getPasswordRequirementErrors, isValidEmail } from '../../../server/utils/validators.js';
 
 test('isValidEmail akzeptiert gueltige E-Mails und trimmt Leerzeichen', () => {
 	assert.equal(isValidEmail('  user@example.com  '), true);
@@ -26,10 +22,7 @@ test('getPasswordRequirementErrors meldet alle fehlenden Anforderungen', () => {
 });
 
 test('getPasswordRequirementErrors meldet nur die jeweils fehlenden Anforderungen', () => {
-	assert.deepEqual(getPasswordRequirementErrors('abcdefgh'), [
-		'Einen Großbuchstaben',
-		'Eine Zahl'
-	]);
+	assert.deepEqual(getPasswordRequirementErrors('abcdefgh'), ['Einen Großbuchstaben', 'Eine Zahl']);
 	assert.deepEqual(getPasswordRequirementErrors('Abcdefgh'), ['Eine Zahl']);
 });
 

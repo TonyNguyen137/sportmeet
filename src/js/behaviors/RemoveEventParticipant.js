@@ -25,9 +25,7 @@ export default class RemoveEventParticipant {
 			return;
 		}
 
-		const isConfirmed = window.confirm(
-			`Möchtest du ${participantName} wirklich aus dem Termin entfernen?`
-		);
+		const isConfirmed = window.confirm(`Möchtest du ${participantName} wirklich aus dem Termin entfernen?`);
 
 		if (!isConfirmed) {
 			return;

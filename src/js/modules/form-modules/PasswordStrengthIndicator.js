@@ -13,10 +13,7 @@ export class PasswordStrengthIndicator {
 	}
 
 	static isAvailable(form) {
-		return (
-			form.querySelector('[data-password-input]') &&
-			form.querySelector('[data-strength-container]')
-		);
+		return form.querySelector('[data-password-input]') && form.querySelector('[data-strength-container]');
 	}
 
 	init() {

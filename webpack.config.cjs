@@ -122,11 +122,7 @@ module.exports = function (env, argv) {
 				},
 				{
 					test: /\.css$/i,
-					use: [
-						MiniCssExtractPlugin.loader,
-						{ loader: 'css-loader', options: { importLoaders: 1 } },
-						'postcss-loader'
-					]
+					use: [MiniCssExtractPlugin.loader, { loader: 'css-loader', options: { importLoaders: 1 } }, 'postcss-loader']
 				},
 				{
 					test: /\.(woff2?|eot|ttf|otf)$/i,

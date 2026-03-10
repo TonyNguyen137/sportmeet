@@ -128,8 +128,7 @@ export const up = (pgm) => {
 			'(sport_id IS NOT NULL AND custom_sport_name IS NULL) OR (sport_id IS NULL AND custom_sport_name IS NOT NULL)'
 	});
 	pgm.addConstraint('events', 'events_visibility_check', {
-		check:
-			'(is_public = TRUE AND group_id IS NULL) OR (is_public = FALSE AND group_id IS NOT NULL)'
+		check: '(is_public = TRUE AND group_id IS NULL) OR (is_public = FALSE AND group_id IS NOT NULL)'
 	});
 
 	// 6) EVENT_PARTICIPANTS

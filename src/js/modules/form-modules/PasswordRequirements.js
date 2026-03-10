@@ -1,9 +1,7 @@
 export class PasswordRequirements {
 	constructor(form) {
 		this.form = form;
-		this.input =
-			form.querySelector('[data-password-input]') ||
-			form.querySelector('input[type="password"]');
+		this.input = form.querySelector('[data-password-input]') || form.querySelector('input[type="password"]');
 		this.container = form.querySelector('[data-requirements-container]');
 
 		if (!this.input || !this.container) return;
@@ -19,8 +17,7 @@ export class PasswordRequirements {
 
 	static isAvailable(form) {
 		return (
-			(form.querySelector('[data-password-input]') ||
-				form.querySelector('input[type="password"]')) &&
+			(form.querySelector('[data-password-input]') || form.querySelector('input[type="password"]')) &&
 			form.querySelector('[data-requirements-container]')
 		);
 	}

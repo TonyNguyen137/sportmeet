@@ -43,8 +43,7 @@ export const requireCsrfToken = (req, res, next) => {
 	const sessionToken = req.session?.[CSRF_SESSION_KEY];
 	const bodyToken = req.body?._csrf;
 	const headerToken = req.get('x-csrf-token');
-	const submittedToken =
-		typeof bodyToken === 'string' && bodyToken.length > 0 ? bodyToken : headerToken;
+	const submittedToken = typeof bodyToken === 'string' && bodyToken.length > 0 ? bodyToken : headerToken;
 
 	if (!safeEqual(sessionToken, submittedToken)) {
 		if (req.accepts('json')) {

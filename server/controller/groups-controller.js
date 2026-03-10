@@ -12,8 +12,7 @@ import {
 	removeGroupMemberByOwner
 } from '../model/groups-model.js';
 
-const defaultCreateInviteCode = () =>
-	`SM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+const defaultCreateInviteCode = () => `SM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
 
 export const extractInviteCode = (rawInput) => {
 	if (!rawInput) {
@@ -159,13 +158,7 @@ export const createGroupsController = (deps = defaultDeps) => {
 		}
 
 		try {
-			await createGroupWithAdminValue(
-				groupName,
-				description,
-				userId,
-				createInviteCode,
-				5
-			);
+			await createGroupWithAdminValue(groupName, description, userId, createInviteCode, 5);
 			return saveFlashAndRedirectValue(req, res, {
 				key: flashKeys.toast,
 				payload: {
@@ -189,17 +182,13 @@ export const createGroupsController = (deps = defaultDeps) => {
 		}
 
 		if (!inviteCode) {
-			return res
-				.status(400)
-				.send('Ein gültiger Einladungslink oder Code ist erforderlich.');
+			return res.status(400).send('Ein gültiger Einladungslink oder Code ist erforderlich.');
 		}
 
 		try {
 			const groupId = await findGroupIdByInviteCodeValue(inviteCode);
 			if (!groupId) {
-				return res
-					.status(404)
-					.send('Gruppe mit diesem Einladungslink wurde nicht gefunden.');
+				return res.status(404).send('Gruppe mit diesem Einladungslink wurde nicht gefunden.');
 			}
 
 			const membershipCount = await joinGroupByIdValue(groupId, userId);
@@ -335,12 +324,7 @@ export const createGroupsController = (deps = defaultDeps) => {
 			return res.status(401).json({ error: 'Nicht autorisiert' });
 		}
 
-		if (
-			!Number.isInteger(groupId) ||
-			groupId <= 0 ||
-			!Number.isInteger(memberId) ||
-			memberId <= 0
-		) {
+		if (!Number.isInteger(groupId) || groupId <= 0 || !Number.isInteger(memberId) || memberId <= 0) {
 			return res.status(400).json({ error: 'Ungültige Anfrage.' });
 		}
 
@@ -389,12 +373,7 @@ export const createGroupsController = (deps = defaultDeps) => {
 		}
 
 		try {
-			const didRegenerate = await regenerateInviteCodeByAdminValue(
-				groupId,
-				userId,
-				createInviteCode,
-				5
-			);
+			const didRegenerate = await regenerateInviteCodeByAdminValue(groupId, userId, createInviteCode, 5);
 
 			if (!didRegenerate) {
 				return res.status(403).send('Nicht erlaubt.');

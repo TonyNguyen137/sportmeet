@@ -53,8 +53,7 @@ export default class Tabs {
 		const currentTabIndex = rootEl.tabEls.indexOf(currentTabEl);
 		if (currentTabIndex < 0) return;
 
-		const nextTabIndex =
-			(currentTabIndex + direction + rootEl.tabEls.length) % rootEl.tabEls.length;
+		const nextTabIndex = (currentTabIndex + direction + rootEl.tabEls.length) % rootEl.tabEls.length;
 		const nextTabEl = rootEl.tabEls[nextTabIndex];
 
 		this._setTab(rootEl.currentActiveTabEl, false, rootEl);

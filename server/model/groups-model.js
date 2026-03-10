@@ -44,13 +44,7 @@ export const findGroupMembers = async (groupId, userId) => {
 	return result.rows;
 };
 
-export const createGroupWithAdmin = async (
-	groupName,
-	description,
-	userId,
-	createInviteCode,
-	maxAttempts = 5
-) => {
+export const createGroupWithAdmin = async (groupName, description, userId, createInviteCode, maxAttempts = 5) => {
 	const client = await pool.connect();
 	try {
 		await client.query('BEGIN');
@@ -96,9 +90,7 @@ export const createGroupWithAdmin = async (
 };
 
 export const findGroupIdByInviteCode = async (inviteCode) => {
-	const result = await pool.query('SELECT id FROM groups WHERE invite_code = $1', [
-		inviteCode
-	]);
+	const result = await pool.query('SELECT id FROM groups WHERE invite_code = $1', [inviteCode]);
 	return result.rows[0]?.id || null;
 };
 
@@ -201,12 +193,7 @@ export const removeGroupMemberByOwner = async (groupId, memberId, userId) => {
 	}
 };
 
-export const regenerateInviteCodeByAdmin = async (
-	groupId,
-	userId,
-	createInviteCode,
-	maxAttempts = 5
-) => {
+export const regenerateInviteCodeByAdmin = async (groupId, userId, createInviteCode, maxAttempts = 5) => {
 	const client = await pool.connect();
 
 	try {

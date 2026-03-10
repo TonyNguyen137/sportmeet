@@ -6,9 +6,7 @@ export default class EventVisibilitySwitcher {
 		if (!this.form) return;
 
 		this.visibilityInput = this.form.querySelector('[data-event-visibility-input]');
-		this.optionButtons = Array.from(
-			this.form.querySelectorAll('[data-event-visibility-option]')
-		);
+		this.optionButtons = Array.from(this.form.querySelectorAll('[data-event-visibility-option]'));
 		this.privateFields = this.form.querySelector('[data-event-private-fields]');
 		this.groupSelect = this.form.querySelector('[data-event-group-select]');
 

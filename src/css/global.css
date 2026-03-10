@@ -4,8 +4,7 @@
 	}
 
 	:focus-visible {
-		outline: var(--focus-width, 2px) var(--focus-style, solid)
-			var(--focus-color, currentColor);
+		outline: var(--focus-width, 2px) var(--focus-style, solid) var(--focus-color, currentColor);
 		outline-offset: var(--focus-offset, 0.15lh);
 	}
 }

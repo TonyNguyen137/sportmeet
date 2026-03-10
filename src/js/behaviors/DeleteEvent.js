@@ -19,9 +19,7 @@ export default class DeleteEvent {
 	}
 
 	async handleDeleteEvent() {
-		const isConfirmed = window.confirm(
-			`Bist du sicher, dass du den Termin "${this.eventTitle}" löschen möchtest?`
-		);
+		const isConfirmed = window.confirm(`Bist du sicher, dass du den Termin "${this.eventTitle}" löschen möchtest?`);
 
 		if (!isConfirmed) {
 			return;

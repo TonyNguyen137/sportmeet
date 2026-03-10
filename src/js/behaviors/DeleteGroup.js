@@ -19,9 +19,7 @@ export default class DeleteGroup {
 	}
 
 	async handleDeleteGroup() {
-		const isConfirmed = window.confirm(
-			`Bist du sicher, dass du die Gruppe "${this.groupName}" löschen möchtest?`
-		);
+		const isConfirmed = window.confirm(`Bist du sicher, dass du die Gruppe "${this.groupName}" löschen möchtest?`);
 
 		if (!isConfirmed) {
 			return;

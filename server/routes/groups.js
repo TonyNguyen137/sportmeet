@@ -32,22 +32,10 @@ export const createGroupsRouter = (
 	router.get('/:groupId/members', handlers.checkAuth, handlers.getGroupMembersList);
 	router.post('/', handlers.checkAuth, handlers.formParser, handlers.createGroup);
 	router.post('/join', handlers.checkAuth, handlers.formParser, handlers.joinGroup);
-	router.post(
-		'/:groupId/regenerate-invite',
-		handlers.checkAuth,
-		handlers.regenerateGroupInvite
-	);
+	router.post('/:groupId/regenerate-invite', handlers.checkAuth, handlers.regenerateGroupInvite);
 	router.post('/:groupId/delete', handlers.checkAuth, handlers.deleteGroup);
-	router.post(
-		'/:groupId/members/:memberId/remove',
-		handlers.checkAuth,
-		handlers.removeGroupMember
-	);
-	router.delete(
-		'/:groupId/members/:memberId',
-		handlers.checkAuth,
-		handlers.removeGroupMember
-	);
+	router.post('/:groupId/members/:memberId/remove', handlers.checkAuth, handlers.removeGroupMember);
+	router.delete('/:groupId/members/:memberId', handlers.checkAuth, handlers.removeGroupMember);
 
 	return router;
 };

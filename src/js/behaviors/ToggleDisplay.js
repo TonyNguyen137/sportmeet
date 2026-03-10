@@ -28,10 +28,7 @@ export default class ToggleDisplay {
 		const closeBtnsSelector = toggleEl.dataset[NAMESPACE + 'CloseBtn'];
 		const closeBtns = document.querySelectorAll(closeBtnsSelector);
 
-		toggleEl.addEventListener(
-			'click',
-			this._toggle.bind(this, toggleEl, targetEls, closeTargetEls)
-		);
+		toggleEl.addEventListener('click', this._toggle.bind(this, toggleEl, targetEls, closeTargetEls));
 
 		if (closeBtns && closeBtns.length > 0) {
 			closeBtns.forEach((btn) => {
@@ -67,9 +64,7 @@ export default class ToggleDisplay {
 			const toggleEl = document.querySelector(`[aria-controls=${id}]`);
 
 			if (!toggleEl) {
-				console.warn(
-					`[ToggleDisplay] No toggle element found for close target "#${id}".`
-				);
+				console.warn(`[ToggleDisplay] No toggle element found for close target "#${id}".`);
 			} else {
 				toggleEl.setAttribute('aria-expanded', false);
 			}

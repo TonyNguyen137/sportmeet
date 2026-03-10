@@ -225,9 +225,7 @@ test('events router uebergibt Params an den passenden Handler', async () => {
 					params: { ...req.params },
 					body: { ...req.body }
 				});
-				res
-					.status(200)
-					.json({ ok: true, params: { ...req.params }, body: { ...req.body } });
+				res.status(200).json({ ok: true, params: { ...req.params }, body: { ...req.body } });
 			},
 			deleteEvent: allow,
 			getEditEventPage: allow,

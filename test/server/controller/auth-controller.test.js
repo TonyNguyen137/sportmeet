@@ -13,13 +13,7 @@ const flashKeys = {
 	eventFormFeedback: 'eventFormFeedback'
 };
 
-const createReq = ({
-	body = {},
-	query = {},
-	session = {},
-	protocol = 'https',
-	host
-} = {}) => ({
+const createReq = ({ body = {}, query = {}, session = {}, protocol = 'https', host } = {}) => ({
 	body,
 	query,
 	session: {
@@ -236,8 +230,7 @@ test('forgotPassword gibt generische Erfolgsmeldung ohne vorhandenen User', asyn
 		payload: {
 			errorTitle: '',
 			errors: [],
-			successMessage:
-				'Wenn ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.',
+			successMessage: 'Wenn ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.',
 			values: {}
 		},
 		redirectTo: '/forgot-password'
@@ -266,10 +259,7 @@ test('forgotPassword ersetzt Reset-Token und versendet E-Mail bei vorhandenem Us
 	assert.ok(replaceCalls[0][2] instanceof Date);
 	assert.equal(mailCalls.length, 1);
 	assert.equal(mailCalls[0].to, 'tony@example.com');
-	assert.match(
-		mailCalls[0].html,
-		/https:\/\/app\.sportmeet\.test\/reset-password\?token=plain-token/
-	);
+	assert.match(mailCalls[0].html, /https:\/\/app\.sportmeet\.test\/reset-password\?token=plain-token/);
 });
 
 test('getResetPasswordPage rendert Formular bei gueltigem Token', async () => {
@@ -280,15 +270,11 @@ test('getResetPasswordPage rendert Formular bei gueltigem Token', async () => {
 			successMessage: 'B',
 			values: { extra: 'x' }
 		}),
-		findValidPasswordResetToken: async (hash) =>
-			hash === 'sha256:plain-token' ? { id: 1, user_id: 2 } : null
+		findValidPasswordResetToken: async (hash) => (hash === 'sha256:plain-token' ? { id: 1, user_id: 2 } : null)
 	});
 	const res = createRes();
 
-	await controller.getResetPasswordPage(
-		createReq({ query: { token: 'plain-token' } }),
-		res
-	);
+	await controller.getResetPasswordPage(createReq({ query: { token: 'plain-token' } }), res);
 
 	assert.deepEqual(res.rendered, {
 		view: 'base',

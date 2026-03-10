@@ -14,11 +14,7 @@ import authRoutes, { createAuthRouter } from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import eventsRoutes, { createEventsRouter } from './routes/events.js';
 import groupsRoutes, { createGroupsRouter } from './routes/groups.js';
-import {
-	findAllSports,
-	findCreatedEventsForUser,
-	findMyEventsForUser
-} from './model/dashboard-model.js';
+import { findAllSports, findCreatedEventsForUser, findMyEventsForUser } from './model/dashboard-model.js';
 import { consumeFlash, FLASH_KEYS } from './utils/flash.js';
 import { checkAuth } from './middlewares/check-auth.js';
 import { loadUserData } from './middlewares/load-user-data.js';
@@ -141,18 +137,13 @@ export const createApp = (
 
 		const loginFeedback = consumeFlashValue(req, flashKeys.loginFeedback, {});
 		const authSuccess = consumeFlashValue(req, flashKeys.authSuccess, {});
-		const hasLoginErrors =
-			Array.isArray(loginFeedback.errors) && loginFeedback.errors.length > 0;
-		const loginValues = hasLoginErrors
-			? loginFeedback.values || {}
-			: authSuccess.values || {};
+		const hasLoginErrors = Array.isArray(loginFeedback.errors) && loginFeedback.errors.length > 0;
+		const loginValues = hasLoginErrors ? loginFeedback.values || {} : authSuccess.values || {};
 
 		res.render('base', {
 			title: 'SportMeet Startseite',
 			template: 'index',
-			loginErrorTitle:
-				loginFeedback.errorTitle ||
-				'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
+			loginErrorTitle: loginFeedback.errorTitle || 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
 			loginErrors: loginFeedback.errors || [],
 			loginValues,
 			loginSuccessMessage: authSuccess.message || ''
@@ -166,9 +157,7 @@ export const createApp = (
 			const sports = await findAllSportsValue();
 			const userId = req.session?.userId;
 			const myEvents = userId ? await findMyEventsForUserValue(userId, 100) : [];
-			const createdEvents = userId
-				? await findCreatedEventsForUserValue(userId, 100)
-				: [];
+			const createdEvents = userId ? await findCreatedEventsForUserValue(userId, 100) : [];
 			const eventFormFeedback = consumeFlashValue(req, flashKeys.eventFormFeedback, {});
 
 			return res.render('base', {
@@ -247,8 +236,7 @@ export const createApp = (
 			return next(err);
 		}
 
-		const statusCode =
-			Number.isInteger(err?.statusCode) && err.statusCode >= 400 ? err.statusCode : 500;
+		const statusCode = Number.isInteger(err?.statusCode) && err.statusCode >= 400 ? err.statusCode : 500;
 
 		const message =
 			statusCode === 500

@@ -29,6 +29,7 @@
 					<a
 						href="/me"
 						class="<%= 'text-md ' + (currentDashboardPage === 'events' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent') %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						aria-label="Termine"
 						aria-current="<%= currentDashboardPage === 'events' ? 'page' : undefined %>">
 						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
@@ -40,6 +41,7 @@
 					<a
 						href="/me/groups"
 						class="<%= 'text-md ' + (currentDashboardPage === 'groups' ? 'bg-secondary text-accent-blue rounded-sm' : 'bg-transparent') %> flex flex-1 items-center gap-[8px] px-[12px] py-[8px] lg:px-[18px]"
+						aria-label="Gruppen"
 						aria-current="<%= currentDashboardPage === 'groups' ? 'page' : undefined %>">
 						<svg aria-hidden="true" width="24" height="24" aria-hidden="true">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#group' %>"></use>

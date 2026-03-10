@@ -6,19 +6,12 @@ export const deleteUserById = async (userId) => {
 	try {
 		await client.query('BEGIN');
 
-		const ownedGroupsResult = await client.query(
-			'SELECT id FROM groups WHERE created_by = $1',
-			[userId]
-		);
+		const ownedGroupsResult = await client.query('SELECT id FROM groups WHERE created_by = $1', [userId]);
 		const ownedGroupIds = ownedGroupsResult.rows.map((row) => row.id);
 
 		if (ownedGroupIds.length > 0) {
-			await client.query('DELETE FROM events WHERE group_id = ANY($1::bigint[])', [
-				ownedGroupIds
-			]);
-			await client.query('DELETE FROM groups WHERE id = ANY($1::bigint[])', [
-				ownedGroupIds
-			]);
+			await client.query('DELETE FROM events WHERE group_id = ANY($1::bigint[])', [ownedGroupIds]);
+			await client.query('DELETE FROM groups WHERE id = ANY($1::bigint[])', [ownedGroupIds]);
 		}
 
 		await client.query('DELETE FROM events WHERE created_by = $1', [userId]);
@@ -33,10 +26,7 @@ export const deleteUserById = async (userId) => {
 };
 
 export const findUserBasicById = async (userId) => {
-	const result = await pool.query(
-		'SELECT id, email, first_name, last_name FROM users WHERE id = $1',
-		[userId]
-	);
+	const result = await pool.query('SELECT id, email, first_name, last_name FROM users WHERE id = $1', [userId]);
 	return result.rows[0] || null;
 };
 

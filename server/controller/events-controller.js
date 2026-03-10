@@ -31,8 +31,7 @@ const buildEventFormValues = (body = {}) => ({
 	city: String(body.city || '').trim(),
 	locationName: String(body.locationName || '').trim(),
 	description: String(body.description || '').trim(),
-	visibility:
-		String(body.visibility || 'public').trim() === 'private' ? 'private' : 'public',
+	visibility: String(body.visibility || 'public').trim() === 'private' ? 'private' : 'public',
 	groupId: String(body.groupId || '')
 });
 
@@ -41,12 +40,7 @@ const buildEventFormValuesFromEvent = (event = {}) => {
 	const isValidDate = startDate instanceof Date && !Number.isNaN(startDate.getTime());
 
 	return {
-		sportId:
-			event.sport_id != null
-				? String(event.sport_id)
-				: event.custom_sport_name
-					? 'custom'
-					: '',
+		sportId: event.sport_id != null ? String(event.sport_id) : event.custom_sport_name ? 'custom' : '',
 		customSportName: String(event.custom_sport_name || '').trim(),
 		title: String(event.title || '').trim(),
 		date: isValidDate ? startDate.toISOString().slice(0, 10) : '',
@@ -116,17 +110,8 @@ export const createEventsController = (deps = defaultDeps) => {
 		updateEventByIdForCreator: updateEventByIdForCreatorValue
 	} = deps;
 
-	const validateAndNormalizeEventInput = async ({
-		body,
-		userId,
-		redirectTo,
-		req,
-		res
-	}) => {
-		const redirectWithFeedback = ({
-			errorTitle = 'Bitte überprüfe deine Eingaben:',
-			errors = []
-		}) =>
+	const validateAndNormalizeEventInput = async ({ body, userId, redirectTo, req, res }) => {
+		const redirectWithFeedback = ({ errorTitle = 'Bitte überprüfe deine Eingaben:', errors = [] }) =>
 			saveFlashAndRedirectValue(req, res, {
 				key: flashKeys.eventFormFeedback,
 				payload: {
@@ -154,8 +139,7 @@ export const createEventsController = (deps = defaultDeps) => {
 		} = body;
 
 		const missingRequiredErrors = [];
-		const normalizedVisibility =
-			String(visibility || 'public').trim() === 'private' ? 'private' : 'public';
+		const normalizedVisibility = String(visibility || 'public').trim() === 'private' ? 'private' : 'public';
 
 		if (!String(sportId || '').trim()) missingRequiredErrors.push('Sportart auswählen');
 		if (!String(title || '').trim()) missingRequiredErrors.push('Titel des Termins');
@@ -185,9 +169,7 @@ export const createEventsController = (deps = defaultDeps) => {
 
 		if (!isCustomSport && normalizedCustomSportName) {
 			await redirectWithFeedback({
-				errors: [
-					'Bitte waehle entweder eine Sportart aus der Liste oder gib eine eigene Sportart ein.'
-				]
+				errors: ['Bitte waehle entweder eine Sportart aus der Liste oder gib eine eigene Sportart ein.']
 			});
 			return null;
 		}
@@ -321,8 +303,7 @@ export const createEventsController = (deps = defaultDeps) => {
 					key: flashKeys.toast,
 					payload: {
 						variant: 'error',
-						message:
-							'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
+						message: 'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
 					},
 					redirectTo: '/me'
 				});
@@ -392,8 +373,7 @@ export const createEventsController = (deps = defaultDeps) => {
 				eventFormSubmitLabel: 'Termin speichern',
 				eventFormCancelUrl: `/events/${eventId}`,
 				sports,
-				eventFormValues:
-					eventFormFeedback?.values || buildEventFormValuesFromEvent(editableEvent)
+				eventFormValues: eventFormFeedback?.values || buildEventFormValuesFromEvent(editableEvent)
 			});
 		} catch (error) {
 			console.error('Fehler beim Laden der Bearbeitungsseite:', error);
@@ -459,8 +439,7 @@ export const createEventsController = (deps = defaultDeps) => {
 					key: flashKeys.toast,
 					payload: {
 						variant: 'error',
-						message:
-							'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
+						message: 'Adresse konnte aktuell nicht geprüft werden. Bitte später erneut versuchen.'
 					},
 					redirectTo
 				});
@@ -534,8 +513,7 @@ export const createEventsController = (deps = defaultDeps) => {
 		const latitude = Number(req.query?.lat);
 		const longitude = Number(req.query?.lng);
 		const radiusKmRaw = Number(req.query?.radiusKm ?? 10);
-		const radiusKm =
-			Number.isFinite(radiusKmRaw) && radiusKmRaw > 0 ? Math.min(radiusKmRaw, 50) : 10;
+		const radiusKm = Number.isFinite(radiusKmRaw) && radiusKmRaw > 0 ? Math.min(radiusKmRaw, 50) : 10;
 
 		if (!userId) {
 			return res.status(401).json({ error: 'Nicht autorisiert' });
@@ -689,8 +667,7 @@ export const createEventsController = (deps = defaultDeps) => {
 					key: flashKeys.toast,
 					payload: {
 						variant: 'warning',
-						message:
-							'Du konntest nicht ausgetragen werden (als Admin bleibst du automatisch Teilnehmer).'
+						message: 'Du konntest nicht ausgetragen werden (als Admin bleibst du automatisch Teilnehmer).'
 					},
 					redirectTo: `/events/${eventId}`
 				});
@@ -782,21 +759,12 @@ export const createEventsController = (deps = defaultDeps) => {
 			return res.status(401).json({ error: 'Nicht autorisiert' });
 		}
 
-		if (
-			!Number.isInteger(eventId) ||
-			eventId <= 0 ||
-			!Number.isInteger(participantId) ||
-			participantId <= 0
-		) {
+		if (!Number.isInteger(eventId) || eventId <= 0 || !Number.isInteger(participantId) || participantId <= 0) {
 			return res.status(400).json({ error: 'Ungültige Anfrage.' });
 		}
 
 		try {
-			const result = await removeEventParticipantByAdminValue(
-				eventId,
-				participantId,
-				userId
-			);
+			const result = await removeEventParticipantByAdminValue(eventId, participantId, userId);
 
 			if (!result.ok) {
 				if (result.code === 'EVENT_EXPIRED') {
@@ -844,12 +812,7 @@ export const createEventsController = (deps = defaultDeps) => {
 			return res.status(401).json({ error: 'Nicht autorisiert' });
 		}
 
-		if (
-			!Number.isInteger(eventId) ||
-			eventId <= 0 ||
-			!Number.isInteger(commentId) ||
-			commentId <= 0
-		) {
+		if (!Number.isInteger(eventId) || eventId <= 0 || !Number.isInteger(commentId) || commentId <= 0) {
 			return res.status(400).json({ error: 'Ungültige Anfrage.' });
 		}
 

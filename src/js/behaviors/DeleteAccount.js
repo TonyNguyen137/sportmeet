@@ -8,18 +8,11 @@ export default class DeleteAccount {
 			return;
 		}
 
-		this.deleteAccountButton.addEventListener(
-			'click',
-			this.handleDeleteAccount.bind(this)
-		);
+		this.deleteAccountButton.addEventListener('click', this.handleDeleteAccount.bind(this));
 	}
 
 	handleDeleteAccount() {
-		if (
-			confirm(
-				'Bist du dir absolut sicher? Dein Account und alle Daten werden sofort gelöscht.'
-			)
-		) {
+		if (confirm('Bist du dir absolut sicher? Dein Account und alle Daten werden sofort gelöscht.')) {
 			fetch('/user/delete-account', {
 				method: 'POST',
 				headers: {

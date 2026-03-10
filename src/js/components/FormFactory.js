@@ -1,9 +1,5 @@
 import Form from './Form.js';
-import {
-	FormValidation,
-	PasswordRequirements,
-	PasswordVisibilityToggle
-} from '../modules/form-modules/index.js';
+import { FormValidation, PasswordRequirements, PasswordVisibilityToggle } from '../modules/form-modules/index.js';
 
 class FormFactory {
 	static createLoginForm(selector = '[data-login-form]') {

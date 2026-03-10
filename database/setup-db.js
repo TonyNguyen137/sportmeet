@@ -9,9 +9,7 @@ const dbConfig = {
 };
 
 async function setup() {
-	console.log(
-		`Versuche Datenbank "${config.database}" auf Port ${config.dbPort} zu erstellen...`
-	);
+	console.log(`Versuche Datenbank "${config.database}" auf Port ${config.dbPort} zu erstellen...`);
 
 	try {
 		// Wir nutzen die Promise-Variante von createdb
@@ -20,9 +18,7 @@ async function setup() {
 	} catch (err) {
 		// Hier fangen wir den "duplicate_database" Fehler ab
 		if (err.pgErrCode === '42P04' || (err.cause && err.cause.code === '42P04')) {
-			console.log(
-				`✅ Info: Datenbank "${config.database}" existiert bereits. Alles okay.`
-			);
+			console.log(`✅ Info: Datenbank "${config.database}" existiert bereits. Alles okay.`);
 		} else {
 			console.error('❌ Schwerwiegender Fehler beim DB-Setup:', err.message);
 			process.exit(1); // Nur bei echten Fehlern (falsches Passwort etc.) abbrechen

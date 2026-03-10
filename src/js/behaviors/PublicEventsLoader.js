@@ -11,13 +11,7 @@ export default class PublicEventsLoader {
 		this.hasLoadedOnce = false;
 		this.isLoading = false;
 
-		if (
-			!this.tabEl ||
-			!this.panelEl ||
-			!this.resultsEl ||
-			!this.loadingEl ||
-			!this.emptyEl
-		) {
+		if (!this.tabEl || !this.panelEl || !this.resultsEl || !this.loadingEl || !this.emptyEl) {
 			return;
 		}
 
@@ -116,9 +110,7 @@ export default class PublicEventsLoader {
 			.map((event) => {
 				const fullAddress =
 					`${event.street || ''} ${event.house_number || ''}, ${event.postal_code || ''} ${event.city || ''}`.trim();
-				const locationText = event.location_name
-					? this.escapeHtml(event.location_name)
-					: '';
+				const locationText = event.location_name ? this.escapeHtml(event.location_name) : '';
 				const addressText = fullAddress || 'Adresse folgt';
 
 				return `

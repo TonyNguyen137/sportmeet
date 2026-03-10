@@ -22,8 +22,5 @@ export function wrap(min, max, index) {
 }
 
 export function getCsrfToken() {
-	return (
-		document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')?.trim() ||
-		''
-	);
+	return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')?.trim() || '';
 }

@@ -3,8 +3,7 @@ import pool from '../server/model/db.js';
 const START_GROUPS = [
 	{
 		name: 'Fußbal Warriors',
-		description:
-			'Lockere Fussballrunde fuer gemeinsame Spiele, Trainings und spontane Termine in Koeln.',
+		description: 'Lockere Fussballrunde fuer gemeinsame Spiele, Trainings und spontane Termine in Koeln.',
 		inviteCode: 'SM-FUSSBAL26',
 		adminEmail: 'tony.n@gso.schule.koeln',
 		memberEmails: ['test@user2.de', 'test@user3.de', 'test@user4.de', 'test@user5.de']
@@ -12,9 +11,7 @@ const START_GROUPS = [
 ];
 
 const findUserIdByEmail = async (client, email) => {
-	const result = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [
-		email
-	]);
+	const result = await client.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [email]);
 	return result.rows[0]?.id ?? null;
 };
 

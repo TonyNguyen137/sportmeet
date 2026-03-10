@@ -1,9 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-	createGroupsController,
-	extractInviteCode
-} from '../../../server/controller/groups-controller.js';
+import { createGroupsController, extractInviteCode } from '../../../server/controller/groups-controller.js';
 
 const flashKeys = {
 	toast: 'toast'
@@ -74,10 +71,7 @@ test('createGroup verlangt Authentifizierung', async () => {
 	const { controller } = createController();
 	const res = createRes();
 
-	await controller.createGroup(
-		createReq({ body: { groupName: 'Laufgruppe' }, session: { userId: null } }),
-		res
-	);
+	await controller.createGroup(createReq({ body: { groupName: 'Laufgruppe' }, session: { userId: null } }), res);
 
 	assert.equal(res.statusCode, 401);
 	assert.equal(res.body, 'Nicht autorisiert');
@@ -149,10 +143,7 @@ test('joinGroup liefert Warning-Toast wenn Mitgliedschaft bereits besteht', asyn
 		joinGroupById: async () => 0
 	});
 
-	await controller.joinGroup(
-		createReq({ body: { inviteCode: 'sm-ab12cd34' } }),
-		createRes()
-	);
+	await controller.joinGroup(createReq({ body: { inviteCode: 'sm-ab12cd34' } }), createRes());
 
 	assert.deepEqual(flashCalls[0], {
 		key: flashKeys.toast,
@@ -195,6 +186,20 @@ test('joinGroupFromInviteLink akzeptiert invite-Links und liefert Success-Toast'
 	});
 });
 
+test('getGroupMembersList liefert Mitglieder als JSON', async () => {
+	const { controller } = createController({
+		findGroupForUser: async () => ({ id: 8, name: 'Laufgruppe' }),
+		findGroupMembers: async () => [{ id: 7, first_name: 'Tony' }]
+	});
+	const res = createRes();
+
+	await controller.getGroupMembersList(createReq({ params: { groupId: '8' } }), res);
+
+	assert.deepEqual(res.jsonBody, {
+		members: [{ id: 7, first_name: 'Tony' }]
+	});
+});
+
 test('deleteGroup liefert 404 wenn Owner nichts loescht', async () => {
 	const { controller } = createController({
 		deleteGroupByIdForOwner: async () => false
@@ -228,10 +233,7 @@ test('removeGroupMember behandelt spezielle Fehlercodes korrekt', async () => {
 	});
 	const res = createRes();
 
-	await controller.removeGroupMember(
-		createReq({ params: { groupId: '8', memberId: '11' } }),
-		res
-	);
+	await controller.removeGroupMember(createReq({ params: { groupId: '8', memberId: '11' } }), res);
 
 	assert.equal(res.statusCode, 400);
 	assert.deepEqual(res.jsonBody, { error: 'Admin kann nicht entfernt werden.' });
@@ -271,10 +273,7 @@ test('regenerateGroupInvite liefert Success-Toast bei Erfolg', async () => {
 		}
 	});
 
-	await controller.regenerateGroupInvite(
-		createReq({ params: { groupId: '8' } }),
-		createRes()
-	);
+	await controller.regenerateGroupInvite(createReq({ params: { groupId: '8' } }), createRes());
 
 	assert.equal(calls.length, 1);
 	assert.equal(calls[0][0], 8);

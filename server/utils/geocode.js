@@ -2,13 +2,7 @@ import config from '../config.js';
 
 const GEOCODING_TIMEOUT_MS = 5000;
 
-export const geocodeAddress = async ({
-	street,
-	houseNumber,
-	postalCode,
-	city,
-	country = 'DE'
-}) => {
+export const geocodeAddress = async ({ street, houseNumber, postalCode, city, country = 'DE' }) => {
 	if (config.geocodingProvider !== 'nominatim') {
 		throw new Error(`Unbekannter Geocoding-Provider: ${config.geocodingProvider}`);
 	}

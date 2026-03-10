@@ -10,21 +10,69 @@
 		</a>
 
 		<div class="overflow-auto rounded-sm bg-white shadow-sm">
-			<div class="bg-emerald-600 p-4 text-white md:px-8 md:py-5">
+			<div class="bg-emerald-800 p-4 text-white md:px-8 md:py-5">
 				<h1 class="text-h1 font-bold"><%= event.title %></h1>
 				<p><%= event.participant_count %> Teilnehmer</p>
 			</div>
 
 			<div class="space-y-4 p-4 md:px-8 md:py-5">
+				<div class="flex flex-col gap-3 sm:flex-row">
+					<% if (!event.is_admin) { %> <% if (event.is_participating) { %>
+					<form method="POST" action="/events/<%= event.id %>/leave" class="w-full">
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+						<button
+							type="submit"
+							class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-3 font-medium text-red-700 transition-all hover:bg-red-50">
+							<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#x-mark' %>"></use>
+							</svg>
+							Nicht teilnehmen
+						</button>
+					</form>
+					<% } else { %>
+					<form method="POST" action="/events/<%= event.id %>/join" class="w-full">
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+						<button
+							type="submit"
+							class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-900/20 transition-colors hover:bg-emerald-700">
+							<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+								<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#check' %>"></use>
+							</svg>
+							Teilnehmen
+						</button>
+					</form>
+					<% } %> <% } else { %> <% if (!event.is_expired) { %>
+					<a
+						href="/events/<%= event.id %>/edit"
+						class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-3 text-center font-medium text-blue-800 transition-all hover:bg-blue-50">
+						<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#edit' %>"></use>
+						</svg>
+						Termin bearbeiten
+					</a>
+					<% } %>
+					<button
+						type="button"
+						class="btn-delete-event inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-3 font-medium text-red-700 transition-all hover:bg-red-50"
+						data-event-delete-url="/events/<%= event.id %>/delete"
+						data-event-title="<%= event.title %>">
+						<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
+							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#trash' %>"></use>
+						</svg>
+						Termin löschen
+					</button>
+					<% } %>
+				</div>
+
 				<% if (!event.is_admin && event.is_participating) { %>
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#check' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Status</p>
+						<p class="text-sm text-gray-700">Status</p>
 						<p class="font-medium text-gray-900">Du nimmst teil</p>
 					</div>
 				</div>
@@ -36,44 +84,44 @@
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Status</p>
+						<p class="text-sm text-gray-700">Status</p>
 						<p class="font-medium text-gray-900">Du nimmst nicht teil</p>
 					</div>
 				</div>
 				<% } %> <% if (event.description) { %>
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#text-quote' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Beschreibung</p>
+						<p class="text-sm text-gray-700">Beschreibung</p>
 						<p class="text-gray-900"><%= event.description %></p>
 					</div>
 				</div>
 				<% } %>
 
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#person' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Sportart</p>
+						<p class="text-sm text-gray-700">Sportart</p>
 						<p class="text-gray-900"><%= event.sport_name %></p>
 					</div>
 				</div>
 
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#calendar' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Datum</p>
+						<p class="text-sm text-gray-700">Datum</p>
 						<p class="text-gray-900">
 							<%= new Date(event.start_datetime).toLocaleString('de-DE', { dateStyle: 'full', timeStyle: 'short' }) %>
 						</p>
@@ -82,41 +130,41 @@
 
 				<% if (event.location_name) { %>
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#building' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Ort</p>
+						<p class="text-sm text-gray-700">Ort</p>
 						<p class="text-gray-900"><%= event.location_name %></p>
 					</div>
 				</div>
 				<% } %>
 
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#address' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Adresse</p>
+						<p class="text-sm text-gray-700">Adresse</p>
 						<p class="text-gray-900"><%= `${event.street} ${event.house_number}, ${event.postal_code} ${event.city}` %></p>
 					</div>
 				</div>
 
 				<div class="flex items-start gap-2">
-					<span class="rounded-sm bg-emerald-50 p-1">
-						<svg class="text-emerald-700" aria-hidden="true" width="24" height="24">
+					<span class="rounded-sm bg-emerald-200 p-1">
+						<svg class="text-emerald-900" aria-hidden="true" width="24" height="24">
 							<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#admin' %>"></use>
 						</svg>
 					</span>
 					<div>
-						<p class="text-sm text-gray-500">Administrator</p>
+						<p class="text-sm text-gray-700">Administrator</p>
 						<p class="font-medium text-gray-900">
 							<%= event.admin_first_name %> <%= event.admin_last_name %> <% if (event.is_admin) { %>
-							<span class="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800">Du</span>
+							<span class="ml-2 rounded-full bg-emerald-200 px-2 py-0.5 text-xs text-emerald-900">Du</span>
 							<% } %>
 						</p>
 					</div>
@@ -126,8 +174,8 @@
 
 		<section class="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
 			<div class="mb-4 flex flex-wrap items-baseline gap-2">
-				<h3 class="text-lg font-semibold text-gray-900">Teilnehmer</h3>
-				<span class="text-[1.1rem] text-gray-500"><%= event.participant_count %></span>
+				<h2 class="text-lg font-semibold text-gray-900">Teilnehmer</h2>
+				<span class="text-[1.1rem] text-gray-700"><%= event.participant_count %></span>
 			</div>
 
 			<div class="max-h-96 space-y-3 overflow-y-auto" data-event-participants-list>
@@ -142,16 +190,16 @@
 					<div class="min-w-0 flex-1">
 						<p class="truncate text-sm font-medium text-gray-900">
 							<%= participant.first_name %> <%= participant.last_name %> <% if (participant.is_current_user) { %>
-							<span class="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800">Du</span>
+							<span class="ml-2 rounded-full bg-emerald-200 px-2 py-0.5 text-xs text-emerald-900">Du</span>
 							<% } %>
 						</p>
 						<% if (participant.is_admin) { %>
 						<span
-							class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-800">
+							class="inline-flex items-center rounded-full border border-amber-300 bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">
 							Admin
 						</span>
 						<% } else { %>
-						<p class="text-xs text-gray-500">Teilnehmer</p>
+						<p class="text-xs text-gray-700">Teilnehmer</p>
 						<% } %>
 					</div>
 
@@ -175,8 +223,8 @@
 
 		<section class="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
 			<div class="mb-4 flex flex-wrap items-baseline gap-2">
-				<h3 class="text-lg font-semibold text-gray-900">Chat</h3>
-				<span class="text-[1.1rem] text-gray-500"><%= comments.length %> Nachrichten</span>
+				<h2 class="text-lg font-semibold text-gray-900">Chat</h2>
+				<span class="text-[1.1rem] text-gray-700"><%= comments.length %> Nachrichten</span>
 			</div>
 
 			<div class="max-h-96 space-y-3 overflow-y-auto rounded-lg border border-gray-100 bg-gray-50 p-3" data-event-comments-list>
@@ -185,15 +233,15 @@
 					<div class="mb-1 flex items-center justify-between gap-3">
 						<p class="text-sm font-medium text-gray-900">
 							<%= comment.first_name %> <%= comment.last_name %> <% if (comment.is_admin) { %>
-							<span class="ml-2 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-800"
+							<span class="ml-2 rounded-full border border-amber-300 bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900"
 								>Admin</span
 							>
 							<% } %> <% if (comment.is_current_user) { %>
-							<span class="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800">Du</span>
+							<span class="ml-2 rounded-full bg-emerald-200 px-2 py-0.5 text-xs text-emerald-900">Du</span>
 							<% } %>
 						</p>
 						<div class="flex items-center gap-2">
-							<span class="text-xs text-gray-500"
+							<span class="text-xs text-gray-700"
 								><%= new Date(comment.created_at).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) %></span
 							>
 							<% if (event.is_admin && !event.is_expired) { %>
@@ -213,7 +261,7 @@
 					<p class="text-sm whitespace-pre-wrap text-gray-700"><%= comment.content %></p>
 				</div>
 				<% }) %> <% } else { %>
-				<p class="text-sm text-gray-600">Noch keine Nachrichten vorhanden.</p>
+				<p class="text-sm text-gray-700">Noch keine Nachrichten vorhanden.</p>
 				<% } %>
 			</div>
 
@@ -228,7 +276,7 @@
 					class="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none [--focus-color:var(--color-accent-blue)]"></textarea>
 				<button
 					type="submit"
-					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-900/20 transition-colors hover:bg-emerald-700 sm:w-fit">
+					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-emerald-800 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-950/20 transition-colors hover:bg-emerald-900 sm:w-fit">
 					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
 						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#send-horizontal' %>"></use>
 					</svg>
@@ -242,57 +290,6 @@
 			Der Termin ist abgelaufen. Du kannst ihn nur noch löschen.
 		</p>
 		<% } %>
-
-		<div class="mt-6">
-			<% if (!event.is_admin) { %> <% if (event.is_participating) { %>
-			<form method="POST" action="/events/<%= event.id %>/leave">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-				<button
-					type="submit"
-					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50">
-					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
-						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#x-mark' %>"></use>
-					</svg>
-					Nicht teilnehmen
-				</button>
-			</form>
-			<% } else { %>
-			<form method="POST" action="/events/<%= event.id %>/join">
-				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-				<button
-					type="submit"
-					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-md shadow-emerald-900/20 transition-colors hover:bg-emerald-700">
-					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
-						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#check' %>"></use>
-					</svg>
-					Teilnehmen
-				</button>
-			</form>
-			<% } %> <% } else { %>
-			<div class="flex flex-col gap-3 sm:flex-row">
-				<% if (!event.is_expired) { %>
-				<a
-					href="/events/<%= event.id %>/edit"
-					class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-blue-100 bg-white px-4 py-3 text-center font-medium text-blue-600 transition-all hover:bg-gray-50">
-					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
-						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#edit' %>"></use>
-					</svg>
-					Termin bearbeiten
-				</a>
-				<% } %>
-				<button
-					type="button"
-					class="btn-delete-event inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-100 bg-white px-4 py-3 font-medium text-red-500 transition-all hover:bg-gray-50"
-					data-event-delete-url="/events/<%= event.id %>/delete"
-					data-event-title="<%= event.title %>">
-					<svg aria-hidden="true" width="18" height="18" class="flex-shrink-0">
-						<use href="<%= publicPrefix + '/' + assets['sprite.svg'] + '#trash' %>"></use>
-					</svg>
-					Termin löschen
-				</button>
-			</div>
-			<% } %>
-		</div>
 	</div>
 </main>
 

@@ -33,8 +33,7 @@ export class FormValidation {
 	}
 
 	focusServerErrors() {
-		const hasVisibleErrorContainer =
-			this.errorContainer && !this.errorContainer.classList.contains(CLASS_HIDDEN);
+		const hasVisibleErrorContainer = this.errorContainer && !this.errorContainer.classList.contains(CLASS_HIDDEN);
 		const hasErrorItems = this.errorList && this.errorList.children.length > 0;
 
 		if (hasVisibleErrorContainer && hasErrorItems) {
@@ -88,9 +87,7 @@ export class FormValidation {
 	}
 
 	collectErrors() {
-		return this.fields
-			.map((field) => field.dataset.errorMessage)
-			.filter((message) => Boolean(message));
+		return this.fields.map((field) => field.dataset.errorMessage).filter((message) => Boolean(message));
 	}
 
 	updateErrorSummary(errors, shouldFocus = false) {

@@ -64,11 +64,7 @@ export const createAuthController = (deps = defaultDeps) => {
 	const redirectToLoginWithFeedback = (
 		req,
 		res,
-		{
-			errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
-			errors = [],
-			values = {}
-		} = {}
+		{ errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:', errors = [], values = {} } = {}
 	) =>
 		saveFlashAndRedirectValue(req, res, {
 			key: flashKeys.loginFeedback,
@@ -79,11 +75,7 @@ export const createAuthController = (deps = defaultDeps) => {
 	const redirectToRegisterWithFeedback = (
 		req,
 		res,
-		{
-			errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
-			errors = [],
-			values = {}
-		} = {}
+		{ errorTitle = 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:', errors = [], values = {} } = {}
 	) =>
 		saveFlashAndRedirectValue(req, res, {
 			key: flashKeys.registerFeedback,
@@ -113,8 +105,7 @@ export const createAuthController = (deps = defaultDeps) => {
 			redirectTo: `/reset-password?token=${encodeURIComponent(values.token || '')}`
 		});
 
-	const getAppBaseUrl = (req) =>
-		(appConfig.appBaseUrl || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
+	const getAppBaseUrl = (req) => (appConfig.appBaseUrl || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
 
 	const getRegisterPage = (req, res) => {
 		const registerFeedback = consumeFlashValue(req, flashKeys.registerFeedback, {});
@@ -122,9 +113,7 @@ export const createAuthController = (deps = defaultDeps) => {
 		res.render('base', {
 			title: 'SportMeet Registrierung',
 			template: 'page-register',
-			loginErrorTitle:
-				registerFeedback.errorTitle ||
-				'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
+			loginErrorTitle: registerFeedback.errorTitle || 'Fehlende Angaben, bitte füllen Sie die gelisteten Felder aus:',
 			loginErrors: registerFeedback.errors || [],
 			loginValues: registerFeedback.values || {}
 		});
@@ -295,9 +284,7 @@ export const createAuthController = (deps = defaultDeps) => {
 				});
 			}
 
-			const currentPasswordHash = await findUserPasswordHashByIdValue(
-				resetTokenRow.user_id
-			);
+			const currentPasswordHash = await findUserPasswordHashByIdValue(resetTokenRow.user_id);
 
 			if (!currentPasswordHash) {
 				return redirectToForgotPasswordWithFeedback(req, res, {
@@ -316,11 +303,7 @@ export const createAuthController = (deps = defaultDeps) => {
 			}
 
 			const hashedPassword = await bcryptLib.hash(password, 10);
-			await updatePasswordByResetTokenValue(
-				resetTokenRow.user_id,
-				resetTokenRow.id,
-				hashedPassword
-			);
+			await updatePasswordByResetTokenValue(resetTokenRow.user_id, resetTokenRow.id, hashedPassword);
 
 			return saveFlashAndRedirectValue(req, res, {
 				key: flashKeys.authSuccess,

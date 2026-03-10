@@ -23,9 +23,7 @@ const bootstrap = async () => {
 	try {
 		await pool.query('SELECT 1');
 	} catch (error) {
-		console.error(
-			`[bootstrap] Database connection failed. Server stopped. ${formatDbBootstrapError(error)}`
-		);
+		console.error(`[bootstrap] Database connection failed. Server stopped. ${formatDbBootstrapError(error)}`);
 		process.exit(1);
 	}
 

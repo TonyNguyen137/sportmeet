@@ -1,9 +1,7 @@
 import pool from './db.js';
 
 export const findSportById = async (sportId) => {
-	const result = await pool.query('SELECT id FROM sports WHERE id = $1 LIMIT 1', [
-		sportId
-	]);
+	const result = await pool.query('SELECT id FROM sports WHERE id = $1 LIMIT 1', [sportId]);
 	return result.rows[0] || null;
 };
 
@@ -346,13 +344,7 @@ export const updateEventByIdForCreator = async (
 	return result.rowCount > 0;
 };
 
-export const findNearbyPublicEvents = async ({
-	userId,
-	latitude,
-	longitude,
-	radiusKm = 10,
-	limit = 60
-}) => {
+export const findNearbyPublicEvents = async ({ userId, latitude, longitude, radiusKm = 10, limit = 60 }) => {
 	const result = await pool.query(
 		`WITH public_events AS (
 			SELECT
@@ -546,11 +538,7 @@ export const deleteEventByIdForCreator = async (eventId, userId) => {
 	return result.rowCount > 0;
 };
 
-export const findReminderRecipientsDue = async (
-	leadMinutes = 10,
-	windowMinutes = 15,
-	limit = 500
-) => {
+export const findReminderRecipientsDue = async (leadMinutes = 10, windowMinutes = 15, limit = 500) => {
 	const result = await pool.query(
 		`SELECT
 			e.id,

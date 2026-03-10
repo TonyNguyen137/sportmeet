@@ -1,12 +1,7 @@
 import { findUserBasicById, findUserGroupsByUserId } from '../model/user-model.js';
 
-export const createLoadUserData = (
-	deps = { findUserBasicById, findUserGroupsByUserId }
-) => {
-	const {
-		findUserBasicById: findUserBasicByIdValue,
-		findUserGroupsByUserId: findUserGroupsByUserIdValue
-	} = deps;
+export const createLoadUserData = (deps = { findUserBasicById, findUserGroupsByUserId }) => {
+	const { findUserBasicById: findUserBasicByIdValue, findUserGroupsByUserId: findUserGroupsByUserIdValue } = deps;
 
 	return async (req, res, next) => {
 		if (req.session && req.session.userId) {

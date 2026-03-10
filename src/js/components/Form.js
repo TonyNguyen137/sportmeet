@@ -1,7 +1,6 @@
 export default class Form {
 	constructor(formElement, options = {}) {
-		this.form =
-			typeof formElement === 'string' ? document.querySelector(formElement) : formElement;
+		this.form = typeof formElement === 'string' ? document.querySelector(formElement) : formElement;
 
 		this.options = {
 			modules: [],
@@ -28,9 +27,7 @@ export default class Form {
 			const { ModuleClass, moduleOptions } = definition;
 			if (!ModuleClass) return;
 
-			const isAvailable = ModuleClass.isAvailable
-				? ModuleClass.isAvailable(this.form, moduleOptions)
-				: true;
+			const isAvailable = ModuleClass.isAvailable ? ModuleClass.isAvailable(this.form, moduleOptions) : true;
 			if (!isAvailable) return;
 
 			const moduleInstance = new ModuleClass(this.form, moduleOptions);
