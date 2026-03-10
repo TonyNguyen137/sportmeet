@@ -8,11 +8,11 @@
 	}
 
 	.tabs__tab--mine[aria-selected='true'] {
-		@apply border-b-2 border-accent-blue text-accent-blue;
+		@apply border-accent-blue text-accent-blue border-b-2;
 	}
 
 	.tabs__tab--public[aria-selected='true'] {
-		@apply border-b-2 border-success-800 text-success-800;
+		@apply border-success-800 text-success-800 border-b-2;
 	}
 
 	.tabs__panel[aria-hidden='true'] {
