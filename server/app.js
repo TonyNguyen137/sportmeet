@@ -60,7 +60,7 @@ const createDefaultSessionMiddleware = () => {
 		cookie: {
 			maxAge: 1000 * 60 * 60 * 24,
 			httpOnly: true,
-			secure: config.env === 'production'
+			secure: config.sessionCookieSecure
 		}
 	});
 };
@@ -105,6 +105,10 @@ export const createApp = (
 	} = deps;
 
 	const app = express();
+
+	if (appConfig.trustProxy) {
+		app.set('trust proxy', 1);
+	}
 
 	app.use(PUBLIC_DIR_SLUG, express.static(PUBLIC_DIR_PATH));
 

@@ -4,6 +4,16 @@ dotenv.config();
 
 const config = {
 	env: process.env.NODE_ENV ?? 'development',
+	trustProxy:
+		process.env.TRUST_PROXY === 'true' ||
+		process.env.TRUST_PROXY === '1' ||
+		process.env.NODE_ENV === 'production',
+	sessionCookieSecure:
+		process.env.SESSION_COOKIE_SECURE === 'true' ||
+		process.env.SESSION_COOKIE_SECURE === '1' ||
+		((process.env.SESSION_COOKIE_SECURE === undefined ||
+			process.env.SESSION_COOKIE_SECURE === '') &&
+			process.env.NODE_ENV === 'production'),
 	port: Number(process.env.PORT || 3000),
 	user: process.env.DB_USER ?? 'postgres',
 	host: process.env.DB_HOST ?? 'localhost',
