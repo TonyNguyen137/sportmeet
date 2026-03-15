@@ -19,7 +19,7 @@ const config = {
 	dbPort: Number(process.env.DB_PORT ?? 5432),
 	sessionSecret: process.env.SESSION_SECRET,
 	geocodingProvider: process.env.GEOCODING_PROVIDER ?? 'nominatim',
-	geocodingUserAgent: process.env.GEOCODING_USER_AGENT ?? 'sportmeet/0.1 (dev@sportmeet.local)',
+	geocodingUserAgent: process.env.GEOCODING_USER_AGENT ?? 'sportmeet/0.1 (tony.n@gso.schule.koeln)',
 	brevoApiKey: process.env.BREVO_API_KEY ?? '',
 	mailFromName: process.env.MAIL_FROM_NAME ?? 'Sportmeet',
 	mailFromAddress: process.env.MAIL_FROM_ADDRESS ?? '',
