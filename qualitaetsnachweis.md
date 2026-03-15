@@ -34,28 +34,6 @@ npx autocannon -c 100 -d 30 -H "Cookie: sportmeet_sid=DEIN_COOKIE_WERT" http://l
 | `/me`       |    100 |  30 s |                 167.5 ms |     190 ms |           593.04 |      0 |        0 |
 | `/groups/2` |    100 |  30 s |                 67.39 ms |      81 ms |          1471.24 |      0 |        0 |
 
-Zusätzlich wurden folgende Kennzahlen gemessen:
-
-- Startseite `/`
-  - Median-Latenz: `43 ms`
-  - Maximale Latenz: `270 ms`
-  - Datendurchsatz: `14 MB/s`
-- Termin-Detailseite `/events/4`
-  - Authentifizierung: eingeloggte Session über `sportmeet_sid`
-  - Median-Latenz: `86 ms`
-  - Maximale Latenz: `277 ms`
-  - Datendurchsatz: `16 MB/s`
-- Nutzer-Dashboard `/me`
-  - Authentifizierung: eingeloggte Session über `sportmeet_sid`
-  - Median-Latenz: `166 ms`
-  - Maximale Latenz: `273 ms`
-  - Datendurchsatz: `18.7 MB/s`
-- Gruppenseite `/groups/2`
-  - Authentifizierung: eingeloggte Session über `sportmeet_sid`
-  - Median-Latenz: `66 ms`
-  - Maximale Latenz: `162 ms`
-  - Datendurchsatz: `14.7 MB/s`
-
 Bewertung:
 
 Die Anwendung blieb während der Tests stabil und erreichbar. Die Startseite erreichte bei `100` gleichzeitigen Anfragen eine durchschnittliche Antwortzeit von `43.72 ms` und eine `99%-Latenz` von `58 ms`. Die geschützte Termin-Detailseite `/events/4` zeigte unter derselben Last ein stabiles Verhalten mit einer durchschnittlichen Antwortzeit von `87.01 ms` und einer `99%-Latenz` von `115 ms`. Das eingeloggte Nutzer-Dashboard `/me` blieb ebenfalls stabil und erreichte eine durchschnittliche Antwortzeit von `167.5 ms` bei einer `99%-Latenz` von `190 ms`. Auch die Gruppenseite `/groups/2` blieb unter Last stabil und erreichte eine durchschnittliche Antwortzeit von `67.39 ms` bei einer `99%-Latenz` von `81 ms`. Während aller Tests traten keine Fehler und keine Timeouts auf.
