@@ -143,7 +143,15 @@ npm run db:init
 
 Dieser Befehl erstellt die Datenbank `sportmeet_db` und führt die Migrationen aus.
 
-Optional können anschließend Startdaten eingespielt werden:
+Danach bitte die Standardsportarten einspielen:
+
+```bash
+npm run db:seed:sports
+```
+
+Dieser Schritt ist wichtig, damit die auswählbaren Sportarten in der Anwendung vorhanden sind.
+
+Optional können anschließend weitere Beispieldaten eingespielt werden:
 
 ```bash
 npm run db:seed:all
@@ -209,6 +217,7 @@ Die wichtigsten Befehle:
 ```bash
 npm install
 npm run db:init
+npm run db:seed:sports
 npm run db:seed:all
 npm start
 ```

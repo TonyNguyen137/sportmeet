@@ -32,7 +32,7 @@
 		"db:seed:start-users": "node database/seed-start-users.js",
 		"db:seed:start-groups": "node database/seed-start-groups.js",
 		"db:seed:start-events": "node database/seed-start-events.js",
-		"db:seed:all": "npm run db:seed:sports && npm run db:seed:start-users && npm run db:seed:start-groups && npm run db:seed:start-events"
+		"db:seed:all": "npm run db:seed:start-users && npm run db:seed:start-groups && npm run db:seed:start-events"
 	},
 	"dependencies": {
 		"bcrypt": "^6.0.0",
