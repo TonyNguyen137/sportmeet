@@ -29,16 +29,15 @@ Bitte vorab installieren:
 1. Die Datei `.env.example` in `.env` umbenennen.
 2. In der Datei `.env` nur die folgenden Werte anpassen:
    - `DB_PASSWORD`
-   - `DATABASE_URL`
+   - `DB_PASSWORD in DATABASE_URL`
    - `SESSION_SECRET`
    - optional `DB_PORT`, falls PostgreSQL lokal nicht auf `5432` läuft
 3. Den Brevo-API-Key aus der Datei `BREVO_API_KEY.docx` im Abgabe-Ordner in Teams kopieren und in `.env` hinter `BREVO_API_KEY=` einfügen.
 
 Wichtige Hinweise:
 
-- Bei `DATABASE_URL` muss anstelle von `DEIN_DB_PASSWORT` das bei der PostgreSQL-Installation vergebene Passwort eingetragen werden.
+- Bei `DB_PASSWORD` muss das bei der PostgreSQL-Installation vergebene Passwort eingetragen werden.
 - Bei `SESSION_SECRET` muss ein eigener beliebiger geheimer String eingetragen werden. Für den Test reicht zum Beispiel: `sportmeet-test-secret-2026`
-- Der Brevo-API-Key aus `BREVO_API_KEY.docx` soll in `.env` hinter `BREVO_API_KEY=` eingefügt werden.
 - Die übrigen Werte für Mail und Geocoding sind bereits in `.env.example` eingetragen und können beibehalten werden.
 
 ## PostgreSQL unter Windows installieren
@@ -156,6 +155,28 @@ Optional können anschließend weitere Beispieldaten eingespielt werden:
 ```bash
 npm run db:seed:all
 ```
+
+Nach `npm run db:init`, `npm run db:seed:sports` und optional `npm run db:seed:all` kann die Datenbank direkt geprüft werden.
+
+Zuerst in PostgreSQL verbinden:
+
+```bash
+psql -U postgres -h localhost -p 5432
+```
+
+Dann in der PostgreSQL-Konsole die Projektdatenbank auswählen:
+
+```sql
+\c sportmeet_db
+```
+
+Danach können normale SQL-Abfragen ausgeführt werden, zum Beispiel:
+
+```sql
+SELECT * FROM users;
+```
+
+So kann geprüft werden, ob die Datenbank erfolgreich erstellt und mit Daten befüllt wurde.
 
 ## Beispielnutzer
 
