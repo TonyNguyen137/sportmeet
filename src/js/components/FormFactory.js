@@ -3,6 +3,7 @@ import { FormValidation, PasswordRequirements, PasswordVisibilityToggle } from '
 
 class FormFactory {
 	static createLoginForm(selector = '[data-login-form]') {
+		// Die Factory liefert pro Formular-Typ genau die Modulkombination, die gebraucht wird.
 		return new Form(selector, {
 			modules: [PasswordVisibilityToggle, FormValidation]
 		});
@@ -45,6 +46,7 @@ class FormFactory {
 	}
 
 	static createAll() {
+		// Zentrale Initialisierung aller unterstützten Formulare beim Laden der Seite.
 		return {
 			login: this.createLoginForm(),
 			register: this.createRegisterForm(),

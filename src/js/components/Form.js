@@ -16,6 +16,8 @@ export default class Form {
 		if (!this.form) return;
 
 		this.options.modules.forEach((entry) => {
+			// Ein Formular setzt sich aus mehreren, austauschbaren Modulen zusammen
+			// statt aus vielen spezialisierten Unterklassen.
 			const definition =
 				typeof entry === 'function'
 					? { ModuleClass: entry, moduleOptions: {} }
@@ -30,6 +32,8 @@ export default class Form {
 			const isAvailable = ModuleClass.isAvailable ? ModuleClass.isAvailable(this.form, moduleOptions) : true;
 			if (!isAvailable) return;
 
+			// Jedes Modul erweitert das Formular um ein klar abgegrenztes Verhalten,
+			// z. B. Validierung oder Passwort-Sichtbarkeit.
 			const moduleInstance = new ModuleClass(this.form, moduleOptions);
 
 			this.modules.push(moduleInstance);

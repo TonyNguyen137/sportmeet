@@ -1,11 +1,3 @@
-/**
- * Event Reminder Service
- * ----------------------
- * Step 4: Mail dispatch for selected recipients.
- * - DB query for due recipients in configurable reminder window
- * - send reminder emails per recipient
- * - idempotency marker write in event_reminder_deliveries (event_id + user_id)
- */
 import { findReminderRecipientsDue, markReminderDeliverySent } from '../model/events-model.js';
 import config from '../config.js';
 import { sendMail } from '../utils/mailer.js';
@@ -33,6 +25,7 @@ export const runEventReminderJob = async () => {
 	try {
 		const leadMinutes = config.eventReminderLeadMinutes;
 		const windowMinutes = config.eventReminderWindowMinutes;
+		// Lädt nur Empfänger, deren Termin genau im konfigurierten Reminder-Fenster liegt.
 		const dueRecipients = await findReminderRecipientsDue(leadMinutes, windowMinutes, 1000);
 		const uniqueEventCount = new Set(dueRecipients.map((row) => row.id)).size;
 
@@ -54,6 +47,7 @@ export const runEventReminderJob = async () => {
 		let deliveriesNotMarked = 0;
 
 		for (const recipient of dueRecipients) {
+			// Aus den DB-Daten wird pro Empfänger eine vollständige Erinnerungsmail erzeugt.
 			const eventUrl = `${config.appBaseUrl.replace(/\/+$/, '')}/events/${recipient.id}`;
 			const friendlyStartTime = formatDateTimeBerlin(recipient.start_datetime);
 			const leadLabel = leadMinutes === 1440 ? '24 Stunden' : `${leadMinutes} Minuten`;
@@ -93,6 +87,8 @@ export const runEventReminderJob = async () => {
 				});
 				emailsSent += 1;
 
+				// Der Versandstatus wird gespeichert, damit derselbe Nutzer für denselben Termin
+				// nicht erneut erinnert wird.
 				const marked = await markReminderDeliverySent(recipient.id, recipient.user_id);
 				if (marked) {
 					deliveriesMarked += 1;

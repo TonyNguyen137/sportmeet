@@ -4,6 +4,9 @@ public
 build
 dist
 .env
+api-key.txt
 pflichtenheft.txt
 architektur.md
 architektur-checkliste.md
+presentation-*.md
+*-checkliste.md

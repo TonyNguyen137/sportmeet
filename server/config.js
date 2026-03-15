@@ -16,7 +16,7 @@ const config = {
 	host: process.env.DB_HOST ?? 'localhost',
 	database: process.env.DB_NAME ?? 'sportmeet_db',
 	password: process.env.DB_PASSWORD,
-	dbPort: Number(process.env.DB_PORT ?? 5433),
+	dbPort: Number(process.env.DB_PORT ?? 5432),
 	sessionSecret: process.env.SESSION_SECRET,
 	geocodingProvider: process.env.GEOCODING_PROVIDER ?? 'nominatim',
 	geocodingUserAgent: process.env.GEOCODING_USER_AGENT ?? 'sportmeet/0.1 (dev@sportmeet.local)',

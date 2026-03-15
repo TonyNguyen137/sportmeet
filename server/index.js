@@ -21,6 +21,7 @@ const formatDbBootstrapError = (error) => {
 
 const bootstrap = async () => {
 	try {
+		// Serverstart nur zulassen, wenn die Datenbankverbindung grundsätzlich funktioniert.
 		await pool.query('SELECT 1');
 	} catch (error) {
 		console.error(`[bootstrap] Database connection failed. Server stopped. ${formatDbBootstrapError(error)}`);
@@ -48,6 +49,7 @@ const startEventReminderScheduler = () => {
 	let isRunning = false;
 
 	const runSafely = async () => {
+		// Verhindert parallele Reminder-Läufe, falls ein Tick länger als das Intervall braucht.
 		if (isRunning) {
 			console.warn('[event-reminder] previous run still active, skipping tick');
 			return;
@@ -69,6 +71,7 @@ const startEventReminderScheduler = () => {
 		intervalMinutes: config.eventReminderIntervalMinutes
 	});
 
+	// Direkt beim Start einmal prüfen und danach im festen Intervall weiterlaufen lassen.
 	void runSafely();
 	setInterval(runSafely, intervalMs);
 };
